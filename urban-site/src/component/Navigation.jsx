@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import Logo from "./Logo";
 
 function Navigation() {
   const [isAuth, setIsAuth] = useState(false);
@@ -10,15 +11,18 @@ function Navigation() {
     }
   }, [isAuth]); // Dependency array to watch for changes in authentication state
 
+  const handleLogoClick = () => {
+    // Handle the click event for the Logo component
+    window.location.href = "/";
+  };
+
   return (
     <>
       <nav className="bg-gray-900 p-4">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex justify-between items-center">
             <div className="flex-shrink-0">
-              <a href="/" className="text-white font-bold text-xl">
-                JWT Authentication
-              </a>
+              <Logo onClick={handleLogoClick} />
             </div>
             <div className="hidden md:block">
               <ul className="flex space-x-4">
