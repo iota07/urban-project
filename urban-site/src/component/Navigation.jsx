@@ -18,17 +18,17 @@ function Navigation() {
 
   return (
     <>
-      <nav className="bg-gray-900 p-4">
+      <nav className="p-4 border-b-2 border-[#1E73BE]">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex justify-between items-center">
-            <div className="flex-shrink-0">
+            <div className="flex-shrink-0 w-24">
               <Logo onClick={handleLogoClick} />
             </div>
             <div className="hidden md:block">
               <ul className="flex space-x-4">
                 {isAuth && (
                   <li>
-                    <a href="/" className="text-white hover:text-gray-300">
+                    <a href="/" className="text-[#1E73BE] hover:text-gray-300">
                       Home
                     </a>
                   </li>
@@ -37,12 +37,15 @@ function Navigation() {
                   {isAuth ? (
                     <a
                       href="/logout"
-                      className="text-white hover:text-gray-300"
+                      className="text-[#1E73BE] hover:text-gray-300"
                     >
                       Logout
                     </a>
                   ) : (
-                    <a href="/login" className="text-white hover:text-gray-300">
+                    <a
+                      href="/login"
+                      className="text-[#1E73BE] hover:text-gray-300"
+                    >
                       Login
                     </a>
                   )}
