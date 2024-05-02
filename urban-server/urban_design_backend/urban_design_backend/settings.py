@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'allauth',
+    'allauth.account',
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True
@@ -77,6 +79,20 @@ SIMPLE_JWT = {
 }
 
 ROOT_URLCONF = 'urban_design_backend.urls'
+
+# Django allauth settings
+
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# Email settings
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'your-email@gmail.com'
+EMAIL_HOST_PASSWORD = 'your-email-password'
+
 
 TEMPLATES = [
     {

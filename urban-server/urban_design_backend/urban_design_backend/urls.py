@@ -23,5 +23,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),    
     path('token/', jwt_views.TokenObtainPairView.as_view(), name ='token_obtain_pair'),
     path('token/refresh/', jwt_views.TokenRefreshView.as_view(), name ='token_refresh'),
+    path('accounts/', include('allauth.urls')),
     path('', include('urban_design_auth.urls')),
 ]
