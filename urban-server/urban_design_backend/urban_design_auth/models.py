@@ -28,9 +28,9 @@ class CustomUser(AbstractUser):
     date_joined = models.DateTimeField(default=timezone.now)
     last_login = models.DateTimeField(default=timezone.now)
 
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username', 'name', 'surname', 'organisation']
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = ['email', 'name', 'surname', 'organisation']
     objects = CustomUserManager()
 
     def __str__(self):
-        return self.email
+        return self.username

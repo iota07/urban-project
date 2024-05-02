@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'urban_design_auth',
     'corsheaders',
     'rest_framework',
+    'rest_framework.authtoken',
     'rest_framework_simplejwt.token_blacklist',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -42,8 +43,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'allauth',
     'allauth.account',
+    'dj_rest_auth',
+    'dj_rest_auth.registration',
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True
@@ -63,6 +67,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 REST_FRAMEWORK = {
@@ -84,18 +89,44 @@ ROOT_URLCONF = 'urban_design_backend.urls'
 
 AUTH_USER_MODEL = 'urban_design_auth.CustomUser'
 
+
+# Dj rest auth settings
+
+REST_USE_JWT = True
+
+DJ_REST_AUTH_SERIALIZERS = {
+    'USER_DETAILS_SERIALIZER': 'users.serializers.UserSerializer',
+}
+
+# change the default authentication class to the custom one
+
+AUTHENTICATION_BACKENDS = ['urban_design_auth.backends.EmailBackend']
+
 # Django allauth settings
 
+ACCOUNT_USER_MODEL_USERNAME_FIELD = 'email'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_USERNAME_REQUIRED = True
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
+ACCOUNT_CONFIRM_EMAIL_ON_GET = True
+ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = '/?verification=1'
+ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = '/?verification=1'
+
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
+# Site settings
+
+SITE_ID = 1
+
 # Email settings
-EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST = 'send.one.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'your-email@gmail.com'
-EMAIL_HOST_PASSWORD = 'your-email-password'
+EMAIL_HOST_USER = 'nhouvannasak@buildwind.net'
+EMAIL_HOST_PASSWORD = 'hanesana2904BW24'
 
 
 TEMPLATES = [
