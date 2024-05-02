@@ -80,6 +80,10 @@ SIMPLE_JWT = {
 
 ROOT_URLCONF = 'urban_design_backend.urls'
 
+# Custom user model
+
+AUTH_USER_MODEL = 'urban_design_auth.CustomUser'
+
 # Django allauth settings
 
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
