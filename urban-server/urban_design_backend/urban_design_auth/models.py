@@ -22,6 +22,8 @@ class CustomUser(AbstractUser):
         error_messages={
             'unique': _("A user with that username already exists."),
         },
+        null=True,
+        blank=True,
     )
     email = models.EmailField(_('email address'), unique=True)
     name = models.CharField(max_length=100)
@@ -30,8 +32,8 @@ class CustomUser(AbstractUser):
     date_joined = models.DateTimeField(default=timezone.now)
     last_login = models.DateTimeField(default=timezone.now)
 
-    USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['email', 'name', 'surname', 'organisation']
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['username', 'name', 'surname', 'organisation']
     objects = CustomUserManager()
 
     def __str__(self):

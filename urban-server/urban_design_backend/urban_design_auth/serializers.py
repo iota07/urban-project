@@ -1,11 +1,18 @@
 from rest_framework import serializers
 from dj_rest_auth.registration.serializers import RegisterSerializer
 from urban_design_auth.models import CustomUser
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+
+
+
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ['id', 'username', 'email', 'name', 'surname', 'organisation', 'date_joined', 'last_login']
+
+
+
 
 class CustomRegisterSerializer(RegisterSerializer):
     username = serializers.CharField()
@@ -20,3 +27,9 @@ class CustomRegisterSerializer(RegisterSerializer):
         })
 
         return cleaned_data
+    
+
+
+
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    username_field = 'email'

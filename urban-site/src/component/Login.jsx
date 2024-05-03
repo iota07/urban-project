@@ -4,13 +4,13 @@ import React from "react";
 
 // Define the Login function.
 const Login = () => {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   // Create the submit method.
   const submit = async (e) => {
     e.preventDefault();
     const user = {
-      username: username,
+      email: email,
       password: password,
     };
     // Create the POST request
@@ -53,17 +53,17 @@ const Login = () => {
               <div className="group relative">
                 <input
                   type="text"
-                  id="username"
+                  id="email"
                   className="peer h-14 w-full rounded-3xl bg-gray-100 px-4 text-sm outline-none"
-                  value={username}
+                  value={email}
                   required
-                  onChange={(e) => setUsername(e.target.value)}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
                 <label
-                  htmlFor="username"
+                  htmlFor="email"
                   className="absolute left-2 top-0 flex h-full transform items-center pl-2 text-base transition-all duration-300 group-focus-within:-top-7 group-focus-within:h-1/2 group-focus-within:pl-0 group-focus-within:text-base group-focus-within:text-white peer-valid:-top-7 peer-valid:h-1/2 peer-valid:pl-0 peer-valid:text-base peer-valid:text-white"
                 >
-                  Username
+                  Email
                 </label>
               </div>
 
