@@ -13,14 +13,16 @@ username_validator = RegexValidator(
 # Create your models here.
 
 class CustomUser(AbstractUser):
-    
-    username = models.CharField(max_length=100, 
+    username = models.CharField(
+        _('username'),
+        max_length=100, 
         unique=True,
-        help_text='Required. 100 characters or fewer. Letters, digits, and spaces only.',
-        validators=[],
+        help_text=_('Required. 100 characters or fewer. Letters, digits, and spaces only.'),
+        validators=[username_validator],
         error_messages={
-            'unique': "A user with that username already exists.",
-        },)
+            'unique': _("A user with that username already exists."),
+        },
+    )
     email = models.EmailField(_('email address'), unique=True)
     name = models.CharField(max_length=100)
     surname = models.CharField(max_length=100)

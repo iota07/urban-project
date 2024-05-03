@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'allauth',
     'allauth.account',
+    'allauth.socialaccount',
     'dj_rest_auth',
     'dj_rest_auth.registration',
 ]
@@ -95,7 +96,11 @@ AUTH_USER_MODEL = 'urban_design_auth.CustomUser'
 REST_USE_JWT = True
 
 DJ_REST_AUTH_SERIALIZERS = {
-    'USER_DETAILS_SERIALIZER': 'users.serializers.UserSerializer',
+    'USER_DETAILS_SERIALIZER': 'urban_design_auth.serializers.UserSerializer',
+}
+
+REST_AUTH_REGISTER_SERIALIZERS = {
+    'REGISTER_SERIALIZER': 'urban_design_auth.serializers.CustomRegisterSerializer',
 }
 
 # change the default authentication class to the custom one
@@ -104,7 +109,7 @@ AUTHENTICATION_BACKENDS = ['urban_design_auth.backends.EmailBackend']
 
 # Django allauth settings
 
-ACCOUNT_USER_MODEL_USERNAME_FIELD = 'email'
+ACCOUNT_USER_MODEL_USERNAME_FIELD = 'username'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USERNAME_REQUIRED = True
@@ -112,10 +117,10 @@ ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
-ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = '/?verification=1'
-ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = '/?verification=1'
+ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = 'http://localhost:5173/login'
+ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = 'http://localhost:5173/login'
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 # Site settings
 
@@ -128,6 +133,9 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'nhouvannasak@buildwind.net'
 EMAIL_HOST_PASSWORD = 'hanesana2904BW24'
 
+# Default email settings
+
+DEFAULT_FROM_EMAIL = 'nhouvannasak@buildwind.net'
 
 TEMPLATES = [
     {
