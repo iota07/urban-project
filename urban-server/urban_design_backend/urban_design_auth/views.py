@@ -8,11 +8,7 @@ from dj_rest_auth.registration.views import RegisterView
 from .serializers import CustomRegisterSerializer
 from allauth.account.utils import complete_signup
 from allauth.account import app_settings as allauth_settings
-from rest_framework_simplejwt.views import TokenObtainPairView
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-
-
-
+from dj_rest_auth.views import LoginView
 
 # Create your views here.
 class HomeView(APIView):
@@ -21,8 +17,6 @@ class HomeView(APIView):
     def get(self, request):
         content = {'message': 'Welcome to Urban Design Home Page!'}
         return Response(content)
-
-
 
 class LogoutView(APIView):
     permission_classes = (IsAuthenticated,)
@@ -35,8 +29,6 @@ class LogoutView(APIView):
             return Response(status=status.HTTP_205_RESET_CONTENT)
         except Exception as e:
             return Response(status=status.HTTP_400_BAD_REQUEST)
-
-
 
 class CustomRegisterView(RegisterView):
     serializer_class = CustomRegisterSerializer
@@ -57,12 +49,5 @@ class CustomRegisterView(RegisterView):
         response = super().create(request, *args, **kwargs)
         return Response({"detail": "Verification e-mail sent."}, status=status.HTTP_201_CREATED)
 
-
-
-class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
-    username_field = 'email'
-
-
-
-class CustomTokenObtainPairView(TokenObtainPairView):
-    serializer_class = CustomTokenObtainPairSerializer
+class CustomLoginView(LoginView):
+    pass

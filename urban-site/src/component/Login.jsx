@@ -15,12 +15,16 @@ const Login = () => {
     };
     // Create the POST request
     try {
-      const { data } = await axios.post("http://localhost:8000/token/", user, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        withCredentials: true, // Set to true to include credentials
-      });
+      const { data } = await axios.post(
+        "http://localhost:8000/token/login/",
+        user,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true, // Set to true to include credentials
+        }
+      );
 
       // Initialize the access & refresh token in local storage.
       localStorage.clear();

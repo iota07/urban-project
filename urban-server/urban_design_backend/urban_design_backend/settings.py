@@ -48,7 +48,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'dj_rest_auth',
-    'dj_rest_auth.registration',
+    
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True
@@ -97,6 +97,7 @@ REST_USE_JWT = True
 
 DJ_REST_AUTH_SERIALIZERS = {
     'USER_DETAILS_SERIALIZER': 'urban_design_auth.serializers.UserSerializer',
+    'JWT_SERIALIZER': 'urban_design_auth.serializers.CustomJWTSerializer',
 }
 
 REST_AUTH_REGISTER_SERIALIZERS = {
