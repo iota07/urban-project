@@ -34,20 +34,25 @@ class CustomRegisterView(RegisterView):
     serializer_class = CustomRegisterSerializer
 
     def perform_create(self, serializer):
-        user = serializer.save(self.request)
-        user.name = self.request.data.get("name", "")
-        user.surname = self.request.data.get("surname", "")
-        user.organisation = self.request.data.get("organisation", "")
-        user.save()
+        try:
+            user = serializer.save(self.request)
+            user.name = self.request.data.get("name", "")
+            user.surname = self.request.data.get("surname", "")
+            user.organisation = self.request.data.get("organisation", "")
+            user.save()
 
-        # Send email confirmation
-        complete_signup(self.request._request, user,
-                        allauth_settings.EMAIL_VERIFICATION,
-                        None)
+            # Send email confirmation
+            complete_signup(self.request._request, user,
+                            allauth_settings.EMAIL_VERIFICATION,
+                            None)
+        except:
+            pass
 
     def create(self, request, *args, **kwargs):
         response = super().create(request, *args, **kwargs)
-        return Response({"detail": "Verification e-mail sent."}, status=status.HTTP_201_CREATED)
+        if response.status_code == status.HTTP_201_CREATED:
+            return Response({"detail": "Verification e-mail sent."}, status=status.HTTP_201_CREATED)
+        return response
 
 class CustomLoginView(LoginView):
     pass

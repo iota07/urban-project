@@ -3,6 +3,8 @@ from dj_rest_auth.registration.serializers import RegisterSerializer
 from dj_rest_auth.serializers import JWTSerializer
 from urban_design_auth.models import CustomUser
 from rest_framework_simplejwt.tokens import RefreshToken
+from allauth.account.adapter import get_adapter
+from allauth.account.models import EmailConfirmation, EmailConfirmationHMAC
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -22,6 +24,15 @@ class CustomRegisterSerializer(RegisterSerializer):
         })
 
         return cleaned_data
+
+    def save(self, request):
+        user = super().save(request)
+        email_address = user.email
+        email_confirmation = EmailConfirmation.create(EmailConfirmationHMAC, email_address)
+        get_adapter().stash_user(request, user.pk)
+        get_adapter().stash_email_confirmation(request, email_confirmation.pk)
+        get_adapter().send_confirmation_mail(request, email_confirmation)
+        return user
 
 class CustomJWTSerializer(JWTSerializer):
 

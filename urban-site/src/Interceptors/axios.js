@@ -28,8 +28,11 @@ axios.interceptors.response.use(
         localStorage.setItem("refresh_token", response.data.refresh);
         return axios(error.config);
       }
+    } else if (error.response.status === 400) {
+      // Handle validation errors here
+      return Promise.reject(error);
     }
     refresh = false;
-    return error;
+    return Promise.reject(error);
   }
 );
