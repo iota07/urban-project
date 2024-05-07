@@ -1,30 +1,43 @@
 import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Logo from "./Logo";
 
 function Navigation() {
+  // State to hold the authentication status
   const [isAuth, setIsAuth] = useState(false);
 
+  // Hook to get the navigate function from react-router-dom
+  const navigate = useNavigate();
+
   useEffect(() => {
-    // Function to update isAuth based on the presence of an access token
+    // Function to update the authentication status
     const updateAuth = () => {
       setIsAuth(localStorage.getItem("access_token") !== null);
     };
 
-    // Update isAuth when the component mounts
+    // Call the updateAuth function initially
     updateAuth();
 
-    // Add event listener for storage event
-    window.addEventListener("storage", updateAuth);
-
-    // Remove event listener on cleanup
-    return () => {
-      window.removeEventListener("storage", updateAuth);
+    // Function to handle changes in authentication status
+    const authChangeHandler = () => {
+      updateAuth();
     };
-  }, [localStorage.getItem("access_token")]); // Run when the component mounts and whenever the access token changes
 
+    // Add event listeners for storage and authChange events
+    window.addEventListener("storage", authChangeHandler);
+    window.addEventListener("authChange", authChangeHandler);
+
+    // Remove event listeners when the component is unmounted
+    return () => {
+      window.removeEventListener("storage", authChangeHandler);
+      window.removeEventListener("authChange", authChangeHandler);
+    };
+  }, []);
+
+  // Function to handle clicks on the logo
   const handleLogoClick = () => {
-    // Handle the click event for the Logo component
-    window.location.href = "/";
+    // Navigate to /home if authenticated, otherwise navigate to /
+    navigate(isAuth ? "/home" : "/");
   };
 
   return (
@@ -33,35 +46,38 @@ function Navigation() {
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex justify-between items-center">
             <div className="flex-shrink-0 w-24">
+              {/* Pass the handleLogoClick function as a prop to the Logo component */}
               <Logo onClick={handleLogoClick} />
             </div>
             <div className="hidden md:block">
               <ul className="flex space-x-4">
+                {/* Show the Home link only if authenticated */}
                 {isAuth && (
                   <li>
-                    <a
-                      href="/home"
+                    <Link
+                      to="/home"
                       className="text-[#1E73BE] hover:text-gray-300"
                     >
                       Home
-                    </a>
+                    </Link>
                   </li>
                 )}
                 <li>
+                  {/* Show the Logout link if authenticated, otherwise show the Login link */}
                   {isAuth ? (
-                    <a
-                      href="/logout"
+                    <Link
+                      to="/logout"
                       className="text-[#1E73BE] hover:text-gray-300"
                     >
                       Logout
-                    </a>
+                    </Link>
                   ) : (
-                    <a
-                      href="/login/"
+                    <Link
+                      to="/login"
                       className="text-[#1E73BE] hover:text-gray-300"
                     >
                       Login
-                    </a>
+                    </Link>
                   )}
                 </li>
               </ul>

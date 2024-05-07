@@ -1,38 +1,96 @@
 import axios from "axios";
-let refresh = false;
+
+// Flag to indicate if a token refresh is in progress
+let isRefreshing = false;
+
+// Queue to hold Axios requests that failed due to an expired token
+let failedQueue = [];
+
+// Function to dispatch an event when the authentication status changes
+const updateAuthStatus = () => {
+  const event = new Event("authChange");
+  window.dispatchEvent(event);
+};
+
+// Add a response interceptor to Axios
 axios.interceptors.response.use(
-  (resp) => resp,
+  (response) => {
+    // If the response was successful, return it
+    return response;
+  },
   async (error) => {
-    if (error.response.status === 401 && !refresh) {
-      refresh = true;
-      console.log(localStorage.getItem("refresh_token"));
-      const response = await axios.post(
-        "http://localhost:8000/token/refresh/",
-        {
-          refresh: localStorage.getItem("refresh_token"),
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        },
-        {
-          withCredentials: true,
+    // Get the original request configuration
+    const originalRequest = error.config;
+
+    // If the response status was 401 (Unauthorized) and this is the first retry attempt
+    if (error.response.status === 401 && !originalRequest._retry) {
+      // If a token refresh is already in progress
+      if (isRefreshing) {
+        try {
+          // Create a new Promise that resolves with the response of the original request
+          const response = await new Promise((resolve, reject) => {
+            failedQueue.push({ resolve, reject });
+          });
+          // Update the Authorization header with the new token
+          originalRequest.headers.Authorization = `Bearer ${response.data.access}`;
+          // Retry the original request
+          return axios(originalRequest);
+        } catch (err) {
+          // If an error occurred while retrying the request, reject the Promise
+          return Promise.reject(err);
         }
-      );
-      if (response.status === 200) {
-        axios.defaults.headers.common[
-          "Authorization"
-        ] = `Bearer ${response.data["access"]}`;
-        localStorage.setItem("access_token", response.data.access);
-        localStorage.setItem("refresh_token", response.data.refresh);
-        return axios(error.config);
       }
-    } else if (error.response.status === 400) {
-      // Handle validation errors here
-      return Promise.reject(error);
+
+      // Mark the request as retried
+      originalRequest._retry = true;
+      // Start a token refresh
+      isRefreshing = true;
+
+      try {
+        // Attempt to refresh the token
+        const refreshResponse = await axios.post(
+          "http://localhost:8000/token/refresh/",
+          {
+            refresh: localStorage.getItem("refresh_token"),
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+            withCredentials: true,
+          }
+        );
+
+        // Store the new tokens in local storage
+        localStorage.setItem("access_token", refreshResponse.data.access);
+        localStorage.setItem("refresh_token", refreshResponse.data.refresh);
+
+        // Update the Authorization header with the new token
+        originalRequest.headers.Authorization = `Bearer ${refreshResponse.data.access}`;
+
+        // Retry all failed requests
+        failedQueue.forEach((prom) => prom.resolve(refreshResponse));
+        // Clear the request queue
+        failedQueue = [];
+        // Retry the original request
+        return axios(originalRequest);
+      } catch (err) {
+        // If an error occurred while refreshing the token, clear local storage and redirect to the login page
+        localStorage.clear();
+        window.location.href = "/login";
+        // Reject the Promise
+        return Promise.reject(err);
+      } finally {
+        // Reset the token refresh flag
+        isRefreshing = false;
+        // Dispatch an event to update the authentication status
+        updateAuthStatus();
+      }
     }
-    refresh = false;
+
+    // If the response status was not 401 or this was not the first retry attempt, reject the Promise
     return Promise.reject(error);
   }
 );
+
+export default updateAuthStatus;

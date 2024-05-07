@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import updateAuthStatus from "../Interceptors/axios";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -30,6 +31,7 @@ const Login = () => {
       localStorage.setItem("access_token", data.access);
       localStorage.setItem("refresh_token", data.refresh);
       axios.defaults.headers.common["Authorization"] = `Bearer ${data.access}`;
+      updateAuthStatus(); // Trigger event to update authentication status
       navigate("/home");
     } catch (error) {
       console.error("Error while logging in:", error);
@@ -104,7 +106,7 @@ const Login = () => {
             <p className="gap-2 text-center text-white">
               Don't have an account?
               <a
-                href="#"
+                href="/register"
                 className="font-semibold text-blue-900 hover:text-blue-800 pl-1"
               >
                 Sign up
