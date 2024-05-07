@@ -1,6 +1,6 @@
 import React from "react";
 
-const VerificationPage = () => {
+const Verification = () => {
   return (
     <div className="flex flex-col items-center justify-start h-screen pt-12">
       <h1 className="text-3xl font-bold mb-4">Registration Successful!</h1>
@@ -12,4 +12,4 @@ const VerificationPage = () => {
   );
 };
 
-export default VerificationPage;
+export default Verification;

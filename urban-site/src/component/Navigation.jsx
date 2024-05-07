@@ -5,11 +5,22 @@ function Navigation() {
   const [isAuth, setIsAuth] = useState(false);
 
   useEffect(() => {
-    // Check if access token exists in localStorage
-    if (localStorage.getItem("access_token") !== null) {
-      setIsAuth(true);
-    }
-  }, [isAuth]); // Dependency array to watch for changes in authentication state
+    // Function to update isAuth based on the presence of an access token
+    const updateAuth = () => {
+      setIsAuth(localStorage.getItem("access_token") !== null);
+    };
+
+    // Update isAuth when the component mounts
+    updateAuth();
+
+    // Add event listener for storage event
+    window.addEventListener("storage", updateAuth);
+
+    // Remove event listener on cleanup
+    return () => {
+      window.removeEventListener("storage", updateAuth);
+    };
+  }, [localStorage.getItem("access_token")]); // Run when the component mounts and whenever the access token changes
 
   const handleLogoClick = () => {
     // Handle the click event for the Logo component
@@ -28,7 +39,10 @@ function Navigation() {
               <ul className="flex space-x-4">
                 {isAuth && (
                   <li>
-                    <a href="/" className="text-[#1E73BE] hover:text-gray-300">
+                    <a
+                      href="/home"
+                      className="text-[#1E73BE] hover:text-gray-300"
+                    >
                       Home
                     </a>
                   </li>
@@ -43,7 +57,7 @@ function Navigation() {
                     </a>
                   ) : (
                     <a
-                      href="/login"
+                      href="/login/"
                       className="text-[#1E73BE] hover:text-gray-300"
                     >
                       Login

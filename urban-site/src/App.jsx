@@ -6,7 +6,8 @@ import Home from "./routes/Homepage/Home";
 import Logout from "./component/Logout";
 import Navigation from "./component/Navigation";
 import Signup from "./routes/Registration/Signup";
-import VerificationPage from "./routes/Verificationpage/Verification";
+import Verification from "./routes/Verificationpage/Verification";
+import LandingPage from "./routes/Landingpage/Landingpage";
 import "./Interceptors/axios";
 
 function App() {
@@ -15,11 +16,12 @@ function App() {
       <BrowserRouter>
         <Navigation />
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/home" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/logout" element={<Logout />} />
           <Route path="/register" element={<Signup />} />
-          <Route path="/verification" element={<VerificationPage />} />
+          <Route path="/verification" element={<Verification />} />
         </Routes>
       </BrowserRouter>
     </>

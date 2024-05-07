@@ -1,18 +1,19 @@
 import axios from "axios";
 import { useState } from "react";
-import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  // Create the submit method.
+  let navigate = useNavigate();
+
   const submit = async (e) => {
     e.preventDefault();
     const user = {
       email: email,
       password: password,
     };
-    // Create the POST request
+
     try {
       const { data } = await axios.post(
         "http://localhost:8000/token/login/",
@@ -21,19 +22,17 @@ const Login = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          withCredentials: true, // Set to true to include credentials
+          withCredentials: true,
         }
       );
 
-      // Initialize the access & refresh token in local storage.
       localStorage.clear();
       localStorage.setItem("access_token", data.access);
       localStorage.setItem("refresh_token", data.refresh);
       axios.defaults.headers.common["Authorization"] = `Bearer ${data.access}`;
-      window.location.href = "/";
+      navigate("/home");
     } catch (error) {
       console.error("Error while logging in:", error);
-      // Handle error
     }
   };
 
