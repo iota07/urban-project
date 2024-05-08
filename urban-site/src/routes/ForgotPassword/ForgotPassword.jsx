@@ -29,7 +29,7 @@ function ForgotPassword() {
 
   if (submitted) {
     return (
-      <div className="text-xl">
+      <div className="mt-4 text-xl text-center justify-center">
         Please check your email for a password reset link.
       </div>
     );
@@ -39,13 +39,14 @@ function ForgotPassword() {
     <div>
       <fieldset>
         <form
-          className="text-center justify-center grid grid-flow-col grid-rows-3"
+          className="text-center justify-center flex flex-col"
           onSubmit={handleSubmit}
         >
           <h1 className="text-xl">Forgot Password</h1>
-          <label className="border-2">
+          <label className="w-full">
             Email:
             <input
+              className="mt-4 ml-2 pt-4 border-4 w-96"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}

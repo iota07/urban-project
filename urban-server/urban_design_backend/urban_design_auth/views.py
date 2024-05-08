@@ -9,6 +9,9 @@ from .serializers import CustomRegisterSerializer
 from allauth.account.utils import complete_signup
 from allauth.account import app_settings as allauth_settings
 from dj_rest_auth.views import LoginView
+from dj_rest_auth.views import PasswordResetConfirmView as DjRestAuthPasswordResetConfirmView
+from django.http import HttpResponseRedirect
+
 
 # HomeView: A view that returns a welcome message for authenticated users.
 class HomeView(APIView):
@@ -61,3 +64,15 @@ class CustomRegisterView(RegisterView):
 # CustomLoginView: A view that handles user login. Currently, it's the same as the default LoginView.
 class CustomLoginView(LoginView):
     pass
+
+class CustomPasswordResetConfirmView(DjRestAuthPasswordResetConfirmView):
+    def get(self, request, *args, **kwargs):
+        # Extract uidb64 and token from URL parameters
+        uidb64 = kwargs.get('uidb64')
+        token = kwargs.get('token')
+
+        # Construct the URL for your React frontend
+        redirect_url = f'http://localhost:5173/reset-password/{uidb64}/{token}/'
+
+        # Redirect to the React frontend URL
+        return HttpResponseRedirect(redirect_url)

@@ -9,6 +9,7 @@ import Signup from "./routes/Registration/Signup";
 import Verification from "./routes/Verificationpage/Verification";
 import LandingPage from "./routes/Landingpage/Landingpage";
 import ForgotPassword from "./routes/ForgotPassword/ForgotPassword";
+import ResetPassword from "./routes/ResetPassword/ResetPassword";
 import "./Interceptors/axios";
 
 function App() {
@@ -24,6 +25,10 @@ function App() {
           <Route path="/register" element={<Signup />} />
           <Route path="/verification" element={<Verification />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route
+            path="/reset-password/:uid/:token"
+            element={<ResetPassword />}
+          />
         </Routes>
       </BrowserRouter>
     </>

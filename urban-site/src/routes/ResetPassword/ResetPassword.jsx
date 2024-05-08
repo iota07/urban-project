@@ -101,7 +101,7 @@ function ResetPassword() {
                 password1: "",
                 password2: "",
               }}
-              passwordSchema={passwordSchema}
+              validationSchema={passwordSchema}
               onSubmit={submit}
             >
               {({ errors, touched }) => (

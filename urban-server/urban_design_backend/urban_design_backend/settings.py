@@ -98,18 +98,13 @@ REST_USE_JWT = True
 DJ_REST_AUTH_SERIALIZERS = {
     'USER_DETAILS_SERIALIZER': 'urban_design_auth.serializers.UserSerializer',
     'JWT_SERIALIZER': 'urban_design_auth.serializers.CustomJWTSerializer',
-    'PASSWORD_RESET_SERIALIZER': 'your_app.serializers.PasswordResetSerializer',
+    
 }
 
 REST_AUTH_REGISTER_SERIALIZERS = {
     'REGISTER_SERIALIZER': 'urban_design_auth.serializers.CustomRegisterSerializer',
 }
 
-DJANGO_REST_AUTH = {
-    'PASSWORD_RESET_CONFIRM_URL': '/login/password-reset/{uidb64}/{token}/',
-}
-
-DJANGO_REST_PASSWORDRESET_CONFIRM_TEMPLATE_NAME = 'password_reset_confirm.html'
 
 # Django allauth settings
 
@@ -123,8 +118,10 @@ ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
 ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = 'http://localhost:5173/login'
 ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = 'http://localhost:5173/login'
+ACCOUNT_PASSWORD_RESET_REDIRECT_URL = 'http://localhost:5173/reset-password'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
 
 # Site settings
 

@@ -3,8 +3,6 @@ from dj_rest_auth.registration.serializers import RegisterSerializer
 from dj_rest_auth.serializers import JWTSerializer
 from urban_design_auth.models import CustomUser
 from rest_framework_simplejwt.tokens import RefreshToken
-from dj_rest_auth.serializers import PasswordResetSerializer as DefaultPasswordResetSerializer
-
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -36,12 +34,3 @@ class CustomJWTSerializer(JWTSerializer):
         data['access'] = str(refresh.access_token)
 
         return data
-
-class PasswordResetSerializer(DefaultPasswordResetSerializer):
-    def get_email_options(self):
-        return {
-            'domain_override': 'localhost:5173', 
-        }
-
-    def password_reset_confirm_url(self, uid, token):
-        return f'/forgot-password/?uid={uid}&token={token}'
