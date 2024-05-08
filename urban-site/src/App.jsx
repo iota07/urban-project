@@ -8,6 +8,7 @@ import Navigation from "./component/Navigation";
 import Signup from "./routes/Registration/Signup";
 import Verification from "./routes/Verificationpage/Verification";
 import LandingPage from "./routes/Landingpage/Landingpage";
+import ForgotPassword from "./routes/ForgotPassword/ForgotPassword";
 import "./Interceptors/axios";
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
           <Route path="/logout" element={<Logout />} />
           <Route path="/register" element={<Signup />} />
           <Route path="/verification" element={<Verification />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
         </Routes>
       </BrowserRouter>
     </>

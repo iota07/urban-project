@@ -98,11 +98,18 @@ REST_USE_JWT = True
 DJ_REST_AUTH_SERIALIZERS = {
     'USER_DETAILS_SERIALIZER': 'urban_design_auth.serializers.UserSerializer',
     'JWT_SERIALIZER': 'urban_design_auth.serializers.CustomJWTSerializer',
+    'PASSWORD_RESET_SERIALIZER': 'your_app.serializers.PasswordResetSerializer',
 }
 
 REST_AUTH_REGISTER_SERIALIZERS = {
     'REGISTER_SERIALIZER': 'urban_design_auth.serializers.CustomRegisterSerializer',
 }
+
+DJANGO_REST_AUTH = {
+    'PASSWORD_RESET_CONFIRM_URL': '/login/password-reset/{uidb64}/{token}/',
+}
+
+DJANGO_REST_PASSWORDRESET_CONFIRM_TEMPLATE_NAME = 'password_reset_confirm.html'
 
 # Django allauth settings
 

@@ -97,8 +97,8 @@ const Login = () => {
             </form>
 
             <a
-              href="#"
-              className="inline-flex !w-auto justify-center font-medium text-white"
+              href="/forgot-password"
+              className="inline-flex !w-auto justify-center font-medium text-white m-4"
             >
               Forgot password?
             </a>
