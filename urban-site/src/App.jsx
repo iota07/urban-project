@@ -9,7 +9,7 @@ import Signup from "./routes/Registration/Signup";
 import Verification from "./routes/Verificationpage/Verification";
 import LandingPage from "./routes/Landingpage/Landingpage";
 import ForgotPassword from "./routes/ForgotPassword/ForgotPassword";
-import ResetPassword from "./routes/ResetPassword/ResetPassword";
+import ResetPassword from "./routes/ResetPasswordtempfolder/ResetPassword";
 import PasswordResetSuccess from "./routes/PasswordResetSuccess/PasswordResetSuccess";
 import "./Interceptors/axios";
 
