@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 function PasswordResetSuccess() {
   return (
-    <div className="flex flex-col items-center min-h-screen p-20 bg-[#1E73BE]">
+    <section className="flex flex-col items-center min-h-screen p-20 bg-[#1E73BE]">
       <div className="p-8 bg-white rounded-xl shadow-md w-1/2">
         <h1 className="text-2xl font-bold mb-4">Password Reset Successful</h1>
         <p className="mb-4">
@@ -14,7 +14,7 @@ function PasswordResetSuccess() {
           Log in
         </Link>
       </div>
-    </div>
+    </section>
   );
 }
 

@@ -36,7 +36,7 @@ function ForgotPassword() {
   }
 
   return (
-    <div>
+    <section>
       <fieldset>
         <form
           className="text-center justify-center flex flex-col"
@@ -56,7 +56,7 @@ function ForgotPassword() {
           <input className="mt-2" type="submit" value="Submit" />
         </form>
       </fieldset>
-    </div>
+    </section>
   );
 }
 

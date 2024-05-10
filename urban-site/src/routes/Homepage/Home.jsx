@@ -28,10 +28,10 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="flex flex-col items-center mt-5">
+    <section className="flex flex-col items-center mt-5">
       <h3 className="text-center">Hi {username}</h3>
       <h3 className="text-center">Welcome to your Homepage</h3>
-    </div>
+    </section>
   );
 };
 
