@@ -23,7 +23,11 @@ axios.interceptors.response.use(
     const originalRequest = error.config;
 
     // If the response status was 401 (Unauthorized) and this is the first retry attempt
-    if (error.response.status === 401 && !originalRequest._retry) {
+    if (
+      error.response.status === 401 &&
+      !originalRequest._retry &&
+      originalRequest.url !== "http://localhost:8000/token/login/"
+    ) {
       // If a token refresh is already in progress
       if (isRefreshing) {
         try {
@@ -86,6 +90,10 @@ axios.interceptors.response.use(
         // Dispatch an event to update the authentication status
         updateAuthStatus();
       }
+    } else if (error.response.status === 401 || error.response.status === 400) {
+      // If the response status was 401 (Unauthorized) due to incorrect credentials
+      // or 400 (Bad Request), log the error to the console
+      console.error("Error while making request:", error.response.data);
     }
 
     // If the response status was not 401 or this was not the first retry attempt, reject the Promise

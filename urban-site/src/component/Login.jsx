@@ -1,18 +1,49 @@
 import axios from "axios";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Formik, Form, useField } from "formik";
+import * as Yup from "yup";
+import { useNavigate, Link } from "react-router-dom";
 import updateAuthStatus from "../Interceptors/axios";
 
+const MyTextInput = ({ label, ...props }) => {
+  const [field, meta] = useField(props);
+  return (
+    <>
+      <div className="group relative">
+        <input
+          {...field}
+          {...props}
+          id={props.name}
+          required
+          className="peer m-0 p-0 h-14 w-full rounded-3xl bg-gray-100 px-4 text-sm outline-none"
+        />
+        <label
+          htmlFor={props.name}
+          className="absolute left-2 top-0 flex h-full transform items-center pl-2 text-base transition-all duration-300 group-focus-within:-top-7 group-focus-within:h-1/2 group-focus-within:pl-0 group-focus-within:text-base group-focus-within:text-white peer-valid:-top-7 peer-valid:h-1/2 peer-valid:pl-0 peer-valid:text-base peer-valid:text-white"
+        >
+          {label}
+        </label>
+      </div>
+      {meta.touched && meta.error ? (
+        <p className="max-w-sm text-red-500 pb-2">{meta.error}</p>
+      ) : null}
+    </>
+  );
+};
+
+const validationSchema = Yup.object().shape({
+  email: Yup.string().email("Invalid email").required("Required"),
+  password: Yup.string()
+    .min(8, "Must be at least 8 characters")
+    .required("Required"),
+});
+
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   let navigate = useNavigate();
 
-  const submit = async (e) => {
-    e.preventDefault();
+  const submit = async (values, { setFieldError }) => {
     const user = {
-      email: email,
-      password: password,
+      email: values.email,
+      password: values.password,
     };
 
     try {
@@ -35,6 +66,23 @@ const Login = () => {
       navigate("/home");
     } catch (error) {
       console.error("Error while logging in:", error);
+      if (error.response) {
+        if (error.response.status === 400) {
+          // The request was a validation error
+          console.log("Validation errors:", error.response.data);
+          let errorData = error.response.data;
+          if (errorData.email) {
+            setFieldError("email", errorData.email[0]);
+          }
+          if (errorData.password) {
+            setFieldError("password", errorData.password[0]);
+          }
+        } else if (error.response.status === 401) {
+          // The request was unauthorized
+          setFieldError("password", error.response.data.detail);
+        }
+      }
+      throw new Error(error.message);
     }
   };
 
@@ -50,67 +98,46 @@ const Login = () => {
             }}
           ></div>
           <div className="absolute bottom-0 flex h-3/4 w-full flex-col rounded-t-3xl bg-white bg-opacity-20 shadow">
-            <form
-              className="mt-10 space-y-8 px-10 py-10 text-center"
+            <Formik
+              initialValues={{
+                email: "",
+                password: "",
+              }}
+              validationSchema={validationSchema}
               onSubmit={submit}
             >
-              <div className="group relative">
-                <input
-                  type="text"
-                  id="email"
-                  className="peer h-14 w-full rounded-3xl bg-gray-100 px-4 text-sm outline-none"
-                  value={email}
-                  required
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-                <label
-                  htmlFor="email"
-                  className="absolute left-2 top-0 flex h-full transform items-center pl-2 text-base transition-all duration-300 group-focus-within:-top-7 group-focus-within:h-1/2 group-focus-within:pl-0 group-focus-within:text-base group-focus-within:text-white peer-valid:-top-7 peer-valid:h-1/2 peer-valid:pl-0 peer-valid:text-base peer-valid:text-white"
-                >
-                  Email
-                </label>
-              </div>
+              {({ errors, touched }) => (
+                <Form className="mt-10 space-y-8 px-10 py-10 text-center">
+                  <MyTextInput name="email" type="text" label="Email" />
+                  <MyTextInput
+                    name="password"
+                    type="password"
+                    label="Password"
+                  />
+                  <button
+                    type="submit"
+                    className="h-12 w-full rounded-3xl bg-blue-900 text-white transition-all duration-300 hover:bg-[#1E73BE]"
+                  >
+                    Login
+                  </button>
+                </Form>
+              )}
+            </Formik>
 
-              <div className="group relative">
-                <input
-                  type="password"
-                  id="password"
-                  className="peer h-14 w-full rounded-3xl bg-gray-100 px-4 text-sm outline-none"
-                  value={password}
-                  required
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-                <label
-                  htmlFor="password"
-                  className="absolute left-2 top-0 flex h-full transform items-center pl-2 text-base transition-all duration-300 group-focus-within:-top-7 group-focus-within:h-1/2 group-focus-within:pl-0 group-focus-within:text-base group-focus-within:text-white peer-valid:-top-7 peer-valid:h-1/2 peer-valid:pl-0 peer-valid:text-base peer-valid:text-white"
-                >
-                  Password
-                </label>
-              </div>
-
-              <button
-                type="submit"
-                className="h-12 w-full rounded-3xl bg-blue-900 text-white transition-all duration-300 hover:bg-[#1E73BE]"
-              >
-                Login
-              </button>
-            </form>
-
-            <a
-              href="/forgot-password"
+            <Link
+              to="/forgot-password"
               className="inline-flex !w-auto justify-center font-medium text-white m-4"
             >
               Forgot password?
-            </a>
-
+            </Link>
             <p className="gap-2 text-center text-white">
               Don't have an account?
-              <a
-                href="/register"
+              <Link
+                to="/register"
                 className="font-semibold text-blue-900 hover:text-blue-800 pl-1"
               >
                 Sign up
-              </a>
+              </Link>
             </p>
           </div>
         </div>
