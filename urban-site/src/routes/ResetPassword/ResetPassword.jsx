@@ -41,12 +41,9 @@ const passwordSchema = Yup.object().shape({
 });
 
 function ResetPassword() {
+  const { uid, token } = useParams();
+
   const submit = async (values, { setFieldError }) => {
-    const { uid, token } = useParams();
-
-    console.log("uid:", uid);
-    console.log("token:", token);
-
     const user = {
       uid: uid,
       token: token,
@@ -66,7 +63,7 @@ function ResetPassword() {
           }
         )
         .then((response) => {
-          if (response.status !== 201) {
+          if (response.status !== 200) {
             throw new Error("Validation error");
           }
           window.location.href = "/password-reset-success";
