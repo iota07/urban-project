@@ -29,6 +29,10 @@ function App() {
             path="/reset-password/:uid/:token"
             element={<ResetPassword />}
           />
+          <Route
+            path="/password-reset-success"
+            element={PasswordResetSuccess}
+          />
         </Routes>
       </BrowserRouter>
     </>
