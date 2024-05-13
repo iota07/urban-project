@@ -4,14 +4,33 @@ import * as Yup from "yup";
 import { useNavigate, Link } from "react-router-dom";
 import updateAuthStatus from "../Interceptors/axios";
 import { useState } from "react";
-import { FiEye, FiEyeOff } from "react-icons/fi";
+import { FiEye, FiEyeOff, FiInfo } from "react-icons/fi";
 
 const MyTextInput = ({ label, ...props }) => {
   const [field, meta] = useField(props);
+  const [showTooltip, setShowTooltip] = useState(false);
+
+  const validationMessages = {
+    email: "Email cannot contain spaces, '<', or '>'",
+  };
 
   return (
     <>
       <div className="group relative">
+        {validationMessages[props.name] && (
+          <div className="absolute left-0 top-0 transform -translate-x-full translate-y-1/2 cursor-pointer">
+            <FiInfo
+              className="text-white"
+              onMouseEnter={() => setShowTooltip(true)}
+              onMouseLeave={() => setShowTooltip(false)}
+            />
+            {showTooltip && (
+              <div className="absolute left-80 -top-14 text-sm transform -translate-x-full w-64 p-2 bg-white border rounded-xl shadow-md z-50">
+                {validationMessages[props.name]}
+              </div>
+            )}
+          </div>
+        )}
         <input
           {...field}
           {...props}
@@ -36,10 +55,29 @@ const MyTextInput = ({ label, ...props }) => {
 const MyPasswordInput = ({ label, ...props }) => {
   const [field, meta] = useField(props);
   const [showPassword, setShowPassword] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(false);
+
+  const validationMessages = {
+    password: "Password cannot contain spaces, '<', or '>'",
+  };
 
   return (
     <>
       <div className="group relative">
+        {validationMessages[props.name] && (
+          <div className="absolute left-0 top-0 transform -translate-x-full translate-y-1/2 cursor-pointer">
+            <FiInfo
+              className="text-white"
+              onMouseEnter={() => setShowTooltip(true)}
+              onMouseLeave={() => setShowTooltip(false)}
+            />
+            {showTooltip && (
+              <div className="absolute left-80 -top-14 text-sm transform -translate-x-full w-64 p-2 bg-white border rounded-xl shadow-md z-50">
+                {validationMessages[props.name]}
+              </div>
+            )}
+          </div>
+        )}
         <input
           {...field}
           {...props}
@@ -69,9 +107,13 @@ const MyPasswordInput = ({ label, ...props }) => {
 };
 
 const validationSchema = Yup.object().shape({
-  email: Yup.string().email("Invalid email").required("Required"),
+  email: Yup.string()
+    .email("Invalid email")
+    .matches(/^[^\s<>]*$/, "Email cannot contain spaces, '<', or '>'")
+    .required("Required"),
   password: Yup.string()
     .min(8, "Must be at least 8 characters")
+    .matches(/^[^\s<>]*$/, "Password cannot contain spaces, '<', or '>'")
     .required("Required"),
 });
 
@@ -135,7 +177,7 @@ const Login = () => {
                 "url('https://usercontent.one/wp/www.buildwind.net/wp-content/uploads/2021/09/IFF_Guangzhou_Sim_streamlines_global_06_169-768x432.jpg')",
             }}
           ></div>
-          <div className="absolute bottom-0 flex h-3/4 w-full flex-col rounded-t-3xl bg-white bg-opacity-20 shadow">
+          <div className="absolute bottom-0 flex h-3/4 w-full flex-col rounded-t-3xl bg-white bg-opacity-20 shadow backdrop-blur-sm">
             <Formik
               initialValues={{
                 email: "",

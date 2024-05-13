@@ -11,7 +11,11 @@ const MyTextInput = ({ label, ...props }) => {
 
   const validationMessages = {
     username:
-      "Username can include: A-Z, a-z, 0-9, hyphen (-), and underscore (_)",
+      "Username can include: A-Z, a-z, 0-9, hyphen (-), and underscore (_). Spaces, '<', and '>' are not allowed",
+    email: "Email cannot contain spaces, '<', or '>'",
+    name: "Name can only contain alphanumeric characters. Spaces, '<', and '>' are not allowed",
+    surname:
+      "Surname can only contain alphanumeric characters. Spaces, '<', and '>' are not allowed",
   };
 
   return (
@@ -52,13 +56,78 @@ const MyTextInput = ({ label, ...props }) => {
   );
 };
 
-const MyPasswordInput = ({ label, ...props }) => {
+const MyOptionalTextInput = ({ label, ...props }) => {
   const [field, meta] = useField(props);
-  const [showPassword, setShowPassword] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(false);
+
+  const validationMessages = {
+    organisation: "Organisation cannot contain '<' or '>'",
+  };
 
   return (
     <>
       <div className="group relative">
+        {validationMessages[props.name] && (
+          <div className="absolute left-0 top-0 transform -translate-x-full translate-y-1/2 cursor-pointer">
+            <FiInfo
+              className="text-[#1E73BE]"
+              onMouseEnter={() => setShowTooltip(true)}
+              onMouseLeave={() => setShowTooltip(false)}
+            />
+            {showTooltip && (
+              <div className="absolute left-80 -top-14 text-sm transform -translate-x-full w-64 p-2 bg-white border rounded-xl shadow-md z-50">
+                {validationMessages[props.name]}
+              </div>
+            )}
+          </div>
+        )}
+        <input
+          {...field}
+          {...props}
+          id={props.name}
+          className="peer m-0 p-0 h-14 w-full rounded-3xl bg-gray-100 px-4 text-sm outline-none"
+        />
+        <label
+          htmlFor={props.name}
+          className="absolute left-2 top-0 flex h-full transform items-center pl-2 text-base transition-all duration-300 group-focus-within:-top-7 group-focus-within:h-1/2 group-focus-within:pl-0 group-focus-within:text-base group-focus-within:text-[#1E73BE]"
+        >
+          {label}
+        </label>
+      </div>
+      {meta.touched && meta.error ? (
+        <p className="max-w-sm text-red-500 pb-2">{meta.error}</p>
+      ) : null}
+    </>
+  );
+};
+
+const MyPasswordInput = ({ label, ...props }) => {
+  const [field, meta] = useField(props);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(false);
+
+  const validationMessages = {
+    password1: "Password cannot contain spaces, '<', or '>'",
+    password2: "Password confirmation cannot contain spaces, '<', or '>'",
+  };
+
+  return (
+    <>
+      <div className="group relative">
+        {validationMessages[props.name] && (
+          <div className="absolute left-0 top-0 transform -translate-x-full translate-y-1/2 cursor-pointer">
+            <FiInfo
+              className="text-[#1E73BE]"
+              onMouseEnter={() => setShowTooltip(true)}
+              onMouseLeave={() => setShowTooltip(false)}
+            />
+            {showTooltip && (
+              <div className="absolute left-80 -top-14 text-sm transform -translate-x-full w-64 p-2 bg-white border rounded-xl shadow-md z-50">
+                {validationMessages[props.name]}
+              </div>
+            )}
+          </div>
+        )}
         <input
           {...field}
           {...props}
@@ -88,35 +157,42 @@ const MyPasswordInput = ({ label, ...props }) => {
 };
 
 const validationSchema = Yup.object().shape({
-  email: Yup.string().email("Invalid email").required("Required"),
+  email: Yup.string()
+    .email("Invalid email")
+    .matches(/^[^\s<>]*$/, "Email cannot contain spaces, '<', or '>'")
+    .required("Required"),
   username: Yup.string()
     .matches(
       /^[a-zA-Z0-9_-]*$/,
-      "Username can only contain alphanumeric characters, hyphens, and underscores without spaces"
+      "Username can only contain alphanumeric characters, hyphens, and underscores"
     )
+    .matches(/^[^\s<>]*$/, "Username cannot contain spaces, '<', or '>'")
     .required("Required"),
   password1: Yup.string()
     .min(8, "Must be at least 8 characters")
+    .matches(/^[^\s<>]*$/, "Password cannot contain spaces, '<', or '>'")
     .required("Required"),
   password2: Yup.string()
     .oneOf([Yup.ref("password1"), null], "Passwords must match")
+    .matches(
+      /^[^\s<>]*$/,
+      "Password confirmation cannot contain spaces, '<', or '>'"
+    )
     .required("Required"),
   name: Yup.string()
-    .matches(
-      /^[a-zA-Z0-9 ]*$/,
-      "Name can only contain alphanumeric characters and spaces"
-    )
+    .matches(/^[a-zA-Z0-9]*$/, "Name can only contain alphanumeric characters")
+    .matches(/^[^\s<>]*$/, "Name cannot contain spaces, '<', or '>'")
     .required("Required"),
   surname: Yup.string()
     .matches(
-      /^[a-zA-Z0-9 ]*$/,
-      "Surname can only contain alphanumeric characters and spaces"
+      /^[a-zA-Z0-9]*$/,
+      "Surname can only contain alphanumeric characters"
     )
+    .matches(/^[^\s<>]*$/, "Surname cannot contain spaces, '<', or '>'")
     .required("Required"),
-  organisation: Yup.string().matches(
-    /^[^<>]*$/,
-    "Organisation cannot contain '<' or '>'"
-  ),
+  organisation: Yup.string()
+    .matches(/^[^\s<>]*$/, "Organisation cannot contain spaces, '<', or '>'")
+    .notRequired(),
 });
 
 const Registration = () => {
@@ -163,7 +239,7 @@ const Registration = () => {
   return (
     <>
       <section className="flex min-h-screen items-center justify-center">
-        <div className="relative h-[1100px] w-[400px] rounded-3xl">
+        <div className="relative h-[800px] w-[400px] rounded-3xl">
           <div
             className="h-full w-full bg-cover bg-center bg-no-repeat"
             style={{
@@ -171,7 +247,7 @@ const Registration = () => {
                 "url('https://usercontent.one/wp/www.buildwind.net/wp-content/uploads/2022/11/Brussels_240N_Streamlines_Windrose-768x533.jpg')",
             }}
           ></div>
-          <div className="absolute top-1 flex h-5/6 w-full flex-col rounded-t-3xl bg-white bg-opacity-20 shadow">
+          <div className="absolute top-5 flex h-auto w-full flex-col rounded-3xl bg-white bg-opacity-20 shadow backdrop-blur-sm">
             <Formik
               initialValues={{
                 email: "",
@@ -192,7 +268,7 @@ const Registration = () => {
                     <MyTextInput name="username" type="text" label="Username" />
                     <MyTextInput name="name" type="text" label="Name" />
                     <MyTextInput name="surname" type="text" label="Surname" />
-                    <MyTextInput
+                    <MyOptionalTextInput
                       name="organisation"
                       type="text"
                       label={

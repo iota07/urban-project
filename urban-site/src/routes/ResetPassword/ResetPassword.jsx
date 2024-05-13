@@ -4,15 +4,35 @@ import { useParams } from "react-router-dom";
 import { Formik, Form, useField } from "formik";
 import * as Yup from "yup";
 import { useState } from "react";
-import { FiEye, FiEyeOff } from "react-icons/fi";
+import { FiEye, FiEyeOff, FiInfo } from "react-icons/fi";
 
 const MyPasswordInput = ({ label, ...props }) => {
   const [field, meta] = useField(props);
   const [showPassword, setShowPassword] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(false);
+
+  const validationMessages = {
+    password1: "Password cannot contain spaces, '<', or '>'",
+    password2: "Password confirmation cannot contain spaces, '<', or '>'",
+  };
 
   return (
     <>
       <div className="group relative">
+        {validationMessages[props.name] && (
+          <div className="absolute left-0 top-0 transform -translate-x-full translate-y-1/2 cursor-pointer">
+            <FiInfo
+              className="text-[#1E73BE]"
+              onMouseEnter={() => setShowTooltip(true)}
+              onMouseLeave={() => setShowTooltip(false)}
+            />
+            {showTooltip && (
+              <div className="absolute left-80 -top-14 text-sm transform -translate-x-full w-64 p-2 bg-white border rounded-xl shadow-md z-50">
+                {validationMessages[props.name]}
+              </div>
+            )}
+          </div>
+        )}
         <input
           {...field}
           {...props}
@@ -44,9 +64,14 @@ const MyPasswordInput = ({ label, ...props }) => {
 const passwordSchema = Yup.object().shape({
   password1: Yup.string()
     .min(8, "Must be at least 8 characters")
+    .matches(/^[^\s<>]*$/, "Password cannot contain spaces, '<', or '>'")
     .required("Required"),
   password2: Yup.string()
     .oneOf([Yup.ref("password1"), null], "Passwords must match")
+    .matches(
+      /^[^\s<>]*$/,
+      "Password confirmation cannot contain spaces, '<', or '>'"
+    )
     .required("Required"),
 });
 
@@ -104,7 +129,7 @@ function ResetPassword() {
                 "url('https://usercontent.one/wp/www.buildwind.net/wp-content/uploads/2022/11/Brussels_240N_Streamlines_Windrose-768x533.jpg')",
             }}
           ></div>
-          <div className="absolute bottom-48 flex h-5/6 w-full flex-col rounded-t-3xl bg-white bg-opacity-20 shadow">
+          <div className="absolute bottom-48 flex h-5/6 w-full flex-col rounded-t-3xl bg-white bg-opacity-20 shadow backdrop-blur-sm">
             <Formik
               initialValues={{
                 password1: "",
