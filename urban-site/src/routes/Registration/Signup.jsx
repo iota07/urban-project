@@ -10,8 +10,8 @@ const MyTextInput = ({ label, ...props }) => {
   const [showTooltip, setShowTooltip] = useState(false);
 
   const validationMessages = {
-    username: "Username can only contain alphanumeric characters and spaces",
-    // Add other validation messages here
+    username:
+      "Username can include: A-Z, a-z, 0-9, hyphen (-), and underscore (_)",
   };
 
   return (
@@ -20,11 +20,12 @@ const MyTextInput = ({ label, ...props }) => {
         {validationMessages[props.name] && (
           <div className="absolute left-0 top-0 transform -translate-x-full translate-y-1/2 cursor-pointer">
             <FiInfo
+              className="text-[#1E73BE]"
               onMouseEnter={() => setShowTooltip(true)}
               onMouseLeave={() => setShowTooltip(false)}
             />
             {showTooltip && (
-              <div className="absolute left-0 transform -translate-x-full w-48 p-2 bg-white border rounded shadow-md z-50">
+              <div className="absolute left-80 -top-14 text-sm transform -translate-x-full w-64 p-2 bg-white border rounded-xl shadow-md z-50">
                 {validationMessages[props.name]}
               </div>
             )}
@@ -39,7 +40,7 @@ const MyTextInput = ({ label, ...props }) => {
         />
         <label
           htmlFor={props.name}
-          className="absolute left-2 top-0 flex h-full transform items-center pl-2 text-base transition-all duration-300 group-focus-within:-top-7 group-focus-within:h-1/2 group-focus-within:pl-0 group-focus-within:text-base group-focus-within:text-white peer-valid:-top-7 peer-valid:h-1/2 peer-valid:pl-0 peer-valid:text-base peer-valid:text-white"
+          className="absolute left-2 top-0 flex h-full transform items-center pl-2 text-base transition-all duration-300 group-focus-within:-top-7 group-focus-within:h-1/2 group-focus-within:pl-0 group-focus-within:text-base group-focus-within:text-[#1E73BE] peer-valid:-top-7 peer-valid:h-1/2 peer-valid:pl-0 peer-valid:text-base peer-valid:text-[#1E73BE]"
         >
           {label}
         </label>
@@ -90,8 +91,8 @@ const validationSchema = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("Required"),
   username: Yup.string()
     .matches(
-      /^[a-zA-Z0-9 ]*$/,
-      "Username can only contain alphanumeric characters and spaces"
+      /^[a-zA-Z0-9_-]*$/,
+      "Username can only contain alphanumeric characters, hyphens, and underscores without spaces"
     )
     .required("Required"),
   password1: Yup.string()
@@ -162,7 +163,7 @@ const Registration = () => {
   return (
     <>
       <section className="flex min-h-screen items-center justify-center">
-        <div className="relative h-[900px] w-[400px] overflow-hidden rounded-3xl">
+        <div className="relative h-[1100px] w-[400px] rounded-3xl">
           <div
             className="h-full w-full bg-cover bg-center bg-no-repeat"
             style={{
@@ -170,7 +171,7 @@ const Registration = () => {
                 "url('https://usercontent.one/wp/www.buildwind.net/wp-content/uploads/2022/11/Brussels_240N_Streamlines_Windrose-768x533.jpg')",
             }}
           ></div>
-          <div className="absolute bottom-48 flex h-5/6 w-full flex-col rounded-t-3xl bg-white bg-opacity-20 shadow">
+          <div className="absolute top-1 flex h-5/6 w-full flex-col rounded-t-3xl bg-white bg-opacity-20 shadow">
             <Formik
               initialValues={{
                 email: "",
@@ -194,7 +195,12 @@ const Registration = () => {
                     <MyTextInput
                       name="organisation"
                       type="text"
-                      label="Organisation"
+                      label={
+                        <>
+                          <span>Organisation</span>{" "}
+                          <span className="pl-2 text-gray-300">(optional)</span>
+                        </>
+                      }
                     />
                     <MyPasswordInput name="password1" label="Password" />
                     <MyPasswordInput
