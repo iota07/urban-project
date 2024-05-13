@@ -1,12 +1,15 @@
 import axios from "axios";
 import React from "react";
 import { useParams } from "react-router-dom";
-import { Formik, Form } from "formik";
-import { useField } from "formik";
+import { Formik, Form, useField } from "formik";
 import * as Yup from "yup";
+import { useState } from "react";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 
 const MyPasswordInput = ({ label, ...props }) => {
   const [field, meta] = useField(props);
+  const [showPassword, setShowPassword] = useState(false);
+
   return (
     <>
       <div className="group relative">
@@ -15,6 +18,7 @@ const MyPasswordInput = ({ label, ...props }) => {
           {...props}
           id={props.name}
           required
+          type={showPassword ? "text" : "password"}
           className="peer m-0 p-0 h-14 w-full rounded-3xl bg-gray-100 px-4 text-sm outline-none"
         />
         <label
@@ -23,6 +27,12 @@ const MyPasswordInput = ({ label, ...props }) => {
         >
           {label}
         </label>
+        <span
+          className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer"
+          onClick={() => setShowPassword((prev) => !prev)}
+        >
+          {showPassword ? <FiEyeOff /> : <FiEye />}
+        </span>
       </div>
       {meta.touched && meta.error ? (
         <p className="max-w-sm text-red-500 pb-2">{meta.error}</p>

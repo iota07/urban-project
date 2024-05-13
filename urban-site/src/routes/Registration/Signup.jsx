@@ -1,14 +1,35 @@
 import axios from "axios";
 import React from "react";
-import { Formik, Form } from "formik";
+import { Formik, Form, useField } from "formik";
 import * as Yup from "yup";
-import { useField } from "formik";
+import { useState } from "react";
+import { FiEye, FiEyeOff, FiInfo } from "react-icons/fi";
 
 const MyTextInput = ({ label, ...props }) => {
   const [field, meta] = useField(props);
+  const [showTooltip, setShowTooltip] = useState(false);
+
+  const validationMessages = {
+    username: "Username can only contain alphanumeric characters and spaces",
+    // Add other validation messages here
+  };
+
   return (
     <>
       <div className="group relative">
+        {validationMessages[props.name] && (
+          <div className="absolute left-0 top-0 transform -translate-x-full translate-y-1/2 cursor-pointer">
+            <FiInfo
+              onMouseEnter={() => setShowTooltip(true)}
+              onMouseLeave={() => setShowTooltip(false)}
+            />
+            {showTooltip && (
+              <div className="absolute left-0 transform -translate-x-full w-48 p-2 bg-white border rounded shadow-md z-50">
+                {validationMessages[props.name]}
+              </div>
+            )}
+          </div>
+        )}
         <input
           {...field}
           {...props}
@@ -18,10 +39,45 @@ const MyTextInput = ({ label, ...props }) => {
         />
         <label
           htmlFor={props.name}
+          className="absolute left-2 top-0 flex h-full transform items-center pl-2 text-base transition-all duration-300 group-focus-within:-top-7 group-focus-within:h-1/2 group-focus-within:pl-0 group-focus-within:text-base group-focus-within:text-white peer-valid:-top-7 peer-valid:h-1/2 peer-valid:pl-0 peer-valid:text-base peer-valid:text-white"
+        >
+          {label}
+        </label>
+      </div>
+      {meta.touched && meta.error ? (
+        <p className="max-w-sm text-red-500 pb-2">{meta.error}</p>
+      ) : null}
+    </>
+  );
+};
+
+const MyPasswordInput = ({ label, ...props }) => {
+  const [field, meta] = useField(props);
+  const [showPassword, setShowPassword] = useState(false);
+
+  return (
+    <>
+      <div className="group relative">
+        <input
+          {...field}
+          {...props}
+          id={props.name}
+          required
+          type={showPassword ? "text" : "password"}
+          className="peer m-0 p-0 h-14 w-full rounded-3xl bg-gray-100 px-4 text-sm outline-none"
+        />
+        <label
+          htmlFor={props.name}
           className="absolute left-2 top-0 flex h-full transform items-center pl-2 text-base transition-all duration-300 group-focus-within:-top-7 group-focus-within:h-1/2 group-focus-within:pl-0 group-focus-within:text-base group-focus-within:text-[#1E73BE] peer-valid:-top-7 peer-valid:h-1/2 peer-valid:pl-0 peer-valid:text-base peer-valid:text-[#1E73BE]"
         >
           {label}
         </label>
+        <span
+          className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer"
+          onClick={() => setShowPassword((prev) => !prev)}
+        >
+          {showPassword ? <FiEyeOff /> : <FiEye />}
+        </span>
       </div>
       {meta.touched && meta.error ? (
         <p className="max-w-sm text-red-500 pb-2">{meta.error}</p>
@@ -56,9 +112,10 @@ const validationSchema = Yup.object().shape({
       "Surname can only contain alphanumeric characters and spaces"
     )
     .required("Required"),
-  organisation: Yup.string()
-    .matches(/^[^<>]*$/, "Organisation cannot contain '<' or '>'")
-    .required("Required"),
+  organisation: Yup.string().matches(
+    /^[^<>]*$/,
+    "Organisation cannot contain '<' or '>'"
+  ),
 });
 
 const Registration = () => {
@@ -139,14 +196,9 @@ const Registration = () => {
                       type="text"
                       label="Organisation"
                     />
-                    <MyTextInput
-                      name="password1"
-                      type="password"
-                      label="Password"
-                    />
-                    <MyTextInput
+                    <MyPasswordInput name="password1" label="Password" />
+                    <MyPasswordInput
                       name="password2"
-                      type="password"
                       label="Password confirmation"
                     />
 

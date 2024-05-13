@@ -28,12 +28,12 @@ class CustomUser(AbstractUser):
     email = models.EmailField(_('email address'), unique=True)
     name = models.CharField(max_length=100)
     surname = models.CharField(max_length=100)
-    organisation = models.CharField(max_length=100)
+    organisation = models.CharField(max_length=100, blank=True)
     date_joined = models.DateTimeField(default=timezone.now)
     last_login = models.DateTimeField(default=timezone.now)
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username', 'name', 'surname', 'organisation']
+    REQUIRED_FIELDS = ['username', 'name', 'surname']
     objects = CustomUserManager()
 
     def __str__(self):

@@ -3,9 +3,12 @@ import { Formik, Form, useField } from "formik";
 import * as Yup from "yup";
 import { useNavigate, Link } from "react-router-dom";
 import updateAuthStatus from "../Interceptors/axios";
+import { useState } from "react";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 
 const MyTextInput = ({ label, ...props }) => {
   const [field, meta] = useField(props);
+
   return (
     <>
       <div className="group relative">
@@ -22,6 +25,41 @@ const MyTextInput = ({ label, ...props }) => {
         >
           {label}
         </label>
+      </div>
+      {meta.touched && meta.error ? (
+        <p className="max-w-sm text-red-500 pb-2">{meta.error}</p>
+      ) : null}
+    </>
+  );
+};
+
+const MyPasswordInput = ({ label, ...props }) => {
+  const [field, meta] = useField(props);
+  const [showPassword, setShowPassword] = useState(false);
+
+  return (
+    <>
+      <div className="group relative">
+        <input
+          {...field}
+          {...props}
+          id={props.name}
+          required
+          type={showPassword ? "text" : "password"}
+          className="peer m-0 p-0 h-14 w-full rounded-3xl bg-gray-100 px-4 text-sm outline-none"
+        />
+        <label
+          htmlFor={props.name}
+          className="absolute left-2 top-0 flex h-full transform items-center pl-2 text-base transition-all duration-300 group-focus-within:-top-7 group-focus-within:h-1/2 group-focus-within:pl-0 group-focus-within:text-base group-focus-within:text-white peer-valid:-top-7 peer-valid:h-1/2 peer-valid:pl-0 peer-valid:text-base peer-valid:text-white"
+        >
+          {label}
+        </label>
+        <span
+          className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer"
+          onClick={() => setShowPassword((prev) => !prev)}
+        >
+          {showPassword ? <FiEyeOff /> : <FiEye />}
+        </span>
       </div>
       {meta.touched && meta.error ? (
         <p className="max-w-sm text-red-500 pb-2">{meta.error}</p>
@@ -109,11 +147,7 @@ const Login = () => {
               {({ errors, touched }) => (
                 <Form className="mt-10 space-y-8 px-10 py-10 text-center">
                   <MyTextInput name="email" type="text" label="Email" />
-                  <MyTextInput
-                    name="password"
-                    type="password"
-                    label="Password"
-                  />
+                  <MyPasswordInput name="password" label="Password" />
                   <button
                     type="submit"
                     className="h-12 w-full rounded-3xl bg-blue-900 text-white transition-all duration-300 hover:bg-[#1E73BE]"
