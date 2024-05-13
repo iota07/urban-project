@@ -1,4 +1,7 @@
 import React from "react";
+import STLWithDataViewer from "../../component/STLWithDataViewer";
+import buildings from "../../assets/buildings.stl";
+import CFD_data_z5 from "../../assets/CFD_data_z5.vtk";
 
 function Landingpage() {
   return (
@@ -7,6 +10,7 @@ function Landingpage() {
         <h1 className="text-4xl font-bold text-blue-500">
           Welcome to the landing page!
         </h1>
+        <STLWithDataViewer stlFile={buildings} vtkFile={CFD_data_z5} />
       </div>
     </section>
   );
