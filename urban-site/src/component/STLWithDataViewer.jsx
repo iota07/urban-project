@@ -1,9 +1,12 @@
 import React, { useEffect, useRef } from "react";
-import vtkFullScreenRenderWindow from "vtk.js/Sources/Rendering/Misc/FullScreenRenderWindow";
+import "@kitware/vtk.js/Rendering/Profiles/Geometry";
 import vtkSTLReader from "vtk.js/Sources/IO/Geometry/STLReader";
 import vtkXMLPolyDataReader from "vtk.js/Sources/IO/XML/XMLPolyDataReader";
-import vtkMapper from "vtk.js/Sources/Rendering/Core/Mapper";
-import vtkActor from "vtk.js/Sources/Rendering/Core/Actor";
+import vtkFullScreenRenderWindow from "@kitware/vtk.js/Rendering/Misc/FullScreenRenderWindow";
+
+import vtkActor from "@kitware/vtk.js/Rendering/Core/Actor";
+import vtkMapper from "@kitware/vtk.js/Rendering/Core/Mapper";
+import vtkConeSource from "@kitware/vtk.js/Filters/Sources/ConeSource";
 
 const STLWithDataViewer = ({ stlFile, vtkFile }) => {
   const containerRef = useRef();
@@ -26,19 +29,27 @@ const STLWithDataViewer = ({ stlFile, vtkFile }) => {
     stlActor.setMapper(stlMapper);
     vtkActor.setMapper(vtkMapper);
 
-    stlReader.setUrl(stlFile, { binary: true }).then(() => {
-      stlMapper.setInputData(stlReader.getOutputData(0));
-      renderer.addActor(stlActor);
-      renderer.resetCamera();
-      renderWindow.render();
-    });
+    Promise.all([
+      stlReader.setUrl(stlFile, { binary: true }).catch((error) => {
+        console.error("Error loading STL file:", error);
+      }),
+      vtkReader.setUrl(vtkFile).catch((error) => {
+        console.error("Error loading VTK file:", error);
+      }),
+    ])
+      .then(() => {
+        stlMapper.setInputData(stlReader.getOutputData(0));
+        vtkMapper.setInputData(vtkReader.getOutputData(0));
 
-    vtkReader.setUrl(vtkFile).then(() => {
-      vtkMapper.setInputData(vtkReader.getOutputData(0));
-      renderer.addActor(vtkActor);
-      renderer.resetCamera();
-      renderWindow.render();
-    });
+        renderer.addActor(stlActor);
+        renderer.addActor(vtkActor);
+
+        renderer.resetCamera();
+        renderWindow.render();
+      })
+      .catch((error) => {
+        console.error("Error loading one or more files:", error);
+      });
 
     return () => {
       fullScreenRenderer.delete();
