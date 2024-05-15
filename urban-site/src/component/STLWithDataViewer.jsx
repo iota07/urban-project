@@ -1,91 +1,61 @@
 import React, { useEffect, useRef } from "react";
-import * as THREE from "three";
-import { STLLoader } from "three/examples/jsm/loaders/STLLoader";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import "@kitware/vtk.js/Rendering/Profiles/Geometry";
+import vtkActor from "@kitware/vtk.js/Rendering/Core/Actor";
+import vtkFullScreenRenderWindow from "@kitware/vtk.js/Rendering/Misc/FullScreenRenderWindow";
+import vtkMapper from "@kitware/vtk.js/Rendering/Core/Mapper";
+import vtkSTLReader from "@kitware/vtk.js/IO/Geometry/STLReader";
+import vtkXMLPolyDataReader from "@kitware/vtk.js/IO/Legacy/PolyDataReader";
 
-const STLWithDataViewer = ({ stlFile }) => {
+const STLWithDataViewer = ({ stlFile, vtkFile }) => {
   const containerRef = useRef();
 
   useEffect(() => {
-    const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0xcce0ff); // Light blue background
+    const fullScreenRenderer = vtkFullScreenRenderWindow.newInstance();
+    const renderer = fullScreenRenderer.getRenderer();
+    const renderWindow = fullScreenRenderer.getRenderWindow();
 
-    const camera = new THREE.PerspectiveCamera(
-      75,
-      window.innerWidth / window.innerHeight,
-      0.1,
-      1000
-    );
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    containerRef.current.appendChild(renderer.domElement);
+    const stlReader = vtkSTLReader.newInstance();
+    const vtkReader = vtkXMLPolyDataReader.newInstance();
+    const stlActor = vtkActor.newInstance();
+    const vtkDataActor = vtkActor.newInstance();
+    const stlMapper = vtkMapper.newInstance();
+    const vtkDataMapper = vtkMapper.newInstance();
 
-    const controls = new OrbitControls(camera, renderer.domElement);
-    controls.update();
+    stlActor.setMapper(stlMapper);
+    vtkDataActor.setMapper(vtkDataMapper);
 
-    const stlLoader = new STLLoader();
+    stlReader
+      .setUrl(stlFile, { binary: true })
+      .then(() => {
+        console.log("STL file loaded successfully");
+        stlMapper.setInputData(stlReader.getOutputData(0));
+        renderer.addActor(stlActor);
+        renderer.resetCamera();
+        renderWindow.render();
+      })
+      .catch((error) => {
+        console.error("Error loading STL file:", error);
+      });
 
-    // Create a directional light to simulate sunlight
-    const light = new THREE.DirectionalLight(0xffffff, 1);
-    light.position.set(0, 1, 1).normalize(); // Position the light to shine from top to bottom
-    scene.add(light);
-
-    // Add an ambient light
-    const ambientLight = new THREE.AmbientLight(0x404040); // Soft ambient light
-    scene.add(ambientLight);
-
-    // Enable shadows in the renderer
-    renderer.shadowMap.enabled = true;
-
-    stlLoader.load(stlFile, function (geometry) {
-      geometry.computeBoundingBox();
-      const boundingBox = geometry.boundingBox;
-      const center = boundingBox.getCenter(new THREE.Vector3());
-      const size = boundingBox.getSize(new THREE.Vector3());
-
-      // Position camera to look at the center of the model
-      camera.position.copy(center);
-      camera.position.x += size.x;
-      camera.position.y += size.y;
-      camera.position.z += size.z;
-
-      const material = new THREE.MeshStandardMaterial({ color: 0xd3d3d3 }); // Use a standard material for the building
-      const mesh = new THREE.Mesh(geometry, material);
-
-      // Enable shadows for the mesh
-      mesh.castShadow = true;
-      mesh.receiveShadow = true;
-
-      // Adjust these values as needed to correct the orientation of the mesh
-      mesh.rotation.x = Math.PI * 0.45; // 180 degrees
-      mesh.rotation.y = Math.PI * 1.15;
-      mesh.rotation.z = Math.PI * 0.58;
-
-      scene.add(mesh);
-
-      // Make the camera look at the mesh
-      camera.lookAt(mesh.position);
-
-      // Set controls target to center of the model
-      controls.target.copy(mesh.position);
-    });
-
-    const animate = function () {
-      requestAnimationFrame(animate);
-      controls.update();
-      renderer.render(scene, camera);
-    };
-
-    animate();
+    vtkReader
+      .setUrl(vtkFile, { binary: true })
+      .then(() => {
+        console.log("VTK file loaded successfully");
+        vtkDataMapper.setInputData(vtkReader.getOutputData(0));
+        renderer.addActor(vtkDataActor);
+        renderer.resetCamera();
+        renderWindow.render();
+      })
+      .catch((error) => {
+        console.error("Error loading VTK file:", error);
+      });
 
     return () => {
-      while (containerRef.current.firstChild) {
-        containerRef.current.firstChild.remove();
-      }
+      fullScreenRenderer.delete();
     };
-  }, [stlFile]);
+  }, [stlFile, vtkFile]);
 
-  return <div ref={containerRef} />;
+  return <div ref={containerRef} className="h-[200px] w-[200px]" />;
 };
 
 export default STLWithDataViewer;
