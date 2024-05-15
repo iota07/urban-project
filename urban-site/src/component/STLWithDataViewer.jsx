@@ -4,9 +4,9 @@ import vtkActor from "@kitware/vtk.js/Rendering/Core/Actor";
 import vtkFullScreenRenderWindow from "@kitware/vtk.js/Rendering/Misc/FullScreenRenderWindow";
 import vtkMapper from "@kitware/vtk.js/Rendering/Core/Mapper";
 import vtkSTLReader from "@kitware/vtk.js/IO/Geometry/STLReader";
-import vtkXMLPolyDataReader from "@kitware/vtk.js/IO/Legacy/PolyDataReader";
+import vtkXMLPolyDataReader from "@kitware/vtk.js/IO/XML/XMLPolyDataReader";
 
-const STLWithDataViewer = ({ stlFile, vtkFile }) => {
+const STLWithDataViewer = ({ stlFile, vtpFile }) => {
   const containerRef = useRef();
 
   useEffect(() => {
@@ -24,38 +24,46 @@ const STLWithDataViewer = ({ stlFile, vtkFile }) => {
     stlActor.setMapper(stlMapper);
     vtkDataActor.setMapper(vtkDataMapper);
 
-    stlReader
-      .setUrl(stlFile, { binary: true })
+    const stlPromise = stlReader.setUrl(stlFile, { binary: true });
+    const vtkPromise = vtkReader.setUrl(vtpFile, { binary: true });
+
+    stlPromise
       .then(() => {
         console.log("STL file loaded successfully");
-        stlMapper.setInputData(stlReader.getOutputData(0));
+        const stlOutputData = stlReader.getOutputData(0);
+        console.log("STL Output Data:", stlOutputData);
+        stlMapper.setInputData(stlOutputData);
         renderer.addActor(stlActor);
         renderer.resetCamera();
-        renderWindow.render();
       })
       .catch((error) => {
         console.error("Error loading STL file:", error);
       });
 
-    vtkReader
-      .setUrl(vtkFile, { binary: true })
+    vtkPromise
       .then(() => {
-        console.log("VTK file loaded successfully");
-        vtkDataMapper.setInputData(vtkReader.getOutputData(0));
+        console.log("VTP file loaded successfully");
+        const vtkOutputData = vtkReader.getOutputData(0);
+        console.log("VTP Output Data:", vtkOutputData);
+        vtkDataMapper.setInputData(vtkOutputData);
         renderer.addActor(vtkDataActor);
         renderer.resetCamera();
-        renderWindow.render();
       })
       .catch((error) => {
         console.error("Error loading VTK file:", error);
       });
 
+    // Render after both files have been processed
+    Promise.all([stlPromise, vtkPromise]).then(() => {
+      renderWindow.render();
+    });
+
     return () => {
       fullScreenRenderer.delete();
     };
-  }, [stlFile, vtkFile]);
+  }, [stlFile, vtpFile]);
 
-  return <div ref={containerRef} className="h-[200px] w-[200px]" />;
+  return <div ref={containerRef} className="h-auto w-auto" />;
 };
 
 export default STLWithDataViewer;
