@@ -17,12 +17,12 @@ const STLWithDataViewer = ({ stlFile, vtpFile }) => {
     const stlReader = vtkSTLReader.newInstance();
     const vtpReader = vtkXMLPolyDataReader.newInstance();
     const stlActor = vtkActor.newInstance();
-    const vtkDataActor = vtkActor.newInstance();
+    const vtpDataActor = vtkActor.newInstance();
     const stlMapper = vtkMapper.newInstance();
     const vtpDataMapper = vtkMapper.newInstance();
 
     stlActor.setMapper(stlMapper);
-    vtkDataActor.setMapper(vtpDataMapper);
+    vtpDataActor.setMapper(vtpDataMapper);
 
     const stlPromise = stlReader.setUrl(stlFile, { binary: true });
     const vtpPromise = vtpReader.setUrl(vtpFile, { binary: true });
@@ -43,14 +43,27 @@ const STLWithDataViewer = ({ stlFile, vtpFile }) => {
     vtpPromise
       .then(() => {
         console.log("VTP file loaded successfully");
-        const vtkOutputData = vtpReader.getOutputData(0);
-        console.log("VTP Output Data:", vtkOutputData);
-        vtpDataMapper.setInputData(vtkOutputData);
-        renderer.addActor(vtkDataActor);
+        const vtpOutputData = vtpReader.getOutputData(0);
+        console.log("VTP Output Data:", vtpOutputData);
+
+        // Log basic information about the loaded data
+        console.log("Number of Points:", vtpOutputData.getNumberOfPoints());
+        console.log("Number of Cells:", vtpOutputData.getNumberOfCells());
+
+        // Log information about scalar arrays
+        const scalarArrays = vtpOutputData.getPointData().getArrays();
+        console.log("Scalar Arrays:");
+        scalarArrays.forEach((array, index) => {
+          console.log(
+            `  Array ${index}: ${array.getName()} (components: ${array.getNumberOfComponents()}, tuples: ${array.getNumberOfTuples()})`
+          );
+        });
+        vtpDataMapper.setInputData(vtpOutputData);
+        renderer.addActor(vtpDataActor);
         renderer.resetCamera();
       })
       .catch((error) => {
-        console.error("Error loading VTK file:", error);
+        console.error("Error loading VTP file:", error);
       });
 
     // Render after both files have been processed
