@@ -5,6 +5,7 @@ import vtkFullScreenRenderWindow from "@kitware/vtk.js/Rendering/Misc/FullScreen
 import vtkMapper from "@kitware/vtk.js/Rendering/Core/Mapper";
 import vtkSTLReader from "@kitware/vtk.js/IO/Geometry/STLReader";
 import vtkXMLPolyDataReader from "@kitware/vtk.js/IO/XML/XMLPolyDataReader";
+import vtkDataArray from "@kitware/vtk.js/Common/Core/DataArray";
 
 const STLWithDataViewer = ({ stlFile, vtpFile }) => {
   const containerRef = useRef();
@@ -58,6 +59,32 @@ const STLWithDataViewer = ({ stlFile, vtpFile }) => {
             `  Array ${index}: ${array.getName()} (components: ${array.getNumberOfComponents()}, tuples: ${array.getNumberOfTuples()})`
           );
         });
+
+        const velocityArray = scalarArrays.find(
+          (array) => array.getName() === "U"
+        );
+        if (velocityArray) {
+          const tuples = velocityArray.getNumberOfTuples();
+
+          const colorData = new Float32Array(tuples * 3); // RGB components
+
+          for (let i = 0; i < tuples; i++) {
+            const tuple = velocityArray.getTuple(i);
+            colorData[i * 3] = tuple[0]; // Red component
+            colorData[i * 3 + 1] = tuple[1]; // Green component
+            colorData[i * 3 + 2] = tuple[2]; // Blue component
+          }
+
+          const colorArray = vtkDataArray.newInstance({
+            name: "Colors",
+            values: colorData,
+            numberOfComponents: 3, // RGB colors
+          });
+
+          // Set color array
+          vtpOutputData.getPointData().setScalars(colorArray);
+        }
+
         vtpDataMapper.setInputData(vtpOutputData);
         renderer.addActor(vtpDataActor);
         renderer.resetCamera();
