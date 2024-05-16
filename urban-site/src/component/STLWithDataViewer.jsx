@@ -15,17 +15,17 @@ const STLWithDataViewer = ({ stlFile, vtpFile }) => {
     const renderWindow = fullScreenRenderer.getRenderWindow();
 
     const stlReader = vtkSTLReader.newInstance();
-    const vtkReader = vtkXMLPolyDataReader.newInstance();
+    const vtpReader = vtkXMLPolyDataReader.newInstance();
     const stlActor = vtkActor.newInstance();
     const vtkDataActor = vtkActor.newInstance();
     const stlMapper = vtkMapper.newInstance();
-    const vtkDataMapper = vtkMapper.newInstance();
+    const vtpDataMapper = vtkMapper.newInstance();
 
     stlActor.setMapper(stlMapper);
-    vtkDataActor.setMapper(vtkDataMapper);
+    vtkDataActor.setMapper(vtpDataMapper);
 
     const stlPromise = stlReader.setUrl(stlFile, { binary: true });
-    const vtkPromise = vtkReader.setUrl(vtpFile, { binary: true });
+    const vtpPromise = vtpReader.setUrl(vtpFile, { binary: true });
 
     stlPromise
       .then(() => {
@@ -40,12 +40,12 @@ const STLWithDataViewer = ({ stlFile, vtpFile }) => {
         console.error("Error loading STL file:", error);
       });
 
-    vtkPromise
+    vtpPromise
       .then(() => {
         console.log("VTP file loaded successfully");
-        const vtkOutputData = vtkReader.getOutputData(0);
+        const vtkOutputData = vtpReader.getOutputData(0);
         console.log("VTP Output Data:", vtkOutputData);
-        vtkDataMapper.setInputData(vtkOutputData);
+        vtpDataMapper.setInputData(vtkOutputData);
         renderer.addActor(vtkDataActor);
         renderer.resetCamera();
       })
@@ -54,7 +54,7 @@ const STLWithDataViewer = ({ stlFile, vtpFile }) => {
       });
 
     // Render after both files have been processed
-    Promise.all([stlPromise, vtkPromise]).then(() => {
+    Promise.all([stlPromise, vtpPromise]).then(() => {
       renderWindow.render();
     });
 
@@ -63,7 +63,7 @@ const STLWithDataViewer = ({ stlFile, vtpFile }) => {
     };
   }, [stlFile, vtpFile]);
 
-  return <div ref={containerRef} className="h-auto w-auto" />;
+  return <div ref={containerRef} />;
 };
 
 export default STLWithDataViewer;
