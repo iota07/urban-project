@@ -12,7 +12,6 @@ const STLWithDataViewer = ({ stlFile, vtpFile }) => {
   const containerRef = useRef();
 
   useEffect(() => {
-    console.log("useEffect called");
     const fullScreenRenderer = vtkFullScreenRenderWindow.newInstance({
       rootContainer: containerRef.current,
       containerStyle: { height: "100%", width: "100%" },
@@ -37,7 +36,7 @@ const STLWithDataViewer = ({ stlFile, vtpFile }) => {
       .then(() => {
         console.log("STL file loaded successfully");
         const stlOutputData = stlReader.getOutputData(0);
-        console.log("STL Output Data:", stlOutputData);
+
         stlMapper.setInputData(stlOutputData);
         renderer.addActor(stlActor);
         renderer.resetCamera();
@@ -50,26 +49,18 @@ const STLWithDataViewer = ({ stlFile, vtpFile }) => {
       .then(() => {
         console.log("VTP file loaded successfully");
         const vtpOutputData = vtpReader.getOutputData(0);
-        console.log("VTP Output Data:", vtpOutputData);
-
-        // Log basic information about the loaded data
-        console.log("Number of Points:", vtpOutputData.getNumberOfPoints());
-        console.log("Number of Cells:", vtpOutputData.getNumberOfCells());
 
         // Log information about scalar arrays
         const scalarArrays = vtpOutputData.getPointData().getArrays();
-        console.log("Scalar Arrays:");
-        scalarArrays.forEach((array, index) => {
-          console.log(
-            `  Array ${index}: ${array.getName()} (components: ${array.getNumberOfComponents()}, tuples: ${array.getNumberOfTuples()})`
-          );
-        });
 
         const velocityArray = scalarArrays.find(
           (array) => array.getName() === "U"
         );
+
         if (velocityArray) {
           const tuples = velocityArray.getNumberOfTuples();
+          console.log("tuples:", tuples);
+          console.log("velocityArray:", velocityArray);
 
           // Compute the magnitude for each tuple in the velocity array
           const magnitudes = new Float32Array(tuples);
@@ -83,26 +74,23 @@ const STLWithDataViewer = ({ stlFile, vtpFile }) => {
             magnitudes[i] = magnitude;
             minMagnitude = Math.min(minMagnitude, magnitude);
             maxMagnitude = Math.max(maxMagnitude, magnitude);
-
-            // Log the magnitude
-            console.log(`Magnitude ${i}: ${magnitude}`);
           }
-          // Log the minimum and maximum magnitudes
-          console.log(`Min magnitude: ${minMagnitude}`);
-          console.log(`Max magnitude: ${maxMagnitude}`);
 
-          const colorTransferFunction = vtkColorTransferFunction.newInstance();
-
-          // Set the color scale from blue to red
-          colorTransferFunction.addRGBPoint(minMagnitude, 0, 0, 1); // Blue at the minimum magnitude
-          colorTransferFunction.addRGBPoint(maxMagnitude, 1, 0, 0); // Red at the maximum magnitude
+          const ctfun = vtkColorTransferFunction.newInstance();
+          ctfun.addRGBPoint(minMagnitude, 1, 0, 0);
+          ctfun.addRGBPoint(maxMagnitude, 0, 0, 1);
 
           const colorData = new Float32Array(tuples * 3); // RGB components
-
           for (let i = 0; i < tuples; i++) {
-            const color = colorTransferFunction.getColor(magnitudes[i]);
+            const magnitude = magnitudes[i];
+
+            const color = [];
+            ctfun.getColor(magnitude, color);
+
             colorData[i * 3] = color[0]; // Red component
+
             colorData[i * 3 + 1] = color[1]; // Green component
+
             colorData[i * 3 + 2] = color[2]; // Blue component
           }
 
@@ -117,9 +105,6 @@ const STLWithDataViewer = ({ stlFile, vtpFile }) => {
         }
 
         vtpDataMapper.setInputData(vtpOutputData);
-        vtpDataMapper.setColorModeToMapScalars();
-        vtpDataMapper.setScalarModeToUsePointData();
-        vtpDataMapper.scalarVisibilityOn();
         renderer.addActor(vtpDataActor);
         renderer.resetCamera();
       })
