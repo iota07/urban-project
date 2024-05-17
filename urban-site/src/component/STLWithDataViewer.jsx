@@ -13,7 +13,10 @@ const STLWithDataViewer = ({ stlFile, vtpFile }) => {
 
   useEffect(() => {
     console.log("useEffect called");
-    const fullScreenRenderer = vtkFullScreenRenderWindow.newInstance();
+    const fullScreenRenderer = vtkFullScreenRenderWindow.newInstance({
+      rootContainer: containerRef.current,
+      containerStyle: { height: "100%", width: "100%" },
+    });
     const renderer = fullScreenRenderer.getRenderer();
     const renderWindow = fullScreenRenderer.getRenderWindow();
 
