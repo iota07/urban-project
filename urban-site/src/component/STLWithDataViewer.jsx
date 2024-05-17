@@ -59,8 +59,6 @@ const STLWithDataViewer = ({ stlFile, vtpFile }) => {
 
         if (velocityArray) {
           const tuples = velocityArray.getNumberOfTuples();
-          console.log("tuples:", tuples);
-          console.log("velocityArray:", velocityArray);
 
           // Compute the magnitude for each tuple in the velocity array
           const magnitudes = new Float32Array(tuples);
