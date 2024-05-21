@@ -1,30 +1,34 @@
-import React, { useEffect, useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import "@kitware/vtk.js/Rendering/Profiles/Geometry";
-import vtkActor from "@kitware/vtk.js/Rendering/Core/Actor";
 import vtkFullScreenRenderWindow from "@kitware/vtk.js/Rendering/Misc/FullScreenRenderWindow";
-import vtkMapper from "@kitware/vtk.js/Rendering/Core/Mapper";
 import vtkSTLReader from "@kitware/vtk.js/IO/Geometry/STLReader";
 import vtkXMLPolyDataReader from "@kitware/vtk.js/IO/XML/XMLPolyDataReader";
+import vtkMapper from "@kitware/vtk.js/Rendering/Core/Mapper";
+import vtkActor from "@kitware/vtk.js/Rendering/Core/Actor";
 import vtkDataArray from "@kitware/vtk.js/Common/Core/DataArray";
 import vtkColorTransferFunction from "@kitware/vtk.js/Rendering/Core/ColorTransferFunction";
 
 const STLWithDataViewer = ({ stlFile, vtpFile }) => {
   const containerRef = useRef();
+  const fullScreenRenderer = useRef(null);
 
   useEffect(() => {
-    const fullScreenRenderer = vtkFullScreenRenderWindow.newInstance({
-      rootContainer: containerRef.current,
-      containerStyle: { height: "100%", width: "100%" },
-    });
-    const renderer = fullScreenRenderer.getRenderer();
-    const renderWindow = fullScreenRenderer.getRenderWindow();
+    if (!fullScreenRenderer.current) {
+      fullScreenRenderer.current = vtkFullScreenRenderWindow.newInstance({
+        rootContainer: containerRef.current,
+        containerStyle: { height: "100%", width: "100%" },
+      });
+    }
+
+    const renderer = fullScreenRenderer.current.getRenderer();
+    const renderWindow = fullScreenRenderer.current.getRenderWindow();
 
     const stlReader = vtkSTLReader.newInstance();
     const vtpReader = vtkXMLPolyDataReader.newInstance();
+    const stlMapper = vtkMapper.newInstance({ scalarVisibility: false });
+    const vtpDataMapper = vtkMapper.newInstance();
     const stlActor = vtkActor.newInstance();
     const vtpDataActor = vtkActor.newInstance();
-    const stlMapper = vtkMapper.newInstance();
-    const vtpDataMapper = vtkMapper.newInstance();
 
     stlActor.setMapper(stlMapper);
     vtpDataActor.setMapper(vtpDataMapper);
@@ -36,7 +40,6 @@ const STLWithDataViewer = ({ stlFile, vtpFile }) => {
       .then(() => {
         console.log("STL file loaded successfully");
         const stlOutputData = stlReader.getOutputData(0);
-
         stlMapper.setInputData(stlOutputData);
         renderer.addActor(stlActor);
         renderer.resetCamera();
@@ -50,7 +53,6 @@ const STLWithDataViewer = ({ stlFile, vtpFile }) => {
         console.log("VTP file loaded successfully");
         const vtpOutputData = vtpReader.getOutputData(0);
 
-        // Log information about scalar arrays
         const scalarArrays = vtpOutputData.getPointData().getArrays();
 
         const velocityArray = scalarArrays.find(
@@ -86,9 +88,7 @@ const STLWithDataViewer = ({ stlFile, vtpFile }) => {
             ctfun.getColor(magnitude, color);
 
             colorData[i * 3] = color[0]; // Red component
-
             colorData[i * 3 + 1] = color[1]; // Green component
-
             colorData[i * 3 + 2] = color[2]; // Blue component
           }
 
@@ -98,7 +98,6 @@ const STLWithDataViewer = ({ stlFile, vtpFile }) => {
             numberOfComponents: 3, // RGB colors
           });
 
-          // Set color array
           vtpOutputData.getPointData().setScalars(colorArray);
         }
 
@@ -116,7 +115,12 @@ const STLWithDataViewer = ({ stlFile, vtpFile }) => {
     });
 
     return () => {
-      fullScreenRenderer.delete();
+      stlActor.delete();
+      vtpDataActor.delete();
+      stlMapper.delete();
+      vtpDataMapper.delete();
+      stlReader.delete();
+      vtpReader.delete();
     };
   }, [stlFile, vtpFile]);
 

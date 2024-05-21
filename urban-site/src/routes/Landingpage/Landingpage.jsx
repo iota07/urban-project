@@ -7,12 +7,9 @@ function Landingpage() {
   return (
     <>
       <h1>Landing page</h1>
-      <STLWithDataViewer
-        stlFile={buildings}
-        vtpFile={CFD_data_z5}
-        width={200}
-        height={200}
-      />
+      <section className="w-5/6">
+        <STLWithDataViewer stlFile={buildings} vtpFile={CFD_data_z5} />
+      </section>
     </>
   );
 }
