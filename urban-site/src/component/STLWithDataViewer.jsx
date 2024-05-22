@@ -7,6 +7,9 @@ import vtkMapper from "@kitware/vtk.js/Rendering/Core/Mapper";
 import vtkActor from "@kitware/vtk.js/Rendering/Core/Actor";
 import vtkDataArray from "@kitware/vtk.js/Common/Core/DataArray";
 import vtkColorTransferFunction from "@kitware/vtk.js/Rendering/Core/ColorTransferFunction";
+import vtkScalarBarActor from "@kitware/vtk.js/Rendering/Core/ScalarBarActor";
+import * as d3 from "d3-scale";
+import { formatDefaultLocale } from "d3-format";
 
 // Component to view STL files with associated VTP data
 const STLWithDataViewer = ({ stlFile, vtpFile }) => {
@@ -23,6 +26,7 @@ const STLWithDataViewer = ({ stlFile, vtpFile }) => {
       // Initialize the renderer if it's not already initialized
       if (!filesLoaded && !fullScreenRenderer.current) {
         fullScreenRenderer.current = vtkFullScreenRenderWindow.newInstance({
+          //background: [1, 1, 1],
           rootContainer: containerRef.current,
           containerStyle: { height: "100%", width: "100%" },
         });
@@ -77,13 +81,17 @@ const STLWithDataViewer = ({ stlFile, vtpFile }) => {
           (array) => array.getName() === "U"
         );
 
+        let ctfun = null;
+        let minMagnitude = 0;
+        let maxMagnitude = 0;
+
         // If the velocity array exists, calculate the magnitudes and colors
         if (velocityArray) {
           // Calculate the magnitudes of the velocities
           const tuples = velocityArray.getNumberOfTuples();
           const magnitudes = new Float32Array(tuples);
-          let minMagnitude = Infinity;
-          let maxMagnitude = -Infinity;
+          minMagnitude = Infinity;
+          maxMagnitude = -Infinity;
           for (let i = 0; i < tuples; i++) {
             const tuple = velocityArray.getTuple(i);
             const magnitude = Math.sqrt(
@@ -95,7 +103,7 @@ const STLWithDataViewer = ({ stlFile, vtpFile }) => {
           }
 
           // Create a color transfer function based on the magnitudes
-          const ctfun = vtkColorTransferFunction.newInstance();
+          ctfun = vtkColorTransferFunction.newInstance();
           ctfun.addRGBPoint(minMagnitude, 1, 0, 0);
           ctfun.addRGBPoint(maxMagnitude, 0, 0, 1);
 
@@ -122,9 +130,44 @@ const STLWithDataViewer = ({ stlFile, vtpFile }) => {
 
         // Set the VTP output data for the mapper
         vtpDataMapper.setInputData(vtpOutputData);
-        // Add the VTP data actor to the renderer and reset the camera
         renderer.addActor(vtpDataActor);
         renderer.resetCamera();
+
+        if (ctfun) {
+          const scalarBarActor = vtkScalarBarActor.newInstance();
+          scalarBarActor.setScalarsToColors(ctfun);
+
+          function generateTicks(numberOfTicks) {
+            return (helper) => {
+              const lastTickBounds = helper.getLastTickBounds();
+              const scale = d3
+                .scaleLinear()
+                .domain([minMagnitude, maxMagnitude])
+                .range([lastTickBounds[0], lastTickBounds[1]]);
+              const samples = scale.ticks(numberOfTicks);
+              const ticks = samples.map((tick) => scale(tick));
+              formatDefaultLocale({ minus: "\u002D" });
+              const format = scale.tickFormat(
+                ticks[0],
+                ticks[ticks.length - 1],
+                numberOfTicks
+              );
+              const tickStrings = ticks
+                .map(format)
+                .map((tick) =>
+                  Number(parseFloat(tick).toPrecision(12)).toPrecision()
+                );
+              helper.setTicks(ticks);
+              helper.setTickStrings(tickStrings);
+            };
+          }
+
+          scalarBarActor.setGenerateTicks(generateTicks(10));
+          scalarBarActor.setVisibility(true);
+          renderer.addActor(scalarBarActor);
+
+          console.log("Scalar Bar Actor:", scalarBarActor);
+        }
 
         // Render after both files have been processed
         renderWindow.render();
