@@ -10,6 +10,7 @@ import vtkColorTransferFunction from "@kitware/vtk.js/Rendering/Core/ColorTransf
 import vtkScalarBarActor from "@kitware/vtk.js/Rendering/Core/ScalarBarActor";
 import * as d3 from "d3-scale";
 import { formatDefaultLocale } from "d3-format";
+import vtkLookupTable from "@kitware/vtk.js/Common/Core/LookupTable";
 
 // Component to view STL files with associated VTP data
 const STLWithDataViewer = ({ stlFile, vtpFile }) => {
@@ -84,6 +85,7 @@ const STLWithDataViewer = ({ stlFile, vtpFile }) => {
         let ctfun = null;
         let minMagnitude = 0;
         let maxMagnitude = 0;
+        let colorArray = null;
 
         // If the velocity array exists, calculate the magnitudes and colors
         if (velocityArray) {
@@ -104,8 +106,8 @@ const STLWithDataViewer = ({ stlFile, vtpFile }) => {
 
           // Create a color transfer function based on the magnitudes
           ctfun = vtkColorTransferFunction.newInstance();
-          ctfun.addRGBPoint(minMagnitude, 0, 0, 1); // Blue for low magnitudes
-          ctfun.addRGBPoint(maxMagnitude, 1, 0, 0); // Red for high magnitudes
+          ctfun.addRGBPoint(minMagnitude, 1, 0, 0); // Blue for low magnitudes
+          ctfun.addRGBPoint(maxMagnitude, 0, 0, 1); // Red for high magnitudes
 
           // Calculate the colors based on the magnitudes
           const colorData = new Float32Array(tuples * 3); // RGB components
@@ -119,7 +121,7 @@ const STLWithDataViewer = ({ stlFile, vtpFile }) => {
           }
 
           // Create a color array and set it as the scalars for the VTP output data
-          const colorArray = vtkDataArray.newInstance({
+          colorArray = vtkDataArray.newInstance({
             name: "Colors",
             values: colorData,
             numberOfComponents: 3, // RGB colors
@@ -133,12 +135,14 @@ const STLWithDataViewer = ({ stlFile, vtpFile }) => {
         renderer.addActor(vtpDataActor);
         renderer.resetCamera();
 
-        if (ctfun) {
-          const mapper = vtkMapper.newInstance();
-          mapper.setUseLookupTableScalarRange(true);
-          let lut = mapper.getLookupTable();
+        if (colorArray) {
+          let lut = vtkLookupTable.newInstance();
           lut.setRange(parseFloat(minMagnitude), parseFloat(maxMagnitude));
-          mapper.setInputData(vtpOutputData);
+          // Invert the hue range to change the gradient from blue to red
+          lut.setHueRange([0.66667, 0.0]);
+
+          // Rebuild the lookup table to apply the changes
+          lut.forceBuild();
           const scalarBarActor = vtkScalarBarActor.newInstance();
           // Set the original lookup table to the scalar bar actor
           scalarBarActor.setScalarsToColors(lut);
@@ -164,7 +168,9 @@ const STLWithDataViewer = ({ stlFile, vtpFile }) => {
               );
               const tickStrings = ticks
                 .map(format)
-                .map((tick) => parseFloat(tick).toFixed(2));
+                .map((tick) =>
+                  Number(parseFloat(tick).toPrecision(12)).toPrecision()
+                );
               helper.setTicks(ticks);
               helper.setTickStrings(tickStrings);
             };
@@ -191,6 +197,10 @@ const STLWithDataViewer = ({ stlFile, vtpFile }) => {
         vtpDataMapper.delete();
         stlReader.delete();
         vtpReader.delete();
+        if (scalarBarActor) {
+          renderer.removeActor(scalarBarActor);
+          scalarBarActor.delete();
+        }
       };
     };
 
