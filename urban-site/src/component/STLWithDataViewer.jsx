@@ -26,7 +26,7 @@ const STLWithDataViewer = ({ stlFile, vtpFile }) => {
       // Initialize the renderer if it's not already initialized
       if (!filesLoaded && !fullScreenRenderer.current) {
         fullScreenRenderer.current = vtkFullScreenRenderWindow.newInstance({
-          //background: [1, 1, 1],
+          //background: [1, 1, 1, 0],
           rootContainer: containerRef.current,
           containerStyle: { height: "100%", width: "100%" },
         });
@@ -104,8 +104,8 @@ const STLWithDataViewer = ({ stlFile, vtpFile }) => {
 
           // Create a color transfer function based on the magnitudes
           ctfun = vtkColorTransferFunction.newInstance();
-          ctfun.addRGBPoint(minMagnitude, 0, 0, 1);
-          ctfun.addRGBPoint(maxMagnitude, 1, 0, 0);
+          ctfun.addRGBPoint(minMagnitude, 0, 0, 1); // Blue for low magnitudes
+          ctfun.addRGBPoint(maxMagnitude, 1, 0, 0); // Red for high magnitudes
 
           // Calculate the colors based on the magnitudes
           const colorData = new Float32Array(tuples * 3); // RGB components
@@ -134,9 +134,18 @@ const STLWithDataViewer = ({ stlFile, vtpFile }) => {
         renderer.resetCamera();
 
         if (ctfun) {
+          const mapper = vtkMapper.newInstance();
+          mapper.setUseLookupTableScalarRange(true);
+          let lut = mapper.getLookupTable();
+          lut.setRange(parseFloat(minMagnitude), parseFloat(maxMagnitude));
+          mapper.setInputData(vtpOutputData);
           const scalarBarActor = vtkScalarBarActor.newInstance();
-          scalarBarActor.setScalarsToColors(ctfun);
+          // Set the original lookup table to the scalar bar actor
+          scalarBarActor.setScalarsToColors(lut);
+
           scalarBarActor.setAxisLabel("U Magnitude");
+          scalarBarActor.setDrawNanAnnotation(false);
+          scalarBarActor.setAutomated(true);
 
           function generateTicks(numberOfTicks) {
             return (helper) => {
@@ -155,9 +164,7 @@ const STLWithDataViewer = ({ stlFile, vtpFile }) => {
               );
               const tickStrings = ticks
                 .map(format)
-                .map((tick) =>
-                  Number(parseFloat(tick).toPrecision(12)).toPrecision()
-                );
+                .map((tick) => parseFloat(tick).toFixed(2));
               helper.setTicks(ticks);
               helper.setTickStrings(tickStrings);
             };
@@ -165,8 +172,6 @@ const STLWithDataViewer = ({ stlFile, vtpFile }) => {
 
           scalarBarActor.setGenerateTicks(generateTicks(10));
           renderer.addActor(scalarBarActor);
-
-          console.log("Scalar Bar Actor:", scalarBarActor);
         }
 
         // Render after both files have been processed
