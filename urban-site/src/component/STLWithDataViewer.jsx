@@ -104,8 +104,8 @@ const STLWithDataViewer = ({ stlFile, vtpFile }) => {
 
           // Create a color transfer function based on the magnitudes
           ctfun = vtkColorTransferFunction.newInstance();
-          ctfun.addRGBPoint(minMagnitude, 1, 0, 0);
-          ctfun.addRGBPoint(maxMagnitude, 0, 0, 1);
+          ctfun.addRGBPoint(minMagnitude, 0, 0, 1);
+          ctfun.addRGBPoint(maxMagnitude, 1, 0, 0);
 
           // Calculate the colors based on the magnitudes
           const colorData = new Float32Array(tuples * 3); // RGB components
@@ -136,6 +136,7 @@ const STLWithDataViewer = ({ stlFile, vtpFile }) => {
         if (ctfun) {
           const scalarBarActor = vtkScalarBarActor.newInstance();
           scalarBarActor.setScalarsToColors(ctfun);
+          scalarBarActor.setAxisLabel("U Magnitude");
 
           function generateTicks(numberOfTicks) {
             return (helper) => {
@@ -163,7 +164,6 @@ const STLWithDataViewer = ({ stlFile, vtpFile }) => {
           }
 
           scalarBarActor.setGenerateTicks(generateTicks(10));
-          scalarBarActor.setVisibility(true);
           renderer.addActor(scalarBarActor);
 
           console.log("Scalar Bar Actor:", scalarBarActor);
