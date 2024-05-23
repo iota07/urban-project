@@ -17,6 +17,7 @@ const STLWithDataViewer = ({ stlFile, vtpFile }) => {
   // References to the container and the renderer
   const containerRef = useRef();
   const fullScreenRenderer = useRef(null);
+  const scalarBarActorRef = useRef(null);
   // State to track if files have been loaded
   const [filesLoaded, setFilesLoaded] = useState(false);
 
@@ -27,7 +28,7 @@ const STLWithDataViewer = ({ stlFile, vtpFile }) => {
       // Initialize the renderer if it's not already initialized
       if (!filesLoaded && !fullScreenRenderer.current) {
         fullScreenRenderer.current = vtkFullScreenRenderWindow.newInstance({
-          //background: [1, 1, 1, 0],
+          background: [1, 1, 1, 1],
           rootContainer: containerRef.current,
           containerStyle: { height: "100%", width: "100%" },
         });
@@ -151,6 +152,17 @@ const STLWithDataViewer = ({ stlFile, vtpFile }) => {
           scalarBarActor.setDrawNanAnnotation(false);
           scalarBarActor.setAutomated(true);
 
+          scalarBarActor.setAxisTextStyle({
+            fontColor: "#1E73BE",
+            fontStyle: "bold",
+            fontFamily: "Arial",
+          });
+          scalarBarActor.setTickTextStyle({
+            fontColor: "#1E73BE",
+            fontStyle: "bold",
+            fontFamily: "Arial",
+          });
+
           function generateTicks(numberOfTicks) {
             return (helper) => {
               const lastTickBounds = helper.getLastTickBounds();
@@ -177,7 +189,9 @@ const STLWithDataViewer = ({ stlFile, vtpFile }) => {
           }
 
           scalarBarActor.setGenerateTicks(generateTicks(10));
+
           renderer.addActor(scalarBarActor);
+          scalarBarActorRef.current = scalarBarActor;
         }
 
         // Render after both files have been processed

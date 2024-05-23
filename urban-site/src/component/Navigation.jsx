@@ -1,10 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { FaBars, FaTimes } from "react-icons/fa";
+import { IoIosLogOut } from "react-icons/io";
+import { IoIosLogIn } from "react-icons/io";
+import { IoHomeOutline } from "react-icons/io5";
+import { MdAppRegistration } from "react-icons/md";
 import Logo from "./Logo";
 
 function Navigation() {
   // State to hold the authentication status
   const [isAuth, setIsAuth] = useState(false);
+  // State to control the visibility of the mobile menu
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // Hook to get the navigate function from react-router-dom
   const navigate = useNavigate();
@@ -40,18 +47,21 @@ function Navigation() {
     navigate(isAuth ? "/home" : "/");
   };
 
+  // Function to toggle the mobile menu
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
   return (
     <>
       <nav className="p-4 border-b-2 border-[#1E73BE]">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex justify-between items-center">
             <div className="flex-shrink-0 w-24">
-              {/* Pass the handleLogoClick function as a prop to the Logo component */}
               <Logo onClick={handleLogoClick} />
             </div>
             <div className="hidden md:block">
               <ul className="flex space-x-4">
-                {/* Show the Home link only if authenticated */}
                 {isAuth && (
                   <li>
                     <Link
@@ -62,8 +72,24 @@ function Navigation() {
                     </Link>
                   </li>
                 )}
+                {!isAuth && (
+                  <li>
+                    <Link to="/" className="text-[#1E73BE] hover:text-gray-300">
+                      Home
+                    </Link>
+                  </li>
+                )}
+                {!isAuth && (
+                  <li>
+                    <Link
+                      to="/register"
+                      className="text-[#1E73BE] hover:text-gray-300"
+                    >
+                      Register
+                    </Link>
+                  </li>
+                )}
                 <li>
-                  {/* Show the Logout link if authenticated, otherwise show the Login link */}
                   {isAuth ? (
                     <Link
                       to="/logout"
@@ -82,9 +108,75 @@ function Navigation() {
                 </li>
               </ul>
             </div>
+            <div className="md:hidden">
+              <button onClick={toggleMobileMenu}>
+                {isMobileMenuOpen ? (
+                  <FaTimes className="text-[#1E73BE] text-2xl" />
+                ) : (
+                  <FaBars className="text-[#1E73BE] text-2xl" />
+                )}
+              </button>
+            </div>
           </div>
         </div>
       </nav>
+      {/* Mobile menu */}
+      <div
+        className={`fixed inset-0 bg-white z-50 flex flex-col justify-center items-center transition-transform duration-300 ${
+          isMobileMenuOpen
+            ? "transform translate-x-0"
+            : "transform translate-x-full"
+        }`}
+      >
+        <button className="absolute top-4 right-4" onClick={toggleMobileMenu}>
+          <FaTimes className="text-[#1E73BE] text-2xl" />
+        </button>
+        <ul className="flex flex-col space-y-7 text-center">
+          <li>
+            <Link
+              to={isAuth ? "/home" : "/"}
+              className="text-[#1E73BE] text-2xl flex items-center justify-center"
+              onClick={toggleMobileMenu}
+            >
+              <IoHomeOutline className="mr-2 text-5xl" />
+              Home
+            </Link>
+          </li>
+          {!isAuth && (
+            <li>
+              <Link
+                to="/register"
+                className="text-[#1E73BE] text-2xl ml-5 flex items-center justify-center"
+                onClick={toggleMobileMenu}
+              >
+                <MdAppRegistration className="mr-2 text-5xl" />
+                Register
+              </Link>
+            </li>
+          )}
+          <li>
+            {isAuth ? (
+              <Link
+                to="/logout"
+                className="text-[#1E73BE] text-2xl ml-3 flex items-center justify-center"
+                onClick={toggleMobileMenu}
+              >
+                <IoIosLogOut className="mr-2 text-5xl" />
+                Logout
+              </Link>
+            ) : (
+              <Link
+                to="/login"
+                className="text-[#1E73BE] text-2xl mr-2 flex items-center justify-center"
+                onClick={toggleMobileMenu}
+              >
+                <IoIosLogIn className="mr-3 text-5xl" />
+                Login
+              </Link>
+            )}
+          </li>
+        </ul>
+      </div>
     </>
   );
 }
