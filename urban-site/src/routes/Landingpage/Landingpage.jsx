@@ -7,7 +7,7 @@ function Landingpage() {
   return (
     <>
       <h1 className="text-primary">Landing page</h1>
-      <section className="w-96">
+      <section className="flex justify-center w-full">
         <STLWithDataViewer stlFile={buildings} vtpFile={CFD_data_z5} />
       </section>
     </>
