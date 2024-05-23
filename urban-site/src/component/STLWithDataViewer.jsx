@@ -239,7 +239,7 @@ const STLWithDataViewer = ({ stlFile, vtpFile }) => {
     <div>
       <div ref={containerRef} style={{ position: "relative" }}>
         {!filesLoaded && (
-          <div className="absolute top-1/2 left-1/2 justify-center items-center bg-backg bg-opacity-0">
+          <div className="absolute top-1/2 left-1/2 bg-backg bg-opacity-0">
             <FaSpinner className="animate-spin h-12 w-12 text-primary" />
           </div>
         )}
