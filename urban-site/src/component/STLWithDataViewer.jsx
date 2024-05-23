@@ -11,6 +11,7 @@ import vtkScalarBarActor from "@kitware/vtk.js/Rendering/Core/ScalarBarActor";
 import * as d3 from "d3-scale";
 import { formatDefaultLocale } from "d3-format";
 import vtkLookupTable from "@kitware/vtk.js/Common/Core/LookupTable";
+import { FaSpinner } from "react-icons/fa";
 
 // Component to view STL files with associated VTP data
 const STLWithDataViewer = ({ stlFile, vtpFile }) => {
@@ -20,6 +21,19 @@ const STLWithDataViewer = ({ stlFile, vtpFile }) => {
   const scalarBarActorRef = useRef(null);
   // State to track if files have been loaded
   const [filesLoaded, setFilesLoaded] = useState(false);
+
+  // Function to reset the render window
+  const resetRenderWindow = () => {
+    // Get the renderer from the full screen render window
+    const renderer = fullScreenRenderer.current.getRenderer();
+    // Reset the camera orientation
+    renderer.getActiveCamera().setOrientationWXYZ(0, 1, 1, 0);
+
+    // Reset the camera
+    renderer.resetCamera();
+    // Render the scene
+    fullScreenRenderer.current.getRenderWindow().render();
+  };
 
   // Effect hook to load and render the files
   useEffect(() => {
@@ -153,14 +167,12 @@ const STLWithDataViewer = ({ stlFile, vtpFile }) => {
           scalarBarActor.setAutomated(true);
 
           scalarBarActor.setAxisTextStyle({
-            fontColor: "#1E73BE",
-            fontStyle: "bold",
-            fontFamily: "Arial",
+            fontColor: "black",
+            fontFamily: "Helvetica",
           });
           scalarBarActor.setTickTextStyle({
-            fontColor: "#1E73BE",
-            fontStyle: "bold",
-            fontFamily: "Arial",
+            fontColor: "black",
+            fontFamily: "Helvetica",
           });
 
           function generateTicks(numberOfTicks) {
@@ -223,7 +235,31 @@ const STLWithDataViewer = ({ stlFile, vtpFile }) => {
   }, [stlFile, vtpFile, filesLoaded]);
 
   // Render a div to contain the rendered files
-  return <div ref={containerRef} />;
+  return (
+    <div>
+      <div ref={containerRef} style={{ position: "relative" }}>
+        {!filesLoaded && (
+          <div className="absolute top-1/2 left-1/2 justify-center items-center bg-backg bg-opacity-0">
+            <FaSpinner className="animate-spin h-12 w-12 text-primary" />
+          </div>
+        )}
+      </div>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <button
+          className="mt-2 bg-transparent hover:bg-primary text-secondary font-semibold hover:text-white py-1 px-4 border-2 border-secondary hover:border-transparent rounded-xl"
+          onClick={resetRenderWindow}
+        >
+          Reset
+        </button>
+      </div>
+    </div>
+  );
 };
 
 export default STLWithDataViewer;

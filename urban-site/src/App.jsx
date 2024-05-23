@@ -11,6 +11,7 @@ import LandingPage from "./routes/Landingpage/Landingpage";
 import ForgotPassword from "./routes/ForgotPassword/ForgotPassword";
 import ResetPassword from "./routes/ResetPassword/ResetPassword";
 import PasswordResetSuccess from "./routes/PasswordResetSuccess/PasswordResetSuccess";
+import Footer from "./component/Footer";
 import "./Interceptors/axios";
 
 function App() {
@@ -36,6 +37,7 @@ function App() {
           />
         </Routes>
       </BrowserRouter>
+      <Footer />
     </>
   );
 }

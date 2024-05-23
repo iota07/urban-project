@@ -54,7 +54,7 @@ function Navigation() {
 
   return (
     <>
-      <nav className="p-4 border-b-2 border-[#1E73BE]">
+      <nav className="p-4 border-b-2 border-primary">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex justify-between items-center">
             <div className="flex-shrink-0 w-24">
@@ -66,7 +66,7 @@ function Navigation() {
                   <li>
                     <Link
                       to="/home"
-                      className="text-[#1E73BE] hover:text-gray-300"
+                      className="text-primary hover:text-gray-300"
                     >
                       Home
                     </Link>
@@ -74,7 +74,7 @@ function Navigation() {
                 )}
                 {!isAuth && (
                   <li>
-                    <Link to="/" className="text-[#1E73BE] hover:text-gray-300">
+                    <Link to="/" className="text-primary hover:text-gray-300">
                       Home
                     </Link>
                   </li>
@@ -83,7 +83,7 @@ function Navigation() {
                   <li>
                     <Link
                       to="/register"
-                      className="text-[#1E73BE] hover:text-gray-300"
+                      className="text-primary hover:text-gray-300"
                     >
                       Register
                     </Link>
@@ -93,14 +93,14 @@ function Navigation() {
                   {isAuth ? (
                     <Link
                       to="/logout"
-                      className="text-[#1E73BE] hover:text-gray-300"
+                      className="text-primary hover:text-gray-300"
                     >
                       Logout
                     </Link>
                   ) : (
                     <Link
                       to="/login"
-                      className="text-[#1E73BE] hover:text-gray-300"
+                      className="text-primary hover:text-gray-300"
                     >
                       Login
                     </Link>
@@ -111,9 +111,9 @@ function Navigation() {
             <div className="md:hidden">
               <button onClick={toggleMobileMenu}>
                 {isMobileMenuOpen ? (
-                  <FaTimes className="text-[#1E73BE] text-2xl" />
+                  <FaTimes className="text-primary text-3xl" />
                 ) : (
-                  <FaBars className="text-[#1E73BE] text-2xl" />
+                  <FaBars className="text-primary text-3xl" />
                 )}
               </button>
             </div>
@@ -129,16 +129,16 @@ function Navigation() {
         }`}
       >
         <button className="absolute top-4 right-4" onClick={toggleMobileMenu}>
-          <FaTimes className="text-[#1E73BE] text-2xl" />
+          <FaTimes className="text-primary mr-4 mt-7 text-3xl" />
         </button>
         <ul className="flex flex-col space-y-7 text-center">
           <li>
             <Link
               to={isAuth ? "/home" : "/"}
-              className="text-[#1E73BE] text-2xl flex items-center justify-center"
+              className="text-primary text-2xl flex items-center justify-center"
               onClick={toggleMobileMenu}
             >
-              <IoHomeOutline className="mr-2 text-5xl" />
+              <IoHomeOutline className="mr-2 text-5xl text-secondary" />
               Home
             </Link>
           </li>
@@ -146,10 +146,10 @@ function Navigation() {
             <li>
               <Link
                 to="/register"
-                className="text-[#1E73BE] text-2xl ml-5 flex items-center justify-center"
+                className="text-primary text-2xl ml-5 flex items-center justify-center"
                 onClick={toggleMobileMenu}
               >
-                <MdAppRegistration className="mr-2 text-5xl" />
+                <MdAppRegistration className="mr-2 text-5xl text-secondary" />
                 Register
               </Link>
             </li>
@@ -158,19 +158,19 @@ function Navigation() {
             {isAuth ? (
               <Link
                 to="/logout"
-                className="text-[#1E73BE] text-2xl ml-3 flex items-center justify-center"
+                className="text-primary text-2xl ml-3 flex items-center justify-center"
                 onClick={toggleMobileMenu}
               >
-                <IoIosLogOut className="mr-2 text-5xl" />
+                <IoIosLogOut className="mr-2 text-5xl text-secondary" />
                 Logout
               </Link>
             ) : (
               <Link
                 to="/login"
-                className="text-[#1E73BE] text-2xl mr-2 flex items-center justify-center"
+                className="text-primary text-2xl mr-2 flex items-center justify-center"
                 onClick={toggleMobileMenu}
               >
-                <IoIosLogIn className="mr-3 text-5xl" />
+                <IoIosLogIn className="mr-3 text-5xl text-secondary" />
                 Login
               </Link>
             )}
