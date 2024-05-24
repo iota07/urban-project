@@ -42,7 +42,7 @@ const STLWithDataViewer = ({ stlFile, vtpFile }) => {
       // Initialize the renderer if it's not already initialized
       if (!filesLoaded && !fullScreenRenderer.current) {
         fullScreenRenderer.current = vtkFullScreenRenderWindow.newInstance({
-          background: [1, 1, 1, 1],
+          background: [0, 0, 0, 0],
           rootContainer: containerRef.current,
           containerStyle: { height: "100%", width: "100%" },
         });
@@ -239,8 +239,8 @@ const STLWithDataViewer = ({ stlFile, vtpFile }) => {
     <div>
       <div ref={containerRef} style={{ position: "relative" }}>
         {!filesLoaded && (
-          <div className="absolute top-1/2 left-1/2 bg-backg bg-opacity-0">
-            <FaSpinner className="animate-spin h-12 w-12 text-primary" />
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-backg bg-opacity-0">
+            <FaSpinner className="animate-spin h-14 w-auto text-primary" />
           </div>
         )}
       </div>

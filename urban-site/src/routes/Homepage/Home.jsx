@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import STLWithDataViewer from "../../component/STLWithDataViewer";
+import buildings from "../../assets/buildings.stl";
+import CFD_data_z5 from "../../assets/CFD_data_z5_PolyData.vtp";
 
 const Home = () => {
   const [username, setUsername] = useState("");
@@ -28,10 +31,13 @@ const Home = () => {
   }, []);
 
   return (
-    <section className="flex flex-col items-center mt-5">
-      <h3 className="text-center">Hi {username}</h3>
-      <h3 className="text-center">Welcome to your Homepage</h3>
-    </section>
+    <>
+      <section className="flex flex-col items-center mt-5">
+        <h3 className="text-center">Hi {username}</h3>
+        <h3 className="text-center">Welcome to your Homepage</h3>
+      </section>
+      <STLWithDataViewer stlFile={buildings} vtpFile={CFD_data_z5} />
+    </>
   );
 };
 

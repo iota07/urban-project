@@ -35,11 +35,11 @@ export default {
           dark: "#f9f9f9",
         },
 
-        // Add more custom colors as needed
+        // Add more custom colors
       },
       fontFamily: {
-        helvetica: ["Helvetica", "Arial", "sans-serif"], // Add Helvetica to the sans family
-        futura: ["FUTURA55", "Helvetica", "Arial", "sans-serif"], // Add FUTURA55 custom font
+        helvetica: ["Helvetica", "Arial", "sans-serif"],
+        futura: ["FUTURA55", "Helvetica", "Arial", "sans-serif"],
       },
     },
   },

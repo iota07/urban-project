@@ -4,40 +4,94 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./component/Login";
 import Home from "./routes/Homepage/Home";
 import Logout from "./component/Logout";
-import Navigation from "./component/Navigation";
 import Signup from "./routes/Registration/Signup";
 import Verification from "./routes/Verificationpage/Verification";
 import LandingPage from "./routes/Landingpage/Landingpage";
 import ForgotPassword from "./routes/ForgotPassword/ForgotPassword";
 import ResetPassword from "./routes/ResetPassword/ResetPassword";
 import PasswordResetSuccess from "./routes/PasswordResetSuccess/PasswordResetSuccess";
-import Footer from "./component/Footer";
 import "./Interceptors/axios";
+import Layout from "./component/Layout";
 
 function App() {
   return (
     <>
       <BrowserRouter>
-        <Navigation />
         <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/logout" element={<Logout />} />
-          <Route path="/register" element={<Signup />} />
-          <Route path="/verification" element={<Verification />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route
+            path="/"
+            element={
+              <Layout>
+                <LandingPage />
+              </Layout>
+            }
+          />
+          <Route
+            path="/home"
+            element={
+              <Layout>
+                <Home />
+              </Layout>
+            }
+          />
+          <Route
+            path="/login"
+            element={
+              <Layout>
+                <Login />
+              </Layout>
+            }
+          />
+          <Route
+            path="/logout"
+            element={
+              <Layout>
+                <Logout />
+              </Layout>
+            }
+          />
+          <Route
+            path="/register"
+            element={
+              <Layout>
+                <Signup />
+              </Layout>
+            }
+          />
+          <Route
+            path="/verification"
+            element={
+              <Layout>
+                <Verification />
+              </Layout>
+            }
+          />
+          <Route
+            path="/forgot-password"
+            element={
+              <Layout>
+                <ForgotPassword />
+              </Layout>
+            }
+          />
           <Route
             path="/reset-password/:uid/:token"
-            element={<ResetPassword />}
+            element={
+              <Layout>
+                <ResetPassword />
+              </Layout>
+            }
           />
           <Route
             path="/password-reset-success"
-            element={<PasswordResetSuccess />}
+            element={
+              <Layout>
+                <PasswordResetSuccess />
+              </Layout>
+            }
           />
         </Routes>
       </BrowserRouter>
-      <Footer />
     </>
   );
 }
