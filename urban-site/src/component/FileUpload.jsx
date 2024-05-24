@@ -19,6 +19,19 @@ const FileUpload = ({ onFileContentRead }) => {
       reader.onload = (event) => {
         onFileContentRead(event.target.result);
       };
+
+      // Send the file data to an API endpoint
+      /* fetch('https://your-api-endpoint.com/upload', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ fileData: event.target.result })
+      })
+      .then(response => response.json())
+      .then(data => console.log(data))
+      .catch(error => console.error('Error:', error));
+    };*/
       reader.readAsDataURL(file);
     },
     [onFileContentRead]
