@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
+import { IoCloudUploadOutline } from "react-icons/io5";
 
 const FileUpload = ({ onFileContentRead }) => {
   const [fileName, setFileName] = useState(null);
@@ -52,9 +53,10 @@ const FileUpload = ({ onFileContentRead }) => {
         })}
       >
         <input {...getInputProps()} />
-        <p className="text-lg text-secondary p-8">
-          Drag 'n' drop a file here, or click to select a file
-        </p>
+        <span className="flex items-center text-lg text-secondary p-8">
+          <IoCloudUploadOutline className="mr-2 text-4xl" />
+          Drag & drop a file here, or click to select a file
+        </span>
       </div>
       {fileName && (
         <div className="file-details">

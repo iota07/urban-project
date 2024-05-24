@@ -244,15 +244,9 @@ const STLWithDataViewer = ({ stlFile, vtpFile }) => {
           </div>
         )}
       </div>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
+      <div className="flex justify-center items-center">
         <button
-          className="mt-2 md:mt-4 md:text-2xl bg-transparent hover:bg-primary text-secondary font-semibold hover:text-white py-1 px-4 border-2 border-secondary hover:border-transparent rounded-xl"
+          className="mt-2 md:mt-4 md:text-2xl bg-transparent hover:bg-tertiary text-secondary font-semibold hover:text-white py-1 px-4 border-2 border-secondary hover:border-transparent rounded-xl"
           onClick={resetRenderWindow}
         >
           Reset

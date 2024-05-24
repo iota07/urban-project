@@ -11,17 +11,17 @@ const Footer = () => {
           <nav>
             <ul className="flex space-x-4">
               <li>
-                <a href="#" className="hover:text-gray-400">
+                <a href="#" className="hover:text-tertiary">
                   About Us
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:text-gray-400">
+                <a href="#" className="hover:text-tertiary">
                   Contact Us
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:text-gray-400">
+                <a href="#" className="hover:text-tertiary">
                   Privacy Policy
                 </a>
               </li>

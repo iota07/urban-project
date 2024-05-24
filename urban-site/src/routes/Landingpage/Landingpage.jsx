@@ -14,7 +14,7 @@ function Landingpage() {
   return (
     <>
       <Hero
-        title="Experience Precision with Buildwind's 3D Viewer for CFD Visualization"
+        title="Experience Precision with BuildWind's 3D Viewer for CFD Visualization"
         text="Discover Unmatched Precision: Explore Our CFD Viewer for Intuitive Design Insights."
         buttonText="Get Started"
         buttonAction={handleButtonClick}
