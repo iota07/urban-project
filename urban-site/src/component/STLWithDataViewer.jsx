@@ -236,8 +236,8 @@ const STLWithDataViewer = ({ stlFile, vtpFile }) => {
 
   // Render a div to contain the rendered files
   return (
-    <div>
-      <div ref={containerRef} style={{ position: "relative" }}>
+    <div className="pt-4 lg:pt-0 w-auto md:w-auto lg:w-5/6 xl:w-5/6 2xl:w-5/6">
+      <div ref={containerRef} className="relative w-auto h-auto">
         {!filesLoaded && (
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-backg bg-opacity-0">
             <FaSpinner className="animate-spin h-14 w-auto text-primary" />
@@ -252,7 +252,7 @@ const STLWithDataViewer = ({ stlFile, vtpFile }) => {
         }}
       >
         <button
-          className="mt-2 bg-transparent hover:bg-primary text-secondary font-semibold hover:text-white py-1 px-4 border-2 border-secondary hover:border-transparent rounded-xl"
+          className="mt-2 md:mt-4 md:text-2xl bg-transparent hover:bg-primary text-secondary font-semibold hover:text-white py-1 px-4 border-2 border-secondary hover:border-transparent rounded-xl"
           onClick={resetRenderWindow}
         >
           Reset

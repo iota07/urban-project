@@ -21,3 +21,24 @@ body {
   font-weight: 400;
   font-style: normal;
 }
+
+.custom-underline {
+  position: relative;
+  display: inline-block;
+}
+
+.custom-underline::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 3px; /* Adjust height as needed */
+  bottom: -12px; /* Adjust position as needed */
+  left: 50%;
+  background-color: #00a199;
+  transition: width 0.3s ease, left 0.3s ease;
+}
+
+.custom-underline:hover::after {
+  width: 70%; /* Adjust width as needed */
+  left: 15%; /* Adjust left position to center the underline */
+}

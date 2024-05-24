@@ -54,27 +54,24 @@ function Navigation() {
 
   return (
     <>
-      <nav className="py-2">
+      <nav className="py-2 md:py-8">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="flex justify-between items-center">
+          <div className="flex justify-between items-center md:pr-24">
             <div className="flex-shrink-0 w-24">
               <Logo onClick={handleLogoClick} />
             </div>
             <div className="hidden md:block">
-              <ul className="flex space-x-4">
+              <ul className="flex md:text-3xl lg:text-4xl md:font-futura space-x-12">
                 {isAuth && (
                   <li>
-                    <Link
-                      to="/home"
-                      className="text-primary hover:text-gray-300"
-                    >
+                    <Link to="/home" className="text-primary custom-underline">
                       Home
                     </Link>
                   </li>
                 )}
                 {!isAuth && (
                   <li>
-                    <Link to="/" className="text-primary hover:text-gray-300">
+                    <Link to="/" className="text-primary custom-underline">
                       Home
                     </Link>
                   </li>
@@ -83,7 +80,7 @@ function Navigation() {
                   <li>
                     <Link
                       to="/register"
-                      className="text-primary hover:text-gray-300"
+                      className="text-primary custom-underline"
                     >
                       Register
                     </Link>
@@ -93,15 +90,12 @@ function Navigation() {
                   {isAuth ? (
                     <Link
                       to="/logout"
-                      className="text-primary hover:text-gray-300"
+                      className="text-primary custom-underline"
                     >
                       Logout
                     </Link>
                   ) : (
-                    <Link
-                      to="/login"
-                      className="text-primary hover:text-gray-300"
-                    >
+                    <Link to="/login" className="text-primary custom-underline">
                       Login
                     </Link>
                   )}
