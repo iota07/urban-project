@@ -96,7 +96,7 @@ const MyPasswordInput = ({ label, ...props }) => {
             {label}
           </label>
           <span
-            className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer"
+            className="absolute right-2 sm:right-4 top-1/2 transform -translate-y-1/2 cursor-pointer"
             onClick={() => setShowPassword((prev) => !prev)}
           >
             {showPassword ? <FiEyeOff /> : <FiEye />}
@@ -173,7 +173,7 @@ const Login = () => {
   return (
     <>
       <section className="min-h-screen bg-danger flex justify-center items-start">
-        <div className="w-11/12 sm:w-10/12 md:w-9/12 lg:w-6/12 xl:1/6 2xl:1/12">
+        <div className="w-11/12 sm:w-10/12 md:w-6/12 lg:w-[400px] xl:w-[500px]">
           <div className="flex h-auto w-full flex-col pb-16 mt-12 sm:mt-12 lg:mt-24 rounded-3xl bg-white bg-opacity-20">
             <Formik
               initialValues={{
@@ -207,7 +207,7 @@ const Login = () => {
               Don't have an account?
               <Link
                 to="/register"
-                className="font-semibold text-primary hover:text-blue-800 pl-1"
+                className="font-semibold text-primary hover:text-success pl-1"
               >
                 Sign up
               </Link>

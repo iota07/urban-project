@@ -20,38 +20,40 @@ const MyTextInput = ({ label, ...props }) => {
 
   return (
     <>
-      <div className="group relative">
-        {validationMessages[props.name] && (
-          <div className="absolute left-0 top-0 transform -translate-x-full translate-y-1/2 cursor-pointer">
-            <FiInfo
-              className="text-[#1E73BE]"
-              onMouseEnter={() => setShowTooltip(true)}
-              onMouseLeave={() => setShowTooltip(false)}
-            />
-            {showTooltip && (
-              <div className="absolute left-80 -top-14 text-sm transform -translate-x-full w-64 p-2 bg-white border rounded-xl shadow-md z-50">
-                {validationMessages[props.name]}
-              </div>
-            )}
-          </div>
-        )}
-        <input
-          {...field}
-          {...props}
-          id={props.name}
-          required
-          className="peer m-0 p-0 h-14 w-full rounded-3xl bg-gray-100 px-4 text-sm outline-none"
-        />
-        <label
-          htmlFor={props.name}
-          className="absolute left-2 top-0 flex h-full transform items-center pl-2 text-base transition-all duration-300 group-focus-within:-top-7 group-focus-within:h-1/2 group-focus-within:pl-0 group-focus-within:text-base group-focus-within:text-[#1E73BE] peer-valid:-top-7 peer-valid:h-1/2 peer-valid:pl-0 peer-valid:text-base peer-valid:text-[#1E73BE]"
-        >
-          {label}
-        </label>
+      <div>
+        <div className="group relative">
+          {validationMessages[props.name] && (
+            <div className="absolute left-0 top-0 transform -translate-x-full translate-y-1/2 cursor-pointer">
+              <FiInfo
+                className="text-white"
+                onMouseEnter={() => setShowTooltip(true)}
+                onMouseLeave={() => setShowTooltip(false)}
+              />
+              {showTooltip && (
+                <div className="absolute left-80 -top-14 text-sm transform -translate-x-full w-64 p-2 bg-white border rounded-xl shadow-md z-50">
+                  {validationMessages[props.name]}
+                </div>
+              )}
+            </div>
+          )}
+          <input
+            {...field}
+            {...props}
+            id={props.name}
+            required
+            className="peer m-0 p-0 h-14 w-full rounded-3xl bg-gray-100 px-4 text-sm outline-none"
+          />
+          <label
+            htmlFor={props.name}
+            className="absolute left-2 top-0 flex h-full transform items-center pl-2 text-base transition-all duration-300 group-focus-within:-top-7 group-focus-within:h-1/2 group-focus-within:pl-0 group-focus-within:text-base group-focus-within:text-white peer-valid:-top-7 peer-valid:h-1/2 peer-valid:pl-0 peer-valid:text-base peer-valid:text-white"
+          >
+            {label}
+          </label>
+        </div>
+        {meta.touched && meta.error ? (
+          <p className="max-w-sm text-red-500 pb-2">{meta.error}</p>
+        ) : null}
       </div>
-      {meta.touched && meta.error ? (
-        <p className="max-w-sm text-red-500 pb-2">{meta.error}</p>
-      ) : null}
     </>
   );
 };
@@ -66,37 +68,39 @@ const MyOptionalTextInput = ({ label, ...props }) => {
 
   return (
     <>
-      <div className="group relative">
-        {validationMessages[props.name] && (
-          <div className="absolute left-0 top-0 transform -translate-x-full translate-y-1/2 cursor-pointer">
-            <FiInfo
-              className="text-[#1E73BE]"
-              onMouseEnter={() => setShowTooltip(true)}
-              onMouseLeave={() => setShowTooltip(false)}
-            />
-            {showTooltip && (
-              <div className="absolute left-80 -top-14 text-sm transform -translate-x-full w-64 p-2 bg-white border rounded-xl shadow-md z-50">
-                {validationMessages[props.name]}
-              </div>
-            )}
-          </div>
-        )}
-        <input
-          {...field}
-          {...props}
-          id={props.name}
-          className="peer m-0 p-0 h-14 w-full rounded-3xl bg-gray-100 px-4 text-sm outline-none"
-        />
-        <label
-          htmlFor={props.name}
-          className="absolute left-2 top-0 flex h-full transform items-center pl-2 text-base transition-all duration-300 group-focus-within:-top-7 group-focus-within:h-1/2 group-focus-within:pl-0 group-focus-within:text-base group-focus-within:text-[#1E73BE]"
-        >
-          {label}
-        </label>
+      <div>
+        <div className="group relative">
+          {validationMessages[props.name] && (
+            <div className="absolute left-0 top-0 transform -translate-x-full translate-y-1/2 cursor-pointer">
+              <FiInfo
+                className="text-white"
+                onMouseEnter={() => setShowTooltip(true)}
+                onMouseLeave={() => setShowTooltip(false)}
+              />
+              {showTooltip && (
+                <div className="absolute left-80 -top-14 text-sm transform -translate-x-full w-64 p-2 bg-white border rounded-xl shadow-md z-50">
+                  {validationMessages[props.name]}
+                </div>
+              )}
+            </div>
+          )}
+          <input
+            {...field}
+            {...props}
+            id={props.name}
+            className="peer m-0 p-0 h-14 w-full rounded-3xl bg-gray-100 px-4 text-sm outline-none"
+          />
+          <label
+            htmlFor={props.name}
+            className="absolute left-2 top-0 flex h-full transform items-center pl-2 text-base transition-all duration-300 group-focus-within:-top-7 group-focus-within:h-1/2 group-focus-within:pl-0 group-focus-within:text-base group-focus-within:text-white"
+          >
+            {label}
+          </label>
+        </div>
+        {meta.touched && meta.error ? (
+          <p className="max-w-sm text-red-500 pb-2">{meta.error}</p>
+        ) : null}
       </div>
-      {meta.touched && meta.error ? (
-        <p className="max-w-sm text-red-500 pb-2">{meta.error}</p>
-      ) : null}
     </>
   );
 };
@@ -113,45 +117,47 @@ const MyPasswordInput = ({ label, ...props }) => {
 
   return (
     <>
-      <div className="group relative">
-        {validationMessages[props.name] && (
-          <div className="absolute left-0 top-0 transform -translate-x-full translate-y-1/2 cursor-pointer">
-            <FiInfo
-              className="text-[#1E73BE]"
-              onMouseEnter={() => setShowTooltip(true)}
-              onMouseLeave={() => setShowTooltip(false)}
-            />
-            {showTooltip && (
-              <div className="absolute left-80 -top-14 text-sm transform -translate-x-full w-64 p-2 bg-white border rounded-xl shadow-md z-50">
-                {validationMessages[props.name]}
-              </div>
-            )}
-          </div>
-        )}
-        <input
-          {...field}
-          {...props}
-          id={props.name}
-          required
-          type={showPassword ? "text" : "password"}
-          className="peer m-0 p-0 h-14 w-full rounded-3xl bg-gray-100 px-4 text-sm outline-none"
-        />
-        <label
-          htmlFor={props.name}
-          className="absolute left-2 top-0 flex h-full transform items-center pl-2 text-base transition-all duration-300 group-focus-within:-top-7 group-focus-within:h-1/2 group-focus-within:pl-0 group-focus-within:text-base group-focus-within:text-[#1E73BE] peer-valid:-top-7 peer-valid:h-1/2 peer-valid:pl-0 peer-valid:text-base peer-valid:text-[#1E73BE]"
-        >
-          {label}
-        </label>
-        <span
-          className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer"
-          onClick={() => setShowPassword((prev) => !prev)}
-        >
-          {showPassword ? <FiEyeOff /> : <FiEye />}
-        </span>
+      <div>
+        <div className="group relative">
+          {validationMessages[props.name] && (
+            <div className="absolute left-0 top-0 transform -translate-x-full translate-y-1/2 cursor-pointer">
+              <FiInfo
+                className="text-white"
+                onMouseEnter={() => setShowTooltip(true)}
+                onMouseLeave={() => setShowTooltip(false)}
+              />
+              {showTooltip && (
+                <div className="absolute left-80 -top-14 text-sm transform -translate-x-full w-64 p-2 bg-white border rounded-xl shadow-md z-50">
+                  {validationMessages[props.name]}
+                </div>
+              )}
+            </div>
+          )}
+          <input
+            {...field}
+            {...props}
+            id={props.name}
+            required
+            type={showPassword ? "text" : "password"}
+            className="peer m-0 p-0 h-14 w-full rounded-3xl bg-gray-100 px-4 text-sm outline-none"
+          />
+          <label
+            htmlFor={props.name}
+            className="absolute left-2 top-0 flex h-full transform items-center pl-2 text-base transition-all duration-300 group-focus-within:-top-7 group-focus-within:h-1/2 group-focus-within:pl-0 group-focus-within:text-base group-focus-within:text-white peer-valid:-top-7 peer-valid:h-1/2 peer-valid:pl-0 peer-valid:text-base peer-valid:text-white"
+          >
+            {label}
+          </label>
+          <span
+            className="absolute right-2 sm:right-4 top-1/2 transform -translate-y-1/2 cursor-pointer"
+            onClick={() => setShowPassword((prev) => !prev)}
+          >
+            {showPassword ? <FiEyeOff /> : <FiEye />}
+          </span>
+        </div>
+        {meta.touched && meta.error ? (
+          <p className="max-w-sm text-red-500 pb-2">{meta.error}</p>
+        ) : null}
       </div>
-      {meta.touched && meta.error ? (
-        <p className="max-w-sm text-red-500 pb-2">{meta.error}</p>
-      ) : null}
     </>
   );
 };
@@ -238,16 +244,9 @@ const Registration = () => {
 
   return (
     <>
-      <section className="flex min-h-screen items-center justify-center">
-        <div className="relative h-[800px] w-[400px] rounded-3xl">
-          <div
-            className="h-full w-full bg-cover bg-center bg-no-repeat"
-            style={{
-              backgroundImage:
-                "url('https://usercontent.one/wp/www.buildwind.net/wp-content/uploads/2022/11/Brussels_240N_Streamlines_Windrose-768x533.jpg')",
-            }}
-          ></div>
-          <div className="absolute top-5 flex h-auto w-full flex-col rounded-3xl bg-white bg-opacity-20 shadow backdrop-blur-sm">
+      <section className="min-h-screen bg-danger flex justify-center items-start">
+        <div className="w-11/12 sm:w-10/12 md:w-6/12 lg:w-[400px] xl:w-[500px]">
+          <div className="flex h-auto w-full flex-col pb-16 mb-2 mt-4 sm:mt-8 lg:mt-12 rounded-3xl bg-white bg-opacity-20">
             <Formik
               initialValues={{
                 email: "",
@@ -286,7 +285,7 @@ const Registration = () => {
 
                     <button
                       type="submit"
-                      className="mt-4 h-12 w-full rounded-3xl bg-blue-900 text-white transition-all duration-300 hover:bg-[#1E73BE]"
+                      className="mt-4 h-12 w-full rounded-3xl bg-primary text-white transition-all duration-300 hover:bg-success"
                     >
                       Sign up
                     </button>
