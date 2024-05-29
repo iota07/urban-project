@@ -1,9 +1,10 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useEffect, useRef } from "react";
 import { useDropzone } from "react-dropzone";
 import { IoCloudUploadOutline } from "react-icons/io5";
 
 const FileUpload = ({ onFileContentRead }) => {
   const [fileName, setFileName] = useState(null);
+  const fileReaderRef = useRef(null);
 
   const onDrop = useCallback(
     (acceptedFiles) => {
@@ -16,33 +17,38 @@ const FileUpload = ({ onFileContentRead }) => {
 
       setFileName(file.name);
 
-      const reader = new FileReader();
-      reader.onload = (event) => {
+      fileReaderRef.current = new FileReader();
+      fileReaderRef.current.onload = (event) => {
         onFileContentRead(event.target.result);
       };
 
-      // Send the file data to an API endpoint
-      /* fetch('https://your-api-endpoint.com/upload', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ fileData: event.target.result })
-      })
-      .then(response => response.json())
-      .then(data => console.log(data))
-      .catch(error => console.error('Error:', error));
-    };*/
-      reader.readAsDataURL(file);
+      fileReaderRef.current.readAsDataURL(file);
     },
     [onFileContentRead]
   );
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
-    accept: ".stl", // Accept CAD file extensions
+    accept: { "model/stl": [".stl"] }, // Accept STL file extensions
     maxFiles: 1,
   });
+
+  useEffect(() => {
+    const cleanup = () => {
+      // Dispose of the FileReader
+      if (fileReaderRef.current) {
+        fileReaderRef.current.onload = null;
+        fileReaderRef.current = null;
+      }
+    };
+
+    window.addEventListener("beforeunload", cleanup);
+
+    return () => {
+      cleanup();
+      window.removeEventListener("beforeunload", cleanup);
+    };
+  }, []);
 
   return (
     <div className="file-upload flex flex-col justify-center m-4">

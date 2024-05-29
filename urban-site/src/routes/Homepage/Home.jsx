@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import STLWithDataViewer from "../../component/STLWithDataViewer";
-import CFD_data_z5 from "../../assets/CFD_data_z5_PolyData.vtp";
+import CadViewer from "../../component/CadViewer";
 import FileUpload from "../../component/FileUpload";
 
 const Home = () => {
@@ -39,7 +38,7 @@ const Home = () => {
         <h3 className="text-center">Hi {username}</h3>
         <h3 className="text-center">Welcome to your Homepage</h3>
         <FileUpload onFileContentRead={handleFileContentRead} />
-        <STLWithDataViewer stlFile={stlFile} vtpFile={CFD_data_z5} />
+        <CadViewer stlFile={stlFile} />
       </section>
     </>
   );
