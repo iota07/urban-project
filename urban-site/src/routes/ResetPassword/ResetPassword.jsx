@@ -5,7 +5,7 @@ import { Formik, Form, useField } from "formik";
 import * as Yup from "yup";
 import { useState } from "react";
 import { FiEye, FiEyeOff, FiInfo } from "react-icons/fi";
-import { RiLockPasswordLine } from "react-icons/ri";
+import { LuKeyRound } from "react-icons/lu";
 import TitleH2 from "../../component/TitleH2";
 
 const MyPasswordInput = ({ label, ...props }) => {
@@ -128,7 +128,7 @@ function ResetPassword() {
         <section className="min-h-screen w-11/12 sm:w-10/12 md:w-6/12 lg:w-[400px] xl:w-[500px] bg-backg flex flex-col pt-12">
           <div className="flex flex-col justify-center items-center">
             <div className="bg-danger p-7 rounded-full ">
-              <RiLockPasswordLine className="bg-primary text-white text-5xl rounded-md p-2" />
+              <LuKeyRound className="bg-primary text-white text-5xl rounded-md p-2" />
             </div>
             <TitleH2 title="Change Password" />
           </div>
@@ -165,7 +165,7 @@ function ResetPassword() {
                 </Form>
               )}
             </Formik>
-            <p className="text-center text-scondary sm:text-md md:text-lg lg:text-xl xl:text-2xl 2xl:text-2xl mt-40 xl:mr-28">
+            <p className="text-center text-scondary sm:text-md md:text-lg lg:text-xl xl:text-2xl 2xl:text-2xl mt-28 xl:mr-28">
               Back to
               <Link
                 to="/Login"
