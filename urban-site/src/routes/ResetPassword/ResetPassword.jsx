@@ -1,10 +1,12 @@
 import axios from "axios";
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { Formik, Form, useField } from "formik";
 import * as Yup from "yup";
 import { useState } from "react";
 import { FiEye, FiEyeOff, FiInfo } from "react-icons/fi";
+import { RiLockPasswordLine } from "react-icons/ri";
+import TitleH2 from "../../component/TitleH2";
 
 const MyPasswordInput = ({ label, ...props }) => {
   const [field, meta] = useField(props);
@@ -18,45 +20,47 @@ const MyPasswordInput = ({ label, ...props }) => {
 
   return (
     <>
-      <div className="group relative">
-        {validationMessages[props.name] && (
-          <div className="absolute left-0 top-0 transform -translate-x-full translate-y-1/2 cursor-pointer">
-            <FiInfo
-              className="text-[#1E73BE]"
-              onMouseEnter={() => setShowTooltip(true)}
-              onMouseLeave={() => setShowTooltip(false)}
-            />
-            {showTooltip && (
-              <div className="absolute left-80 -top-14 text-sm transform -translate-x-full w-64 p-2 bg-white border rounded-xl shadow-md z-50">
-                {validationMessages[props.name]}
-              </div>
-            )}
-          </div>
-        )}
-        <input
-          {...field}
-          {...props}
-          id={props.name}
-          required
-          type={showPassword ? "text" : "password"}
-          className="peer m-0 p-0 h-14 w-full rounded-3xl bg-gray-100 px-4 text-sm outline-none"
-        />
-        <label
-          htmlFor={props.name}
-          className="absolute left-2 top-0 flex h-full transform items-center pl-2 text-base transition-all duration-300 group-focus-within:-top-7 group-focus-within:h-1/2 group-focus-within:pl-0 group-focus-within:text-base group-focus-within:text-[#1E73BE] peer-valid:-top-7 peer-valid:h-1/2 peer-valid:pl-0 peer-valid:text-base peer-valid:text-[#1E73BE]"
-        >
-          {label}
-        </label>
-        <span
-          className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer"
-          onClick={() => setShowPassword((prev) => !prev)}
-        >
-          {showPassword ? <FiEyeOff /> : <FiEye />}
-        </span>
+      <div>
+        <div className="group relative">
+          {validationMessages[props.name] && (
+            <div className="absolute left-0 top-0 transform -translate-x-full translate-y-1/2 cursor-pointer">
+              <FiInfo
+                className="text-primary"
+                onMouseEnter={() => setShowTooltip(true)}
+                onMouseLeave={() => setShowTooltip(false)}
+              />
+              {showTooltip && (
+                <div className="absolute left-80 -top-14 text-sm transform -translate-x-full w-64 p-2 bg-white border rounded-xl shadow-md z-50">
+                  {validationMessages[props.name]}
+                </div>
+              )}
+            </div>
+          )}
+          <input
+            {...field}
+            {...props}
+            id={props.name}
+            required
+            type={showPassword ? "text" : "password"}
+            className="peer m-0 p-0 h-14 w-full rounded-xl bg-gray-100 px-4 text-sm outline-none"
+          />
+          <label
+            htmlFor={props.name}
+            className="absolute left-2 top-0 flex h-full transform items-center pl-2 text-base transition-all duration-300 group-focus-within:-top-7 group-focus-within:h-1/2 group-focus-within:pl-0 group-focus-within:text-base group-focus-within:text-primary peer-valid:-top-7 peer-valid:h-1/2 peer-valid:pl-0 peer-valid:text-base peer-valid:text-white"
+          >
+            {label}
+          </label>
+          <span
+            className="absolute right-2 sm:right-4 top-1/2 transform -translate-y-1/2 cursor-pointer"
+            onClick={() => setShowPassword((prev) => !prev)}
+          >
+            {showPassword ? <FiEyeOff /> : <FiEye />}
+          </span>
+        </div>
+        {meta.touched && meta.error ? (
+          <p className="max-w-sm text-red-500 pb-2">{meta.error}</p>
+        ) : null}
       </div>
-      {meta.touched && meta.error ? (
-        <p className="max-w-sm text-red-500 pb-2">{meta.error}</p>
-      ) : null}
     </>
   );
 };
@@ -120,16 +124,15 @@ function ResetPassword() {
   };
   return (
     <>
-      <section className="flex min-h-screen items-center justify-center">
-        <div className="relative h-[900px] w-[400px] overflow-hidden rounded-3xl">
-          <div
-            className="h-full w-full bg-cover bg-center bg-no-repeat"
-            style={{
-              backgroundImage:
-                "url('https://usercontent.one/wp/www.buildwind.net/wp-content/uploads/2022/11/Brussels_240N_Streamlines_Windrose-768x533.jpg')",
-            }}
-          ></div>
-          <div className="absolute bottom-48 flex h-5/6 w-full flex-col rounded-t-3xl bg-white bg-opacity-20 shadow backdrop-blur-sm">
+      <section className="flex flex-col justify-center items-center">
+        <section className="min-h-screen w-11/12 sm:w-10/12 md:w-6/12 lg:w-[400px] xl:w-[500px] bg-backg flex flex-col pt-12">
+          <div className="flex flex-col justify-center items-center">
+            <div className="bg-danger p-7 rounded-full ">
+              <RiLockPasswordLine className="bg-primary text-white text-5xl rounded-md p-2" />
+            </div>
+            <TitleH2 title="Change Password" />
+          </div>
+          <div className="flex h-5/6 w-full flex-col justify-center">
             <Formik
               initialValues={{
                 password1: "",
@@ -144,26 +147,35 @@ function ResetPassword() {
                     <MyPasswordInput
                       name="password1"
                       type="password"
-                      label="Password"
+                      label="New Password"
                     />
                     <MyPasswordInput
                       name="password2"
                       type="password"
-                      label="Password confirmation"
+                      label="Re-enter New Password"
                     />
 
                     <button
                       type="submit"
-                      className="mt-4 h-12 w-full rounded-3xl bg-blue-900 text-white transition-all duration-300 hover:bg-[#1E73BE]"
+                      className="mt-14 text-lg bg-primary text-white py-2 rounded-lg hover:bg-success"
                     >
-                      Set new password
+                      Change password
                     </button>
                   </fieldset>
                 </Form>
               )}
             </Formik>
+            <p className="text-center text-scondary sm:text-md md:text-lg lg:text-xl xl:text-2xl 2xl:text-2xl mt-40 xl:mr-28">
+              Back to
+              <Link
+                to="/Login"
+                className="font-semibold text-primary hover:text-success pl-1"
+              >
+                Sign in
+              </Link>
+            </p>
           </div>
-        </div>
+        </section>
       </section>
     </>
   );

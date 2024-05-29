@@ -1,4 +1,8 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import { RiLockPasswordLine } from "react-icons/ri";
+import TitleH2 from "../../component/TitleH2";
+import { IoMailOutline } from "react-icons/io5";
 
 function ForgotPassword() {
   const [email, setEmail] = useState("");
@@ -18,8 +22,6 @@ function ForgotPassword() {
     })
       .then((response) => response.json())
       .then((data) => {
-        // Handle the response
-        console.log(data);
         setSubmitted(true);
       })
       .catch((error) => {
@@ -29,33 +31,94 @@ function ForgotPassword() {
 
   if (submitted) {
     return (
-      <div className="mt-4 text-xl text-center justify-center">
-        Please check your email for a password reset link.
-      </div>
+      <section className="flex flex-col justify-center items-center">
+        <section className="min-h-screen w-11/12 sm:w-10/12 md:w-6/12 lg:w-[400px] xl:w-[500px] bg-backg flex flex-col pt-12">
+          <div className="flex">
+            <div className="bg-danger p-7 rounded-full ">
+              <IoMailOutline className="bg-primary text-white text-5xl rounded-md p-2" />
+            </div>
+          </div>
+          <fieldset>
+            <form
+              className="flex flex-col mt-8"
+              onSubmit={handleSubmit}
+              id="resetpasswordform"
+            >
+              <TitleH2 title="Check you email" />
+              <p className="text-sm sm:text-sm md:text-md lg:text-lg xl:text-xl 2xl:text-2xl">
+                We sent a password reset link to{" "}
+                <a href={`mailto:${email}`} className="text-success">
+                  {email}
+                </a>
+              </p>
+              <a href={`mailto:${email}`}>
+                <button
+                  type="button"
+                  className="mt-14 text-lg bg-primary text-white py-2 w-96 rounded-lg hover:bg-success"
+                >
+                  Open email
+                </button>
+              </a>
+              <p className="text-center text-scondary sm:text-md md:text-lg lg:text-xl xl:text-2xl 2xl:text-2xl mt-48 xl:mr-28">
+                Back to
+                <Link
+                  to="/Login"
+                  className="font-semibold text-primary hover:text-success pl-1"
+                >
+                  Sign in
+                </Link>
+              </p>
+            </form>
+          </fieldset>
+        </section>
+      </section>
     );
   }
 
   return (
-    <section>
-      <fieldset>
-        <form
-          className="text-center justify-center flex flex-col"
-          onSubmit={handleSubmit}
-        >
-          <h1 className="text-xl">Forgot Password</h1>
-          <label className="w-full">
-            Email:
-            <input
-              className="mt-4 ml-2 pt-4 border-4 w-96"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </label>
-          <input className="mt-2" type="submit" value="Submit" />
-        </form>
-      </fieldset>
+    <section className="flex flex-col justify-center items-center">
+      <section className="min-h-screen w-11/12 sm:w-10/12 md:w-6/12 lg:w-[400px] xl:w-[500px] bg-backg flex flex-col pt-12">
+        <div className="flex">
+          <div className="bg-danger p-7 rounded-full ">
+            <RiLockPasswordLine className="bg-primary text-white text-5xl rounded-md p-2" />
+          </div>
+        </div>
+        <fieldset>
+          <form
+            className="flex flex-col mt-8"
+            onSubmit={handleSubmit}
+            id="forgotpasswordform"
+          >
+            <TitleH2 title="Forgot Password?" />
+            <label className="w-full mt-12 font-bold text-secondary flex flex-col">
+              Email
+              <input
+                className="pt-4 mt-2 pl-2 pb-3 border border-danger rounded-lg placeholder:text-gray-400 outline-none"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter your email"
+                required
+              />
+            </label>
+            <button
+              type="submit"
+              className="mt-14 text-lg bg-primary text-white py-2 rounded-lg hover:bg-success"
+            >
+              Reset Password
+            </button>
+          </form>
+          <p className="text-center text-scondary sm:text-md md:text-lg lg:text-xl xl:text-2xl 2xl:text-2xl mt-48 mb-2 xl:mr-28">
+            Back to
+            <Link
+              to="/Login"
+              className="font-semibold text-primary hover:text-success pl-1"
+            >
+              Sign in
+            </Link>
+          </p>
+        </fieldset>
+      </section>
     </section>
   );
 }
