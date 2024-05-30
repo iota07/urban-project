@@ -31,7 +31,7 @@ const CadViewer = ({ stlFile }) => {
 
       if (!fullScreenRenderer.current) {
         fullScreenRenderer.current = vtkFullScreenRenderWindow.newInstance({
-          background: [0.976, 0.949, 1, 1],
+          background: [0.95, 0.95, 0.95, 1],
           rootContainer: containerRef.current,
           containerStyle: { height: "100%", width: "100%" },
         });
@@ -88,7 +88,7 @@ const CadViewer = ({ stlFile }) => {
       <div className="flex justify-center items-center">
         {!loading && !error && fileLoaded && (
           <button
-            className="mt-2 md:mt-4 md:text-2xl bg-transparent hover:bg-tertiary text-secondary font-semibold hover:text-white py-1 px-4 border-2 border-secondary hover:border-transparent rounded-xl"
+            className="mt-2 md:mt-4 md:text-2xl bg-transparent hover:bg-primary text-secondary font-semibold hover:text-white py-1 px-4 border-2 border-secondary hover:border-transparent rounded-xl"
             onClick={resetRenderWindow}
           >
             Reset

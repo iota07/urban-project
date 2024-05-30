@@ -5,12 +5,12 @@ export default {
     extend: {
       colors: {
         primary: {
-          DEFAULT: "#1E73BE",
+          DEFAULT: "#2F5265",
           light: "#16537e",
           dark: "#174A7A",
         },
         secondary: {
-          DEFAULT: "#615b7f",
+          DEFAULT: "#2F5265",
           light: "#FF8387",
           dark: "#CC474C",
         },
@@ -20,12 +20,12 @@ export default {
           dark: "#FFD700",
         },
         success: {
-          DEFAULT: "#00a7e0",
+          DEFAULT: "black",
           light: "#00a199",
           dark: "#00a199",
         },
         danger: {
-          DEFAULT: "#c0dbdf",
+          DEFAULT: "#acbac1",
           light: "#ff0000",
           dark: "#ff0000",
         },

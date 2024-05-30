@@ -17,7 +17,7 @@
     url("assets/fonts/FUTURA55REGULAR.TTF") format("truetype");
 }
 body {
-  font-family: "Helvetica", sans-serif;
+  font-family: "FUTURA55";
   font-weight: 400;
   font-style: normal;
 }
@@ -34,7 +34,7 @@ body {
   height: 3px; /* Adjust height as needed */
   bottom: -12px; /* Adjust position as needed */
   left: 50%;
-  background-color: #00a199;
+  background-color: #2f5265;
   transition: width 0.3s ease, left 0.3s ease;
 }
 

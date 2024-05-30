@@ -4,7 +4,7 @@ import { MdOutlineKeyboardDoubleArrowRight } from "react-icons/md";
 
 const Hero = ({ title, text, buttonText, buttonAction, children }) => {
   return (
-    <section className="bg-danger py-8 lg:py-0 lg:min-h-screen">
+    <section className="bg-backg py-8 lg:py-0 lg:min-h-screen">
       <div className="container mx-auto px-2 text-center lg:flex">
         <div className="lg:w-5/6 xl:w-5/6 2xl:w-full lg:pl-4 lg:pt-8">
           <TitleH1 title={title} />
@@ -12,7 +12,7 @@ const Hero = ({ title, text, buttonText, buttonAction, children }) => {
             {text}
           </p>
           <button
-            className="mt-8 bg-primary text-white py-2 px-6 rounded-3xl shadow-md hover:bg-secondary transition duration-300"
+            className="mt-8 bg-primary text-white py-2 px-6 rounded-3xl shadow-md hover:bg-success transition duration-300"
             onClick={buttonAction}
           >
             <span className="flex items-center text-xl md:text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl">

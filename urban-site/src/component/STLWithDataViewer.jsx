@@ -169,12 +169,12 @@ const STLWithDataViewer = ({ stlFile, vtpFile }) => {
           scalarBarActor.setAxisTextStyle({
             fontColor: "black",
             fontStyle: "bold",
-            fontFamily: "Helvetica",
+            fontFamily: "Arial",
           });
 
           scalarBarActor.setTickTextStyle({
             fontColor: "black",
-            fontFamily: "Helvetica",
+            fontFamily: "Arial",
           });
 
           function generateTicks(numberOfTicks) {
@@ -225,9 +225,9 @@ const STLWithDataViewer = ({ stlFile, vtpFile }) => {
         vtpDataMapper.delete();
         stlReader.delete();
         vtpReader.delete();
-        if (scalarBarActor) {
-          renderer.removeActor(scalarBarActor);
-          scalarBarActor.delete();
+        if (scalarBarActorRef.current) {
+          renderer.removeActor(scalarBarActorRef.current);
+          scalarBarActorRef.current.delete();
         }
       };
     };
@@ -249,7 +249,7 @@ const STLWithDataViewer = ({ stlFile, vtpFile }) => {
       <div className="flex justify-center items-center">
         {filesLoaded && (
           <button
-            className="mt-2 md:mt-4 md:text-2xl bg-transparent hover:bg-tertiary text-secondary font-semibold hover:text-white py-1 px-4 border-2 border-secondary hover:border-transparent rounded-xl"
+            className="mt-2 md:mt-4 md:text-2xl bg-transparent hover:bg-primary text-secondary font-semibold hover:text-white py-1 px-4 border-2 border-secondary hover:border-transparent rounded-xl"
             onClick={resetRenderWindow}
           >
             Reset

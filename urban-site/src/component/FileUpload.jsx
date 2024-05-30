@@ -55,11 +55,11 @@ const FileUpload = ({ onFileContentRead }) => {
       <div
         {...getRootProps({
           className:
-            "dropzone my-2 p-8 flex items-center justify-center w-auto h-64 border-4 border-dashed border-tertiary rounded-lg cursor-pointer transition duration-300 ease-in-out hover:border-success hover:bg-danger",
+            "dropzone my-2 p-8 flex items-center justify-center w-auto h-64 border-4 border-dashed border-primary rounded-lg cursor-pointer transition duration-300 ease-in-out hover:border-success hover:bg-danger",
         })}
       >
         <input {...getInputProps()} />
-        <span className="flex items-center text-lg text-secondary p-8">
+        <span className="flex items-center text-lg text-primary p-8">
           <IoCloudUploadOutline className="mr-2 text-8xl" />
           Drag & drop your .stl file here, or click to select a file
         </span>
