@@ -92,14 +92,16 @@ const MyOptionalTextInput = ({ label, ...props }) => {
           />
           <label
             htmlFor={props.name}
-            className="absolute left-2 top-0 flex h-full transform items-center pl-2 text-base transition-all duration-300 group-focus-within:-top-7 group-focus-within:h-1/2 group-focus-within:pl-0 group-focus-within:text-base group-focus-within:text-white"
+            className={`absolute left-2 top-0 flex h-full transform items-center pl-2 text-base transition-all duration-300 ${
+              field.value
+                ? "-top-7 h-1/2 pl-0 text-base text-white"
+                : "peer-focus:-top-7 peer-focus:h-1/2 peer-focus:pl-0 peer-focus:text-base peer-focus:text-white"
+            }`}
           >
             {label}
           </label>
         </div>
-        {meta.touched && meta.error ? (
-          <p className="max-w-sm text-red-500 pb-2">{meta.error}</p>
-        ) : null}
+        {meta.error && <div className="error">{meta.error}</div>}
       </div>
     </>
   );
