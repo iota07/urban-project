@@ -246,8 +246,8 @@ const Registration = () => {
 
   return (
     <>
-      <section className="min-h-screen bg-danger flex justify-center items-start">
-        <div className="w-11/12 sm:w-[400px] xl:w-[500px]">
+      <section className="min-h-screen flex justify-center items-start">
+        <div className="w-[400px] xl:w-[500px] rounded-3xl bg-danger flex justify-center items-start">
           <div className="flex h-auto w-full flex-col pb-16 mb-2 mt-4 sm:mt-8 lg:mt-12 rounded-3xl bg-white bg-opacity-20">
             <Formik
               initialValues={{

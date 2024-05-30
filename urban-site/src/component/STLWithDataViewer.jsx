@@ -168,8 +168,10 @@ const STLWithDataViewer = ({ stlFile, vtpFile }) => {
 
           scalarBarActor.setAxisTextStyle({
             fontColor: "black",
+            fontStyle: "bold",
             fontFamily: "Helvetica",
           });
+
           scalarBarActor.setTickTextStyle({
             fontColor: "black",
             fontFamily: "Helvetica",

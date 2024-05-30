@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import CadViewer from "../../component/CadViewer";
 import FileUpload from "../../component/FileUpload";
+import TitleH3 from "../../component/TitleH3";
 
 const Home = () => {
   const [username, setUsername] = useState("");
@@ -35,8 +36,7 @@ const Home = () => {
   return (
     <>
       <section className="flex flex-col justify-center items-center mt-5">
-        <h3 className="text-center">Hi {username}</h3>
-        <h3 className="text-center">Welcome to your Homepage</h3>
+        <TitleH3 title={`Welcome ${username}`} />
         <FileUpload onFileContentRead={handleFileContentRead} />
         <CadViewer stlFile={stlFile} />
       </section>

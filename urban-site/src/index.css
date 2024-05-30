@@ -42,3 +42,7 @@ body {
   width: 70%; /* Adjust width as needed */
   left: 15%; /* Adjust left position to center the underline */
 }
+
+.scalar-bar-actor text {
+  font-size: 40px !important;
+}

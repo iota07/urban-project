@@ -60,8 +60,8 @@ const FileUpload = ({ onFileContentRead }) => {
       >
         <input {...getInputProps()} />
         <span className="flex items-center text-lg text-secondary p-8">
-          <IoCloudUploadOutline className="mr-2 text-4xl" />
-          Drag & drop a file here, or click to select a file
+          <IoCloudUploadOutline className="mr-2 text-8xl" />
+          Drag & drop your .stl file here, or click to select a file
         </span>
       </div>
       {fileName && (
