@@ -38,37 +38,30 @@ function ForgotPassword() {
               <IoMailOutline className="bg-primary text-white text-5xl rounded-md p-2" />
             </div>
           </div>
-          <fieldset>
-            <form
-              className="flex flex-col mt-8"
-              onSubmit={handleSubmit}
-              id="resetpasswordform"
-            >
-              <TitleH2 title="Check you email" />
-              <p className="text-sm sm:text-sm md:text-md lg:text-lg xl:text-xl 2xl:text-2xl">
-                We sent a password reset link to{" "}
-                <a href={`mailto:${email}`} className="text-success">
-                  {email}
-                </a>
-              </p>
-              <a href={`mailto:${email}`}>
-                <button
-                  type="button"
-                  className="mt-14 text-lg bg-primary text-white py-2 w-96 rounded-lg hover:bg-success"
-                >
-                  Open email
-                </button>
+          <fieldset className="flex flex-col mt-8">
+            <TitleH2 title="Check you email" />
+            <p className="text-sm sm:text-sm md:text-md lg:text-lg xl:text-xl 2xl:text-2xl">
+              We sent a password reset link to{" "}
+              <a href={`mailto:${email}`} className="text-success">
+                {email}
               </a>
-              <p className="text-center text-scondary sm:text-md md:text-lg lg:text-xl xl:text-2xl 2xl:text-2xl mt-48 xl:mr-28">
-                Back to
-                <Link
-                  to="/Login"
-                  className="font-semibold text-primary hover:text-success pl-1"
-                >
-                  Sign in
-                </Link>
-              </p>
-            </form>
+            </p>
+            <button
+              type="button"
+              className="mt-14 text-lg bg-primary text-white py-2 rounded-lg hover:bg-success"
+              onClick={() => (window.location.href = `mailto:${email}`)}
+            >
+              Open email
+            </button>
+            <p className="text-center text-scondary sm:text-md md:text-lg lg:text-xl xl:text-2xl 2xl:text-2xl mt-48 xl:mr-28">
+              Back to
+              <Link
+                to="/Login"
+                className="font-semibold text-primary hover:text-success pl-1"
+              >
+                Sign in
+              </Link>
+            </p>
           </fieldset>
         </section>
       </section>

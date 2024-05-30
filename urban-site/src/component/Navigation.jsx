@@ -44,7 +44,7 @@ function Navigation() {
   // Function to handle clicks on the logo
   const handleLogoClick = () => {
     // Navigate to /home if authenticated, otherwise navigate to /
-    navigate(isAuth ? "/home" : "/");
+    navigate("/");
   };
 
   // Function to toggle the mobile menu
