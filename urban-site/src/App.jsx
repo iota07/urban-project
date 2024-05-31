@@ -12,6 +12,8 @@ import ResetPassword from "./routes/ResetPassword/ResetPassword";
 import PasswordResetSuccess from "./routes/PasswordResetSuccess/PasswordResetSuccess";
 import "./Interceptors/axios";
 import Layout from "./component/Layout";
+import ErrorPage from "./routes/Errorpage/ErrorPage";
+import { ErrorResponse } from "./routes/Errorpage/ErrorPage";
 
 function App() {
   return (
@@ -87,6 +89,22 @@ function App() {
             element={
               <Layout>
                 <PasswordResetSuccess />
+              </Layout>
+            }
+          />
+          <Route
+            path="/error"
+            element={
+              <Layout>
+                <ErrorResponse />
+              </Layout>
+            }
+          />
+          <Route
+            path="*"
+            element={
+              <Layout>
+                <ErrorPage />
               </Layout>
             }
           />

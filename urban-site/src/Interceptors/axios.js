@@ -90,10 +90,21 @@ axios.interceptors.response.use(
         // Dispatch an event to update the authentication status
         updateAuthStatus();
       }
-    } else if (error.response.status === 401 || error.response.status === 400) {
-      // If the response status was 401 (Unauthorized) due to incorrect credentials
-      // or 400 (Bad Request), log the error to the console
-      console.error("Error while making request:", error.response.data);
+    } // If the response status was 400 or above, redirect to the error page
+    else if (error.response.status >= 400) {
+      // Check if the error is a validation error
+      if (Object.keys(error.response.data).length > 0) {
+        // Check if the current frontend URL matches the password reset page
+        if (window.location.pathname.startsWith("/reset-password")) {
+          // Check if there's a validation error for the token field with 'Invalid value' message
+          if (
+            error.response.data.token &&
+            error.response.data.token.includes("Invalid value")
+          ) {
+            window.location.href = "/error";
+          }
+        }
+      }
     }
 
     // If the response status was not 401 or this was not the first retry attempt, reject the Promise

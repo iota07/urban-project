@@ -14,8 +14,8 @@ const MyPasswordInput = ({ label, ...props }) => {
   const [showTooltip, setShowTooltip] = useState(false);
 
   const validationMessages = {
-    password1: "Password cannot contain spaces, '<', or '>'",
-    password2: "Password confirmation cannot contain spaces, '<', or '>'",
+    password1: "New Password cannot contain spaces, '<', or '>'",
+    password2: "New Password cannot contain spaces, '<', or '>'",
   };
 
   return (
@@ -68,14 +68,11 @@ const MyPasswordInput = ({ label, ...props }) => {
 const passwordSchema = Yup.object().shape({
   password1: Yup.string()
     .min(8, "Must be at least 8 characters")
-    .matches(/^[^\s<>]*$/, "Password cannot contain spaces, '<', or '>'")
+    .matches(/^[^\s<>]*$/, "New Password cannot contain spaces, '<', or '>'")
     .required("Required"),
   password2: Yup.string()
     .oneOf([Yup.ref("password1"), null], "Passwords must match")
-    .matches(
-      /^[^\s<>]*$/,
-      "Password confirmation cannot contain spaces, '<', or '>'"
-    )
+    .matches(/^[^\s<>]*$/, "New Password cannot contain spaces, '<', or '>'")
     .required("Required"),
 });
 
@@ -108,16 +105,22 @@ function ResetPassword() {
           window.location.href = "/password-reset-success";
         });
     } catch (error) {
-      console.error("Error while registering:", error);
+      console.error("Error while resetting password:", error);
       if (error.response && error.response.status === 400) {
         // The request was a validation error
         console.log("Validation errors:", error.response.data);
         let errorData = error.response.data;
-        if (errorData.username) {
-          setFieldError("username", errorData.username[0]);
+        if (errorData.uid) {
+          setFieldError("uid", errorData.uid[0]);
         }
-        if (errorData.email) {
-          setFieldError("email", errorData.email[0]);
+        if (errorData.token) {
+          setFieldError("token", errorData.token[0]);
+        }
+        if (errorData.new_password1) {
+          setFieldError("password1", errorData.new_password1[0]);
+        }
+        if (errorData.new_password2) {
+          setFieldError("password2", errorData.new_password2[0]);
         }
       }
     }
