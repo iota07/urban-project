@@ -23,9 +23,10 @@ urlpatterns = [
     path('admin/', admin.site.urls),    
     path('token/login/', TokenObtainPairView.as_view(), name='token_login'),
     path('token/refresh/', TokenRefreshView.as_view(), name ='token_refresh'),
+    path('', include('urban_design_auth.urls')),
     path('accounts/', include('allauth.urls')),
     path('dj-rest-auth/', include('dj_rest_auth.urls')),
     path('dj-rest-auth/password/reset/confirm/<uidb64>/<token>/', CustomPasswordResetConfirmView.as_view(), name='password_reset_confirm'),
-    path('', include('urban_design_auth.urls')),
+    
     
 ]

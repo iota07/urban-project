@@ -4,6 +4,8 @@ from dj_rest_auth.serializers import JWTSerializer
 from urban_design_auth.models import CustomUser
 from rest_framework_simplejwt.tokens import RefreshToken
 
+
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
@@ -34,3 +36,4 @@ class CustomJWTSerializer(JWTSerializer):
         data['access'] = str(refresh.access_token)
 
         return data
+    

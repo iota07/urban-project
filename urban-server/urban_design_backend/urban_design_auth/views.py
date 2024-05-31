@@ -11,6 +11,10 @@ from allauth.account import app_settings as allauth_settings
 from dj_rest_auth.views import LoginView
 from dj_rest_auth.views import PasswordResetConfirmView as DjRestAuthPasswordResetConfirmView
 from django.http import HttpResponseRedirect
+from urban_design_auth.models import CustomUser
+from rest_framework import generics
+from rest_framework.permissions import IsAuthenticated
+from .serializers import UserSerializer
 
 
 # HomeView: A view that returns a welcome message for authenticated users.
@@ -76,3 +80,12 @@ class CustomPasswordResetConfirmView(DjRestAuthPasswordResetConfirmView):
 
         # Redirect to the React frontend URL
         return HttpResponseRedirect(redirect_url)
+
+# UserDetailView: A view that returns the details of the authenticated user.
+class UserDetailView(generics.RetrieveUpdateAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        return self.request.user
