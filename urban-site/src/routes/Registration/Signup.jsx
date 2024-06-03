@@ -88,17 +88,17 @@ const MyOptionalTextInput = ({ label, ...props }) => {
             {...field}
             {...props}
             id={props.name}
-            className="peer m-0 p-0 h-14 w-full rounded-3xl bg-gray-100 px-4 text-sm outline-none"
+            className={`peer m-0 p-0 h-14 w-full rounded-3xl bg-gray-100 px-4 text-sm outline-none ${
+              field.value ? "optional-text" : ""
+            }`}
           />
           <label
             htmlFor={props.name}
-            className={`absolute left-2 top-0 flex h-full transform items-center pl-2 text-base transition-all duration-300
-              ${
-                field.value
-                  ? "-top-7 h-1/2 pl-0 text-base text-primary"
-                  : "text-gray-500"
-              } 
-              peer-focus:-top-7 peer-focus:h-1/2 peer-focus:pl-0 peer-focus:text-base peer-focus:text-white`}
+            className={`absolute left-2 top-0 flex h-full transform items-center pl-2 text-base transition-all duration-300 ${
+              field.value
+                ? "-top-7 h-1/2 pl-0 text-base text-white"
+                : "peer-focus:-top-7 peer-focus:h-1/2 peer-focus:pl-0 peer-focus:text-base peer-focus:text-white"
+            }`}
           >
             {label}
           </label>

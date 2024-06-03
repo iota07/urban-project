@@ -9,11 +9,7 @@ export default {
           light: "#16537e",
           dark: "#174A7A",
         },
-        secondary: {
-          DEFAULT: "#2F5265",
-          light: "#FF8387",
-          dark: "#CC474C",
-        },
+
         tertiary: {
           DEFAULT: "#00a199",
           light: "#FFD700",
