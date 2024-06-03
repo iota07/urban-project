@@ -9,8 +9,7 @@ export default {
           light: "#16537e",
           dark: "#174A7A",
         },
-
-        tertiary: {
+        danger: {
           DEFAULT: "#00a199",
           light: "#FFD700",
           dark: "#FFD700",
@@ -20,7 +19,7 @@ export default {
           light: "#00a199",
           dark: "#00a199",
         },
-        danger: {
+        secondary: {
           DEFAULT: "#acbac1",
           light: "#ff0000",
           dark: "#ff0000",

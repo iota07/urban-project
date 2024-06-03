@@ -4,6 +4,7 @@ import { FaBars, FaTimes } from "react-icons/fa";
 import { IoIosLogOut } from "react-icons/io";
 import { IoIosLogIn } from "react-icons/io";
 import { IoHomeOutline } from "react-icons/io5";
+import { CgProfile } from "react-icons/cg";
 import { MdAppRegistration } from "react-icons/md";
 import Logo from "./Logo";
 
@@ -63,11 +64,24 @@ function Navigation() {
             <div className="hidden md:block">
               <ul className="flex md:text-3xl lg:text-4xl md:font-futura space-x-12">
                 {isAuth && (
-                  <li>
-                    <Link to="/home" className="text-primary custom-underline">
-                      Home
-                    </Link>
-                  </li>
+                  <>
+                    <li>
+                      <Link
+                        to="/home"
+                        className="text-primary custom-underline"
+                      >
+                        Home
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        to="/account"
+                        className="text-primary custom-underline"
+                      >
+                        Account
+                      </Link>
+                    </li>
+                  </>
                 )}
                 {!isAuth && (
                   <li>
@@ -132,10 +146,22 @@ function Navigation() {
               className="text-primary text-2xl flex items-center justify-center"
               onClick={toggleMobileMenu}
             >
-              <IoHomeOutline className="mr-2 text-5xl text-secondary" />
+              <IoHomeOutline className="mr-2 text-5xl text-primary" />
               Home
             </Link>
           </li>
+          {isAuth && (
+            <li>
+              <Link
+                to="/account"
+                className="text-primary text-2xl ml-5 flex items-center justify-center"
+                onClick={toggleMobileMenu}
+              >
+                <CgProfile className="mr-2 text-5xl text-primary" />
+                Account
+              </Link>
+            </li>
+          )}
           {!isAuth && (
             <li>
               <Link
@@ -143,7 +169,7 @@ function Navigation() {
                 className="text-primary text-2xl ml-5 flex items-center justify-center"
                 onClick={toggleMobileMenu}
               >
-                <MdAppRegistration className="mr-2 text-5xl text-secondary" />
+                <MdAppRegistration className="mr-2 text-5xl text-primary" />
                 Register
               </Link>
             </li>
@@ -155,7 +181,7 @@ function Navigation() {
                 className="text-primary text-2xl ml-3 flex items-center justify-center"
                 onClick={toggleMobileMenu}
               >
-                <IoIosLogOut className="mr-2 text-5xl text-secondary" />
+                <IoIosLogOut className="mr-2 text-5xl text-primary" />
                 Logout
               </Link>
             ) : (
@@ -164,7 +190,7 @@ function Navigation() {
                 className="text-primary text-2xl mr-2 flex items-center justify-center"
                 onClick={toggleMobileMenu}
               >
-                <IoIosLogIn className="mr-3 text-5xl text-secondary" />
+                <IoIosLogIn className="mr-3 text-5xl text-primary" />
                 Login
               </Link>
             )}

@@ -34,7 +34,7 @@ function ForgotPassword() {
       <section className="flex flex-col justify-center items-center">
         <section className="min-h-screen w-11/12 sm:w-10/12 md:w-6/12 lg:w-[400px] xl:w-[500px] bg-backg flex flex-col pt-12">
           <div className="flex">
-            <div className="bg-danger p-7 rounded-full ">
+            <div className="bg-secondary p-7 rounded-full ">
               <IoMailOutline className="bg-primary text-white text-5xl rounded-md p-2" />
             </div>
           </div>
@@ -72,7 +72,7 @@ function ForgotPassword() {
     <section className="flex flex-col justify-center items-center">
       <section className="min-h-screen w-11/12 sm:w-10/12 md:w-6/12 lg:w-[400px] xl:w-[500px] bg-backg flex flex-col pt-12">
         <div className="flex">
-          <div className="bg-danger p-7 rounded-full ">
+          <div className="bg-secondary p-7 rounded-full ">
             <RiLockPasswordLine className="bg-primary text-white text-5xl rounded-md p-2" />
           </div>
         </div>
@@ -83,10 +83,10 @@ function ForgotPassword() {
             id="forgotpasswordform"
           >
             <TitleH2 title="Forgot Password?" />
-            <label className="w-full mt-12 font-bold text-secondary flex flex-col">
+            <label className="w-full mt-12 font-bold text-primary flex flex-col">
               Email
               <input
-                className="pt-4 mt-2 pl-2 pb-3 border border-danger rounded-lg placeholder:text-gray-400 outline-none"
+                className="pt-4 mt-2 pl-2 pb-3 border border-secondary rounded-lg placeholder:text-gray-300 outline-none"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -101,7 +101,7 @@ function ForgotPassword() {
               Reset Password
             </button>
           </form>
-          <p className="text-center text-scondary sm:text-md md:text-lg lg:text-xl xl:text-2xl 2xl:text-2xl mt-48 mb-2 xl:mr-28">
+          <p className="text-center text-primary sm:text-md md:text-lg lg:text-xl xl:text-2xl 2xl:text-2xl mt-48 mb-2 xl:mr-28">
             Back to
             <Link
               to="/Login"

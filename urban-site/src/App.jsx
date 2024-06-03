@@ -13,6 +13,7 @@ import PasswordResetSuccess from "./routes/PasswordResetSuccess/PasswordResetSuc
 import "./Interceptors/axios";
 import Layout from "./component/Layout";
 import ErrorPage from "./routes/Errorpage/ErrorPage";
+import Account from "./routes/Account/Account";
 import { ErrorResponse } from "./routes/Errorpage/ErrorPage";
 
 function App() {
@@ -57,6 +58,14 @@ function App() {
             element={
               <Layout>
                 <Signup />
+              </Layout>
+            }
+          />
+          <Route
+            path="/account"
+            element={
+              <Layout>
+                <Account />
               </Layout>
             }
           />

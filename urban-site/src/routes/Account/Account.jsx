@@ -205,7 +205,7 @@ const validationSchema = Yup.object().shape({
     .notRequired(),
 });
 
-const Registration = () => {
+const Account = () => {
   const submit = async (values, { setFieldError }) => {
     const user = {
       email: values.email,
@@ -291,7 +291,7 @@ const Registration = () => {
                       type="submit"
                       className="mt-4 h-12 w-full rounded-3xl bg-primary text-white transition-all duration-300 hover:bg-success"
                     >
-                      Sign up
+                      SAVE CHANGES
                     </button>
                   </fieldset>
                 </Form>
@@ -304,4 +304,4 @@ const Registration = () => {
   );
 };
 
-export default Registration;
+export default Account;

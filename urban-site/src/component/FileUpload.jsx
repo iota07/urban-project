@@ -55,7 +55,7 @@ const FileUpload = ({ onFileContentRead }) => {
       <div
         {...getRootProps({
           className:
-            "dropzone my-2 p-8 flex items-center justify-center w-auto h-64 border-4 border-dashed border-primary rounded-lg cursor-pointer transition duration-300 ease-in-out hover:border-success hover:bg-danger",
+            "dropzone my-2 p-8 flex items-center justify-center w-auto h-64 border-4 border-dashed border-primary rounded-lg cursor-pointer transition duration-300 ease-in-out hover:border-success hover:bg-secondary",
         })}
       >
         <input {...getInputProps()} />

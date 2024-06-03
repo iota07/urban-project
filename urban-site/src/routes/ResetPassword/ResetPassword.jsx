@@ -130,12 +130,12 @@ function ResetPassword() {
       <section className="flex flex-col justify-center items-center">
         <section className="min-h-screen w-11/12 sm:w-10/12 md:w-6/12 lg:w-[400px] xl:w-[500px] bg-backg flex flex-col pt-12">
           <div className="flex flex-col justify-center items-center">
-            <div className="bg-danger p-7 rounded-full ">
+            <div className="bg-secondary p-7 rounded-full ">
               <LuKeyRound className="bg-primary text-white text-5xl rounded-md p-2" />
             </div>
             <TitleH2 title="Change Password" />
           </div>
-          <div className="flex h-5/6 w-full flex-col justify-center">
+          <div className="flex w-[400px] w-full flex-col justify-center">
             <Formik
               initialValues={{
                 password1: "",
@@ -146,7 +146,7 @@ function ResetPassword() {
             >
               {({ errors, touched }) => (
                 <Form>
-                  <fieldset className="flex flex-col gap-6 mt-10 px-10 py-10 text-center">
+                  <fieldset className="flex flex-col gap-6 mt-4 px-10 py-10 text-center">
                     <MyPasswordInput
                       name="password1"
                       type="password"
@@ -160,7 +160,7 @@ function ResetPassword() {
 
                     <button
                       type="submit"
-                      className="mt-14 text-lg bg-primary text-white py-2 rounded-lg hover:bg-success"
+                      className="mt-6 text-lg bg-primary text-white py-2 rounded-lg hover:bg-success"
                     >
                       Change password
                     </button>
@@ -168,7 +168,7 @@ function ResetPassword() {
                 </Form>
               )}
             </Formik>
-            <p className="text-center text-scondary sm:text-md md:text-lg lg:text-xl xl:text-2xl 2xl:text-2xl mt-28 xl:mr-28">
+            <p className="text-center text-scondary sm:text-md md:text-lg lg:text-xl xl:text-2xl 2xl:text-2xl mt-28">
               Back to
               <Link
                 to="/Login"
