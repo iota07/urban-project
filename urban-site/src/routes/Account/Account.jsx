@@ -159,19 +159,38 @@ const validationSchema = Yup.object().shape({
 });
 
 const Account = () => {
+  const [saveStatus, setSaveStatus] = useState(null);
   const [userData, setUserData] = useState(null);
+
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:8000/dj-rest-auth/user/"
-        );
+        // Retrieve the access token from local storage
+        const accessToken = localStorage.getItem("access_token");
 
-        if (response.data) {
-          console.log("Fetched user data:", response.data);
-          const { email, username, name, surname, organisation } =
-            response.data;
-          setUserData({ email, username, name, surname, organisation });
+        // Check if the access token exists
+        if (accessToken) {
+          // Include the access token in the request headers
+          const config = {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          };
+
+          // Send the GET request with the access token included in the headers
+          const response = await axios.get(
+            "http://localhost:8000/user/",
+            config
+          );
+
+          if (response.data) {
+            const { email, username, name, surname, organisation } =
+              response.data;
+            setUserData({ email, username, name, surname, organisation });
+          }
+        } else {
+          // Handle the case where the access token is missing
+          console.error("Access token is missing");
         }
       } catch (error) {
         console.error("Error fetching user data:", error);
@@ -192,18 +211,21 @@ const Account = () => {
     };
 
     try {
-      await axios
-        .patch("http://localhost:8000/dj-rest-auth/user/", user, {
+      const response = await axios.patch(
+        "http://localhost:8000/dj-rest-auth/user/",
+        user,
+        {
           headers: {
             "Content-Type": "application/json",
           },
-        })
-        .then((response) => {
-          if (response.status !== 201) {
-            throw new Error("Validation error");
-          }
-          window.location.href = "/verification";
-        });
+        }
+      );
+
+      if (response.status === 200) {
+        setSaveStatus("saved");
+      } else {
+        throw new Error("Validation error");
+      }
     } catch (error) {
       console.error("Error while registering:", error);
       if (error.response && error.response.status === 400) {
@@ -226,15 +248,15 @@ const Account = () => {
         <div className="w-[400px] xl:w-[500px] rounded-3xl bg-secondary flex justify-center items-start">
           <div className="flex h-auto w-full flex-col pb-16 mb-2 mt-4 sm:mt-8 lg:mt-12 rounded-3xl bg-white bg-opacity-20">
             <Formik
-              initialValues={
-                userData || {
-                  email: "",
-                  username: "",
-                  name: "",
-                  surname: "",
-                  organisation: "",
-                }
-              }
+              initialValues={{
+                email: userData?.email ?? "",
+                username: userData?.username ?? "",
+                name: userData?.name ?? "",
+                surname: userData?.surname ?? "",
+                organisation: userData?.organisation ?? "",
+                password1: "",
+                password2: "",
+              }}
               enableReinitialize={true}
               validationSchema={validationSchema}
               onSubmit={submit}
@@ -284,6 +306,11 @@ const Account = () => {
                     >
                       SAVE CHANGES
                     </button>
+                    {saveStatus === "saved" && (
+                      <p className="text-green-500 text-xl">
+                        Changes have been saved.
+                      </p>
+                    )}
                   </fieldset>
                 </Form>
               )}

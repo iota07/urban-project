@@ -10,7 +10,7 @@ from allauth.account.views import confirm_email
 urlpatterns = [    
     path('home/', views.HomeView.as_view(), name ='home'),
     path('logout/', LogoutView.as_view(), name ='logout'),
-    re_path(r'^dj-rest-auth/user/$', UserDetailView.as_view(), name='user_detail'),
+    path('user/', UserDetailView.as_view(), name='user_detail'),
     re_path(r'^account/', include('allauth.urls')),
     re_path(r'^dj-rest-auth/', include('dj_rest_auth.urls')),
     re_path(r'^dj-rest-auth/registration/$', CustomRegisterView.as_view(), name='account_signup'),    

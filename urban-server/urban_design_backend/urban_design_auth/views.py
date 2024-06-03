@@ -15,6 +15,7 @@ from urban_design_auth.models import CustomUser
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from .serializers import UserSerializer
+from django.contrib.auth.hashers import make_password
 
 
 # HomeView: A view that returns a welcome message for authenticated users.
@@ -89,3 +90,27 @@ class UserDetailView(generics.RetrieveUpdateAPIView):
 
     def get_object(self):
         return self.request.user
+
+    def update(self, request, *args, **kwargs):
+        # Get the user object
+        user = self.get_object()
+        # Get the password fields from the request data
+        password1 = request.data.get('password1')
+        password2 = request.data.get('password2')
+
+        # If both password fields are provided, update the password
+        if password1 and password2:
+            # Check if the passwords match
+            if password1 == password2:
+                # Set the new password hash for the user
+                user.password = make_password(password1)
+                user.save()
+                return Response({'message': 'Password updated successfully'}, status=status.HTTP_200_OK)
+            else:
+                return Response({'error': 'Passwords do not match'}, status=status.HTTP_400_BAD_REQUEST)
+        # If only one of the password fields is provided, return an error
+        elif password1 or password2:
+            return Response({'error': 'Both password fields are required'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # If no password fields are provided, perform a normal update
+        return super().update(request, *args, **kwargs)
