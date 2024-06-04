@@ -130,17 +130,6 @@ const validationSchema = Yup.object().shape({
     )
     .matches(/^[^\s<>]*$/, "Username cannot contain spaces, '<', or '>'"),
 
-  password1: Yup.string()
-    .min(8, "Must be at least 8 characters")
-    .matches(/^[^\s<>]*$/, "Password cannot contain spaces, '<', or '>'"),
-
-  password2: Yup.string()
-    .oneOf([Yup.ref("password1"), null], "Passwords must match")
-    .matches(
-      /^[^\s<>]*$/,
-      "Password confirmation cannot contain spaces, '<', or '>'"
-    ),
-
   name: Yup.string()
     .matches(/^[a-zA-Z0-9]*$/, "Name can only contain alphanumeric characters")
     .matches(/^[^\s<>]*$/, "Name cannot contain spaces, '<', or '>'"),
@@ -157,6 +146,101 @@ const validationSchema = Yup.object().shape({
     "Organisation cannot contain spaces, '<', or '>'"
   ),
 });
+
+const PasswordUpdateForm = () => {
+  const [updateStatus, setUpdateStatus] = useState(null);
+
+  const validationSchema = Yup.object().shape({
+    oldpassword: Yup.string()
+      .required("Old password is required")
+      .matches(/^[^\s<>]*$/, "Password cannot contain spaces, '<', or '>'"),
+    newpassword1: Yup.string()
+      .required("New password is required")
+      .min(8, "Must be at least 8 characters")
+      .matches(/^[^\s<>]*$/, "Password cannot contain spaces, '<', or '>'"),
+    newpassword2: Yup.string()
+      .required("Password confirmation is required")
+      .oneOf([Yup.ref("newpassword1"), null], "Passwords must match")
+      .matches(
+        /^[^\s<>]*$/,
+        "Password confirmation cannot contain spaces, '<', or '>'"
+      ),
+  });
+
+  const submit = async (values, { setFieldError, setSubmitting }) => {
+    const passwordData = {
+      old_password: values.oldpassword,
+      password1: values.newpassword1,
+      password2: values.newpassword2,
+    };
+
+    try {
+      const response = await axios.patch(
+        "http://localhost:8000/user/password/",
+        passwordData
+      );
+
+      if (response.status === 200) {
+        setUpdateStatus("updated");
+      } else {
+        throw new Error("Validation error");
+      }
+    } catch (error) {
+      console.error("Error while updating password:", error);
+      if (error.response && error.response.status === 400) {
+        let errorData = error.response.data;
+        if (errorData.old_password) {
+          setFieldError("oldpassword", errorData.old_password[0]);
+        }
+        if (errorData.password1) {
+          setFieldError("newpassword1", errorData.password1[0]);
+        }
+        if (errorData.password2) {
+          setFieldError("newpassword2", errorData.password2[0]);
+        }
+      }
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  return (
+    <Formik
+      initialValues={{
+        oldpassword: "",
+        newpassword1: "",
+        newpassword2: "",
+      }}
+      validationSchema={validationSchema}
+      onSubmit={submit}
+    >
+      {({ errors, touched }) => (
+        <Form>
+          <fieldset className="flex flex-col gap-6 mt-10 px-10 py-10 text-center">
+            <TitleH2 title="Update Password" />
+            <MyPasswordInput name="oldpassword" label="Old Password" />
+            <MyPasswordInput name="newpassword1" label="New Password" />
+            <MyPasswordInput
+              name="newpassword2"
+              label="New Password confirmation"
+            />
+            <button
+              type="submit"
+              className="mt-4 h-12 w-full rounded-3xl bg-primary text-white transition-all duration-300 hover:bg-success"
+            >
+              UPDATE PASSWORD
+            </button>
+            {updateStatus === "updated" && (
+              <p className="text-green-500 text-xl">
+                Password has been updated.
+              </p>
+            )}
+          </fieldset>
+        </Form>
+      )}
+    </Formik>
+  );
+};
 
 const Account = () => {
   const [saveStatus, setSaveStatus] = useState(null);
@@ -203,23 +287,17 @@ const Account = () => {
     const user = {
       email: values.email,
       username: values.username,
-      password1: values.password1,
-      password2: values.password2,
       name: values.name,
       surname: values.surname,
       organisation: values.organisation,
     };
 
     try {
-      const response = await axios.patch(
-        "http://localhost:8000/dj-rest-auth/user/",
-        user,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await axios.patch("http://localhost:8000/user/", user, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
       if (response.status === 200) {
         setSaveStatus("saved");
@@ -254,8 +332,6 @@ const Account = () => {
                 name: userData?.name ?? "",
                 surname: userData?.surname ?? "",
                 organisation: userData?.organisation ?? "",
-                password1: "",
-                password2: "",
               }}
               enableReinitialize={true}
               validationSchema={validationSchema}
@@ -295,11 +371,7 @@ const Account = () => {
                       label="Organisation"
                       placeholder={userData ? userData.organisation : ""}
                     />
-                    <MyPasswordInput name="password1" label="New Password" />
-                    <MyPasswordInput
-                      name="password2"
-                      label="New Password confirmation"
-                    />
+
                     <button
                       type="submit"
                       className="mt-4 h-12 w-full rounded-3xl bg-primary text-white transition-all duration-300 hover:bg-success"
@@ -315,6 +387,9 @@ const Account = () => {
                 </Form>
               )}
             </Formik>
+            <fieldset>
+              <PasswordUpdateForm />
+            </fieldset>
           </div>
         </div>
       </section>

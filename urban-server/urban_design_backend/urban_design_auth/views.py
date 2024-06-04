@@ -15,7 +15,7 @@ from urban_design_auth.models import CustomUser
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from .serializers import UserSerializer
-from django.contrib.auth.hashers import make_password
+from django.contrib.auth import get_user_model
 
 
 # HomeView: A view that returns a welcome message for authenticated users.
@@ -92,25 +92,24 @@ class UserDetailView(generics.RetrieveUpdateAPIView):
         return self.request.user
 
     def update(self, request, *args, **kwargs):
-        # Get the user object
-        user = self.get_object()
-        # Get the password fields from the request data
+        # Perform a normal update
+        return super().update(request, *args, **kwargs)
+    
+User = get_user_model()
+
+class UpdatePasswordView(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def patch(self, request, *args, **kwargs):
+        user = request.user
+        old_password = request.data.get('old_password')
         password1 = request.data.get('password1')
         password2 = request.data.get('password2')
 
-        # If both password fields are provided, update the password
-        if password1 and password2:
-            # Check if the passwords match
-            if password1 == password2:
-                # Set the new password hash for the user
-                user.password = make_password(password1)
+        if user.check_password(old_password):
+            if password1 and password2 and password1 == password2:
+                user.set_password(password1)
                 user.save()
-                return Response({'message': 'Password updated successfully'}, status=status.HTTP_200_OK)
-            else:
-                return Response({'error': 'Passwords do not match'}, status=status.HTTP_400_BAD_REQUEST)
-        # If only one of the password fields is provided, return an error
-        elif password1 or password2:
-            return Response({'error': 'Both password fields are required'}, status=status.HTTP_400_BAD_REQUEST)
-        
-        # If no password fields are provided, perform a normal update
-        return super().update(request, *args, **kwargs)
+                return Response({'status': 'Password updated successfully'}, status=status.HTTP_200_OK)
+            return Response({'error': 'New passwords do not match'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'error': 'Old password is not correct'}, status=status.HTTP_400_BAD_REQUEST)
