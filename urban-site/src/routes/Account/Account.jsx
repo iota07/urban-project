@@ -5,6 +5,7 @@ import * as Yup from "yup";
 import { useState, useEffect } from "react";
 import { FiEye, FiEyeOff, FiInfo } from "react-icons/fi";
 import TitleH2 from "../../component/TitleH2";
+import TitleH3 from "../../component/TitleH3";
 
 const MyTextInput = ({ label, ...props }) => {
   const [field, meta] = useField(props);
@@ -50,7 +51,7 @@ const MyTextInput = ({ label, ...props }) => {
             {...field}
             {...props}
             id={props.name}
-            className="peer m-0 p-0 h-14 w-full rounded-3xl bg-gray-100 px-4 text-sm outline-none"
+            className="peer m-0 p-0 h-14 w-full rounded-lg bg-gray-100 px-4 text-md outline-none"
             placeholder={props.placeholder}
           />
         </div>
@@ -68,8 +69,9 @@ const MyPasswordInput = ({ label, ...props }) => {
   const [showTooltip, setShowTooltip] = useState(false);
 
   const validationMessages = {
-    password1: "Password cannot contain spaces, '<', or '>'",
-    password2: "Password confirmation cannot contain spaces, '<', or '>'",
+    oldpassword: "Password cannot contain spaces, '<', or '>'",
+    newpassword1: "Password cannot contain spaces, '<', or '>'",
+    newpassword2: "Password confirmation cannot contain spaces, '<', or '>'",
   };
 
   return (
@@ -101,10 +103,10 @@ const MyPasswordInput = ({ label, ...props }) => {
             {...props}
             id={props.name}
             type={showPassword ? "text" : "password"}
-            className="peer m-0 p-0 h-14 w-full rounded-3xl bg-gray-100 px-4 text-sm outline-none"
+            className="peer m-0 p-0 h-14 w-full rounded-lg bg-gray-100 px-4 text-md outline-none"
           />
           <span
-            className="absolute right-5 top-14 transform -translate-y-1/2 cursor-pointer"
+            className="absolute right-5 top-11 transform translate-y-1/2 cursor-pointer"
             onClick={() => setShowPassword((prev) => !prev)}
           >
             {showPassword ? <FiEyeOff /> : <FiEye />}
@@ -216,8 +218,14 @@ const PasswordUpdateForm = () => {
     >
       {({ errors, touched }) => (
         <Form>
-          <fieldset className="flex flex-col gap-6 mt-10 px-10 py-10 text-center">
-            <TitleH2 title="Update Password" />
+          <fieldset className="flex flex-col gap-6 mt-10 px-10 text-center">
+            <aside className="md:hidden">
+              <TitleH2 title="Update Password" />
+            </aside>
+            <aside className="hidden md:block md:-mt-2 md:-mb-8">
+              <TitleH3 title="Update Password" />
+            </aside>
+
             <MyPasswordInput name="oldpassword" label="Old Password" />
             <MyPasswordInput name="newpassword1" label="New Password" />
             <MyPasswordInput
@@ -226,14 +234,12 @@ const PasswordUpdateForm = () => {
             />
             <button
               type="submit"
-              className="mt-4 h-12 w-full rounded-3xl bg-primary text-white transition-all duration-300 hover:bg-success"
+              className="mt-4 h-12 w-full rounded-lg bg-primary text-white transition-all duration-300 hover:bg-success"
             >
-              UPDATE PASSWORD
+              CHANGE PASSWORD
             </button>
             {updateStatus === "updated" && (
-              <p className="text-green-500 text-xl">
-                Password has been updated.
-              </p>
+              <p className="text-danger text-xl">Password has been updated.</p>
             )}
           </fieldset>
         </Form>
@@ -323,8 +329,15 @@ const Account = () => {
   return (
     <>
       <section className="min-h-screen flex justify-center items-start">
-        <div className="w-[400px] xl:w-[500px] rounded-3xl bg-secondary flex justify-center items-start">
-          <div className="flex h-auto w-full flex-col pb-16 mb-2 mt-4 sm:mt-8 lg:mt-12 rounded-3xl bg-white bg-opacity-20">
+        <div className="w-[400px] sm:w-[400px] md:w-[700px] lg:w-[1000px] rounded-lg bg-secondary flex flex-col justify-center items-start">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+            <path
+              fill="#2F5265"
+              opacity="1"
+              d="M0,224L48,229.3C96,235,192,245,288,256C384,267,480,277,576,266.7C672,256,768,224,864,208C960,192,1056,192,1152,202.7C1248,213,1344,235,1392,245.3L1440,256L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"
+            ></path>
+          </svg>
+          <div className="flex h-auto w-full flex-col pb-16 mb-2  pt-0 mt-0 rounded-b-lg bg-secondary bg-opacity-20 md:grid md:grid-cols-2">
             <Formik
               initialValues={{
                 email: userData?.email ?? "",
@@ -339,7 +352,7 @@ const Account = () => {
             >
               {({ errors, touched }) => (
                 <Form>
-                  <fieldset className="flex flex-col gap-6 mt-10 px-10 py-10 text-center">
+                  <fieldset className="flex flex-col gap-6 mt-2 px-10 text-center">
                     <TitleH2 title="Account" />
                     <MyTextInput
                       name="email"
@@ -374,12 +387,12 @@ const Account = () => {
 
                     <button
                       type="submit"
-                      className="mt-4 h-12 w-full rounded-3xl bg-primary text-white transition-all duration-300 hover:bg-success"
+                      className="mt-4 h-12 w-full rounded-lg bg-primary text-white transition-all duration-300 hover:bg-success"
                     >
                       SAVE CHANGES
                     </button>
                     {saveStatus === "saved" && (
-                      <p className="text-green-500 text-xl">
+                      <p className="text-danger text-xl">
                         Changes have been saved.
                       </p>
                     )}
@@ -387,7 +400,7 @@ const Account = () => {
                 </Form>
               )}
             </Formik>
-            <fieldset>
+            <fieldset className="p-0 m-0">
               <PasswordUpdateForm />
             </fieldset>
           </div>
