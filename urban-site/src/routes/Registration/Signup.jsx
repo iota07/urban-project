@@ -289,7 +289,7 @@ const Registration = () => {
 
                     <button
                       type="submit"
-                      className="mt-4 h-12 w-full rounded-3xl bg-primary text-white transition-all duration-300 hover:bg-success"
+                      className="mt-4 h-12 w-full rounded-3xl bg-primary text-white transition-all duration-300 hover:bg-tertiary"
                     >
                       Sign up
                     </button>

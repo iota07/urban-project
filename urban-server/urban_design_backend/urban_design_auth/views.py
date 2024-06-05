@@ -113,3 +113,12 @@ class UpdatePasswordView(APIView):
                 return Response({'status': 'Password updated successfully'}, status=status.HTTP_200_OK)
             return Response({'error': 'New passwords do not match'}, status=status.HTTP_400_BAD_REQUEST)
         return Response({'error': 'Old password is not correct'}, status=status.HTTP_400_BAD_REQUEST)
+    
+
+class DeleteAccountView(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def delete(self, request, *args, **kwargs):
+        user = request.user
+        user.delete()
+        return Response({'status': 'Account deleted successfully'}, status=status.HTTP_200_OK)

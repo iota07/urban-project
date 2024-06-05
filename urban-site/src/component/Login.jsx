@@ -189,7 +189,7 @@ const Login = () => {
                   <MyPasswordInput name="password" label="Password" />
                   <button
                     type="submit"
-                    className="h-12 w-full rounded-3xl bg-primary text-white transition-all duration-300 hover:bg-success"
+                    className="h-12 w-full rounded-3xl bg-primary text-white transition-all duration-300 hover:bg-tertiary"
                   >
                     Login
                   </button>
@@ -207,7 +207,7 @@ const Login = () => {
               Don't have an account?
               <Link
                 to="/register"
-                className="font-semibold text-primary hover:text-success pl-1"
+                className="font-semibold text-primary hover:text-tertiary pl-1"
               >
                 Sign up
               </Link>

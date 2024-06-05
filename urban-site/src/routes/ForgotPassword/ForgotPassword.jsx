@@ -40,15 +40,15 @@ function ForgotPassword() {
           </div>
           <fieldset className="flex flex-col mt-8">
             <TitleH2 title="Check you email" />
-            <p className="text-sm sm:text-sm md:text-md lg:text-lg xl:text-xl 2xl:text-2xl">
+            <p className="text-md sm:mt-4 md:text-lg lg:text-xl xl:text-2xl 2xl:text-3xl">
               We sent a password reset link to{" "}
-              <a href={`mailto:${email}`} className="text-success">
+              <a href={`mailto:${email}`} className="text-tertiary">
                 {email}
               </a>
             </p>
             <button
               type="button"
-              className="mt-14 text-lg bg-primary text-white py-2 rounded-lg hover:bg-success"
+              className="mt-14 text-lg bg-primary text-white py-2 rounded-lg hover:bg-tertiary"
               onClick={() => (window.location.href = `mailto:${email}`)}
             >
               Open email
@@ -57,7 +57,7 @@ function ForgotPassword() {
               Back to
               <Link
                 to="/Login"
-                className="font-semibold text-primary hover:text-success pl-1"
+                className="font-semibold text-primary hover:text-tertiary pl-1"
               >
                 Sign in
               </Link>
@@ -86,7 +86,7 @@ function ForgotPassword() {
             <label className="w-full mt-12 font-bold text-primary flex flex-col">
               Email
               <input
-                className="pt-4 mt-2 pl-2 pb-3 border border-secondary rounded-lg placeholder:text-gray-300 outline-none"
+                className="pt-4 mt-2 pl-2 pb-3 border border-secondary rounded-lg placeholder:text-secondary outline-none"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -96,7 +96,7 @@ function ForgotPassword() {
             </label>
             <button
               type="submit"
-              className="mt-14 text-lg bg-primary text-white py-2 rounded-lg hover:bg-success"
+              className="mt-14 text-lg bg-primary text-white py-2 rounded-lg hover:bg-tertiary"
             >
               Reset Password
             </button>
@@ -105,7 +105,7 @@ function ForgotPassword() {
             Back to
             <Link
               to="/Login"
-              className="font-semibold text-primary hover:text-success pl-1"
+              className="font-semibold text-primary hover:text-tertiary pl-1"
             >
               Sign in
             </Link>

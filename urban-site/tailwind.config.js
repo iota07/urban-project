@@ -9,25 +9,35 @@ export default {
           light: "#16537e",
           dark: "#174A7A",
         },
-        danger: {
-          DEFAULT: "#00a199",
-          light: "#FFD700",
-          dark: "#FFD700",
-        },
-        success: {
-          DEFAULT: "black",
-          light: "#00a199",
-          dark: "#00a199",
-        },
+
         secondary: {
           DEFAULT: "#acbac1",
           light: "#ff0000",
           dark: "#ff0000",
         },
+
+        success: {
+          DEFAULT: "#00a199",
+          light: "#FFD700",
+          dark: "#FFD700",
+        },
+
+        tertiary: {
+          DEFAULT: "black",
+          light: "#00a199",
+          dark: "#00a199",
+        },
+
         backg: {
           DEFAULT: "#ffffff",
           light: "#f9f9f9",
           dark: "#f9f9f9",
+        },
+
+        danger: {
+          DEFAULT: "#ff4b5c",
+          light: "#ff6b7f",
+          dark: "#d9404f",
         },
 
         // Add more custom colors
@@ -35,6 +45,7 @@ export default {
       fontFamily: {
         helvetica: ["Helvetica", "Arial", "sans-serif"],
         futura: ["FUTURA55", "Helvetica", "Arial", "sans-serif"],
+        // Add more custom fonts
       },
     },
   },

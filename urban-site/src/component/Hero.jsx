@@ -12,7 +12,7 @@ const Hero = ({ title, text, buttonText, buttonAction, children }) => {
             {text}
           </p>
           <button
-            className="mt-8 bg-primary text-white py-2 px-6 rounded-3xl shadow-md hover:bg-success transition duration-300"
+            className="mt-8 bg-primary text-white py-2 px-6 rounded-3xl shadow-md hover:bg-tertiary transition duration-300"
             onClick={buttonAction}
           >
             <span className="flex items-center text-xl md:text-2xl lg:text-3xl xl:text-4xl 2xl:text-5xl">

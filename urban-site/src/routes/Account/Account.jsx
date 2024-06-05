@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import { FiEye, FiEyeOff, FiInfo } from "react-icons/fi";
 import TitleH2 from "../../component/TitleH2";
 import TitleH3 from "../../component/TitleH3";
+import DeleteModal from "../../component/DeleteModal";
 
 const MyTextInput = ({ label, ...props }) => {
   const [field, meta] = useField(props);
@@ -76,28 +77,30 @@ const MyPasswordInput = ({ label, ...props }) => {
 
   return (
     <>
-      <div>
+      <section>
         <div className="group relative flex flex-col place-items-start">
-          {validationMessages[props.name] && (
-            <div className="absolute left-0 top-0 transform -translate-x-full translate-y-1/2 cursor-pointer">
-              <FiInfo
-                className="text-white"
-                onMouseEnter={() => setShowTooltip(true)}
-                onMouseLeave={() => setShowTooltip(false)}
-              />
-              {showTooltip && (
-                <div className="absolute left-80 -top-14 text-sm transform -translate-x-full w-64 p-2 bg-white border rounded-xl shadow-md z-50">
-                  {validationMessages[props.name]}
-                </div>
-              )}
-            </div>
-          )}
-          <label
-            htmlFor={props.name}
-            className="text-lg text-primary ml-3 mb-1"
-          >
-            {label}
-          </label>
+          <div>
+            {validationMessages[props.name] && (
+              <div className="absolute left-0 top-0 transform -translate-x-full translate-y-1/2 cursor-pointer">
+                <FiInfo
+                  className="text-white"
+                  onMouseEnter={() => setShowTooltip(true)}
+                  onMouseLeave={() => setShowTooltip(false)}
+                />
+                {showTooltip && (
+                  <div className="absolute left-80 -top-14 text-sm transform -translate-x-full w-64 p-2 bg-white border rounded-xl shadow-md z-50">
+                    {validationMessages[props.name]}
+                  </div>
+                )}
+              </div>
+            )}
+            <label
+              htmlFor={props.name}
+              className="text-lg text-primary ml-3 mb-1"
+            >
+              {label}
+            </label>
+          </div>
           <input
             {...field}
             {...props}
@@ -115,7 +118,7 @@ const MyPasswordInput = ({ label, ...props }) => {
         {meta.touched && meta.error ? (
           <p className="max-w-sm text-red-500 pb-2">{meta.error}</p>
         ) : null}
-      </div>
+      </section>
     </>
   );
 };
@@ -218,11 +221,11 @@ const PasswordUpdateForm = () => {
     >
       {({ errors, touched }) => (
         <Form>
-          <fieldset className="flex flex-col gap-6 mt-10 px-10 text-center">
-            <aside className="md:hidden">
+          <fieldset className="flex flex-col gap-6 px-10 text-center">
+            <aside className="md:hidden mt-4">
               <TitleH2 title="Update Password" />
             </aside>
-            <aside className="hidden md:block md:-mt-2 md:-mb-8">
+            <aside className="hidden md:block md:mt-8 md:-mb-9">
               <TitleH3 title="Update Password" />
             </aside>
 
@@ -234,12 +237,12 @@ const PasswordUpdateForm = () => {
             />
             <button
               type="submit"
-              className="mt-4 h-12 w-full rounded-lg bg-primary text-white transition-all duration-300 hover:bg-success"
+              className="mt-4 h-12 w-full rounded-lg bg-primary text-white transition-all duration-300 hover:bg-tertiary"
             >
               CHANGE PASSWORD
             </button>
             {updateStatus === "updated" && (
-              <p className="text-danger text-xl">Password has been updated.</p>
+              <p className="text-success text-xl">Password has been updated.</p>
             )}
           </fieldset>
         </Form>
@@ -251,6 +254,8 @@ const PasswordUpdateForm = () => {
 const Account = () => {
   const [saveStatus, setSaveStatus] = useState(null);
   const [userData, setUserData] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState("");
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -325,6 +330,16 @@ const Account = () => {
       }
     }
   };
+  const handleDelete = () => {
+    // Handle the deletion process here
+    console.log("Account deleted");
+    setConfirmDelete("");
+    setShowModal(false);
+  };
+
+  const handleConfirmChange = (e) => {
+    setConfirmDelete(e.target.value);
+  };
 
   return (
     <>
@@ -352,7 +367,7 @@ const Account = () => {
             >
               {({ errors, touched }) => (
                 <Form>
-                  <fieldset className="flex flex-col gap-6 mt-2 px-10 text-center">
+                  <fieldset className="flex flex-col gap-6 px-10 text-center">
                     <TitleH2 title="Account" />
                     <MyTextInput
                       name="email"
@@ -387,22 +402,37 @@ const Account = () => {
 
                     <button
                       type="submit"
-                      className="mt-4 h-12 w-full rounded-lg bg-primary text-white transition-all duration-300 hover:bg-success"
+                      className="mt-4 h-12 w-full rounded-lg bg-primary text-white transition-all duration-300 hover:bg-tertiary"
                     >
                       SAVE CHANGES
                     </button>
                     {saveStatus === "saved" && (
-                      <p className="text-danger text-xl">
-                        Changes have been saved.
+                      <p className="text-success text-xl">
+                        Account has been updated.
                       </p>
                     )}
                   </fieldset>
                 </Form>
               )}
             </Formik>
-            <fieldset className="p-0 m-0">
+            <fieldset>
               <PasswordUpdateForm />
             </fieldset>
+            <div className="flex flex-col gap-6 px-10 text-center mt-8 col-start-2">
+              <button
+                className="mt-4 h-12 w-full rounded-lg bg-primary text-white transition-all duration-300 hover:bg-danger"
+                onClick={() => setShowModal(true)}
+              >
+                DELETE ACCOUNT
+              </button>
+              <DeleteModal
+                showModal={showModal}
+                setShowModal={setShowModal}
+                confirmDelete={confirmDelete}
+                setConfirmDelete={setConfirmDelete}
+                handleDelete={handleDelete}
+              />
+            </div>
           </div>
         </div>
       </section>

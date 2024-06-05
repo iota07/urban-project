@@ -15,7 +15,7 @@ function ErrorPage() {
       <p>Sorry, the page you are looking for does not exist.</p>
       <button
         type="button"
-        className="mt-14 w-11/12 sm:w-[400px] text-lg bg-primary text-white py-2 rounded-lg hover:bg-success"
+        className="mt-14 w-11/12 sm:w-[400px] text-lg bg-primary text-white py-2 rounded-lg hover:bg-tertiary"
         onClick={handleButtonClick}
       >
         Home
@@ -37,7 +37,7 @@ function ErrorResponse() {
       <p>Oops, something went wrong.</p>
       <button
         type="button"
-        className="mt-14 w-11/12 sm:w-[400px] text-lg bg-primary text-white py-2 rounded-lg hover:bg-success"
+        className="mt-14 w-11/12 sm:w-[400px] text-lg bg-primary text-white py-2 rounded-lg hover:bg-tertiary"
         onClick={handleButtonClick}
       >
         Home

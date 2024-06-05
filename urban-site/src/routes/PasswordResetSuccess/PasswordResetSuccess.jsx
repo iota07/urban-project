@@ -14,14 +14,14 @@ function PasswordResetSuccess() {
       <section className="min-h-screen w-11/12 sm:w-10/12 md:w-6/12 lg:w-[400px] xl:w-[500px] bg-backg flex flex-col pt-12">
         <div className="flex flex-col justify-center items-center">
           <div className="bg-secondary p-7 rounded-full ">
-            <BsShieldCheck className="bg-danger text-white text-5xl rounded-md p-2" />
+            <BsShieldCheck className="bg-success text-white text-5xl rounded-md p-2" />
           </div>
           <TitleH2 title="Password reset" />
           <p className="mt-4">Your password has been successfully reset.</p>
           <p>Click below to log in.</p>
           <button
             type="button"
-            className="mt-14 w-11/12 text-lg bg-primary text-white py-2 rounded-lg hover:bg-success"
+            className="mt-14 w-11/12 text-lg bg-primary text-white py-2 rounded-lg hover:bg-tertiary"
             onClick={handleButtonClick}
           >
             Sign in
@@ -32,7 +32,7 @@ function PasswordResetSuccess() {
             Back to
             <Link
               to="/Login"
-              className="font-semibold text-primary hover:text-success pl-1"
+              className="font-semibold text-primary hover:text-tertiary pl-1"
             >
               Sign in
             </Link>
