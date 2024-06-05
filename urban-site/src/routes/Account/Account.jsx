@@ -330,15 +330,22 @@ const Account = () => {
       }
     }
   };
-  const handleDelete = () => {
-    // Handle the deletion process here
+  const handleDelete = async () => {
+    const response = await axios.delete(
+      "http://localhost:8000/delete_account/"
+    );
+
+    if (response.status === 200) {
+      localStorage.clear();
+      // Redirect to home
+      window.location.href = "/";
+    } else {
+      // Handle error
+      console.error("Failed to delete account");
+    }
     console.log("Account deleted");
     setConfirmDelete("");
     setShowModal(false);
-  };
-
-  const handleConfirmChange = (e) => {
-    setConfirmDelete(e.target.value);
   };
 
   return (

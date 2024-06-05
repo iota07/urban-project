@@ -34,7 +34,12 @@ const DeleteModal = ({
           <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
             <div className="flex justify-between">
               <TitleH2 title="Delete Account" />
-              <button onClick={() => setShowModal(false)}>Cancel</button>
+              <button
+                className="py-2 w-fit px-8 mb-2 rounded-lg bg-primary text-white transition-all duration-300 hover:bg-tertiary"
+                onClick={() => setShowModal(false)}
+              >
+                Cancel
+              </button>
             </div>
             <p className="border-t-2">
               Deleting your account will remove all your information from our
@@ -48,12 +53,19 @@ const DeleteModal = ({
               value={confirmDelete}
               onChange={(e) => setConfirmDelete(e.target.value)}
             />
-            <button
-              disabled={confirmDelete !== "DELETE"}
-              onClick={handleDelete}
-            >
-              Delete
-            </button>
+            <div className="flex justify-end">
+              <button
+                className={`py-2 w-fit px-8 my-2 rounded-lg transition-all duration-300 ${
+                  confirmDelete !== "DELETE"
+                    ? "bg-gray-300 text-white cursor-not-allowed"
+                    : "bg-white text-danger border border-danger hover:bg-danger hover:text-white"
+                }`}
+                disabled={confirmDelete !== "DELETE"}
+                onClick={handleDelete}
+              >
+                Delete
+              </button>
+            </div>
           </div>
         </div>
       </div>
