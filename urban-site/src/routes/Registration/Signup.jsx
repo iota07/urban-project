@@ -206,6 +206,8 @@ const validationSchema = Yup.object().shape({
 });
 
 const Registration = () => {
+  const [errorMessage, setErrorMessage] = useState("");
+
   const submit = async (values, { setFieldError }) => {
     const user = {
       email: values.email,
@@ -241,6 +243,15 @@ const Registration = () => {
         }
         if (errorData.email) {
           setFieldError("email", errorData.email[0]);
+        }
+        if (errorData.password1) {
+          setFieldError("password1", errorData.password1[0]);
+        }
+        if (errorData.password2) {
+          setFieldError("password2", errorData.password2[0]);
+        }
+        if (errorData.non_field_errors) {
+          setErrorMessage(errorData.non_field_errors[0]);
         }
       }
     }
@@ -293,6 +304,9 @@ const Registration = () => {
                     >
                       Sign up
                     </button>
+                    {errorMessage && (
+                      <p className="text-danger mt-2">{errorMessage}</p>
+                    )}
                   </fieldset>
                 </Form>
               )}
