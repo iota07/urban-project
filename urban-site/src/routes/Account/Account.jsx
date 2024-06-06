@@ -352,7 +352,11 @@ const Account = () => {
     <>
       <section className="min-h-screen flex justify-center items-start">
         <div className="w-[400px] sm:w-[400px] md:w-[700px] lg:w-[1000px] rounded-lg bg-secondary flex flex-col justify-center items-start">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 1440 320"
+            className="rounded-t-lg"
+          >
             <path
               fill="#2F5265"
               opacity="1"

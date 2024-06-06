@@ -160,7 +160,7 @@ function ResetPassword() {
 
                     <button
                       type="submit"
-                      className="mt-6 text-lg bg-primary text-white py-2 rounded-lg hover:bg-success"
+                      className="mt-6 text-lg bg-primary text-white py-2 rounded-lg hover:bg-tertiary"
                     >
                       Change password
                     </button>
@@ -172,7 +172,7 @@ function ResetPassword() {
               Back to
               <Link
                 to="/Login"
-                className="font-semibold text-primary hover:text-success pl-1"
+                className="font-semibold text-primary hover:text-tertiary pl-1"
               >
                 Sign in
               </Link>
