@@ -37,6 +37,13 @@ axios.interceptors.response.use(
     return response;
   },
   async (error) => {
+    // If the server is not reachable
+    if (!error.response) {
+      // Redirect to an error page or display a suitable message
+      window.location.href = "/error";
+      return Promise.reject(error);
+    }
+
     // Get the original request configuration
     const originalRequest = error.config;
 
@@ -108,7 +115,12 @@ axios.interceptors.response.use(
         // Dispatch an event to update the authentication status
         updateAuthStatus();
       }
+    } else if (error.response.status === 500) {
+      // Redirect to an error page or display a generic error message
+      window.location.href = "/error";
+      return Promise.reject(error);
     } // If the response status was 400 or above, redirect to the error page
+    // If the response status was 400 or above, redirect to the error page
     else if (error.response.status >= 400) {
       // Check if the error is a validation error
       if (Object.keys(error.response.data).length > 0) {
