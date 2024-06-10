@@ -19,7 +19,10 @@ const Logout = () => {
             withCredentials: true,
           }
         );
-        localStorage.clear();
+
+        localStorage.removeItem("access_token");
+        localStorage.removeItem("refresh_token");
+
         window.location.href = "/";
       } catch (error) {
         console.error("Logout failed:", error);
