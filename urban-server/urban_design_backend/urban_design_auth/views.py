@@ -16,6 +16,7 @@ from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from .serializers import UserSerializer
 from django.contrib.auth import get_user_model
+from django.conf import settings
 
 
 # HomeView: A view that returns a welcome message for authenticated users.
@@ -77,7 +78,7 @@ class CustomPasswordResetConfirmView(DjRestAuthPasswordResetConfirmView):
         token = kwargs.get('token')
 
         # Construct the URL for your React frontend
-        redirect_url = f'http://localhost:5173/reset-password/{uidb64}/{token}/'
+        redirect_url = f'{settings.FRONTEND_URL}/reset-password/{uidb64}/{token}/'
 
         # Redirect to the React frontend URL
         return HttpResponseRedirect(redirect_url)
