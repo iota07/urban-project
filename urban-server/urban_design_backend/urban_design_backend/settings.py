@@ -14,8 +14,16 @@ from pathlib import Path
 from datetime import timedelta
 from dotenv import load_dotenv
 import os
+from urllib.parse import urlparse
 
 load_dotenv()
+
+FRONTEND_URL = os.getenv('FRONTEND_URL', 'http://localhost:5173')
+
+parsed_url = urlparse(FRONTEND_URL)
+frontend_scheme = parsed_url.scheme 
+frontend_netloc = parsed_url.netloc  
+frontend_url = f"{frontend_scheme}://{frontend_netloc}"
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -30,7 +38,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG') == 'True'
 
-ALLOWED_HOSTS = ['urban-project.vercel.app']
+ALLOWED_HOSTS = [frontend_url]
 
 
 # Application definition
@@ -59,7 +67,7 @@ CORS_ORIGIN_ALLOW_ALL = True
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
-    "https://urban-project.vercel.app",
+    frontend_url,
 ]
 
 CORS_ALLOW_CREDENTIALS = True
@@ -121,9 +129,9 @@ ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
-ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = 'http://localhost:5173/login'
-ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = 'http://localhost:5173/login'
-ACCOUNT_PASSWORD_RESET_REDIRECT_URL = 'http://localhost:5173/reset-password'
+ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = f"{frontend_url}/login"
+ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = f"{frontend_url}/login"
+ACCOUNT_PASSWORD_RESET_REDIRECT_URL = f"{frontend_url}/reset-password"
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
