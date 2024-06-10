@@ -25,6 +25,10 @@ frontend_scheme = parsed_url.scheme
 frontend_netloc = parsed_url.netloc  
 frontend_url = f"{frontend_scheme}://{frontend_netloc}"
 
+parsed_url = urlparse(FRONTEND_URL)
+backend_scheme = parsed_url.scheme 
+backend_netloc = parsed_url.netloc  
+backend_url = f"{backend_scheme}://{backend_netloc}"
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -38,7 +42,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG') == 'True'
 
-ALLOWED_HOSTS = [frontend_url]
+ALLOWED_HOSTS = [frontend_url,backend_url, 'localhost']
 
 
 # Application definition
@@ -69,6 +73,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     frontend_url,
 ]
+
 
 CORS_ALLOW_CREDENTIALS = True
 
