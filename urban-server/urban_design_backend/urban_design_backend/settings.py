@@ -38,7 +38,6 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = os.getenv('DEBUG') == 'True'
 
 ALLOWED_HOSTS = [frontend_hostname,backend_hostname, 'localhost']
-print(ALLOWED_HOSTS)
 
 # Application definition
 
