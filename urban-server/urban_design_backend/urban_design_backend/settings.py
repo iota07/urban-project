@@ -21,14 +21,14 @@ load_dotenv()
 FRONTEND_URL = os.getenv('FRONTEND_URL', 'http://localhost:5173')
 BACKEND_URL = os.getenv('BACKEND_URL', 'http://localhost:8000')
 
-parsed_url = urlparse(FRONTEND_URL)
-frontend_scheme = parsed_url.scheme 
-frontend_netloc = parsed_url.netloc  
+parsed_url_front = urlparse(FRONTEND_URL)
+frontend_scheme = parsed_url_front.scheme 
+frontend_netloc = parsed_url_front.netloc  
 frontend_url = f"{frontend_scheme}://{frontend_netloc}"
 
-parsed_url = urlparse(BACKEND_URL)
-backend_scheme = parsed_url.scheme 
-backend_netloc = parsed_url.netloc  
+parsed_url_back = urlparse(BACKEND_URL)
+backend_scheme = parsed_url_back.scheme 
+backend_netloc = parsed_url_back.netloc  
 backend_url = f"{backend_scheme}://{backend_netloc}"
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
