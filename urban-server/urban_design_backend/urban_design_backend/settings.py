@@ -19,13 +19,14 @@ from urllib.parse import urlparse
 load_dotenv()
 
 FRONTEND_URL = os.getenv('FRONTEND_URL', 'http://localhost:5173')
+BACKEND_URL = os.getenv('BACKEND_URL', 'http://localhost:8000')
 
 parsed_url = urlparse(FRONTEND_URL)
 frontend_scheme = parsed_url.scheme 
 frontend_netloc = parsed_url.netloc  
 frontend_url = f"{frontend_scheme}://{frontend_netloc}"
 
-parsed_url = urlparse(FRONTEND_URL)
+parsed_url = urlparse(BACKEND_URL)
 backend_scheme = parsed_url.scheme 
 backend_netloc = parsed_url.netloc  
 backend_url = f"{backend_scheme}://{backend_netloc}"
@@ -43,7 +44,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = os.getenv('DEBUG') == 'True'
 
 ALLOWED_HOSTS = [frontend_url,backend_url, 'localhost']
-
+print(ALLOWED_HOSTS)
 
 # Application definition
 
