@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { RiLockPasswordLine } from "react-icons/ri";
 import TitleH2 from "../../component/TitleH2";
 import { IoMailOutline } from "react-icons/io5";
+import { BACKEND_URL } from "../../utils/config";
 
 function ForgotPassword() {
   const [email, setEmail] = useState("");
@@ -11,7 +12,7 @@ function ForgotPassword() {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    fetch("http://localhost:8000/dj-rest-auth/password/reset/", {
+    fetch(`${BACKEND_URL}/dj-rest-auth/password/reset/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

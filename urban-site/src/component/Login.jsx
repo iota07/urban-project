@@ -5,6 +5,7 @@ import { useNavigate, Link } from "react-router-dom";
 import updateAuthStatus from "../Interceptors/axios";
 import { useState } from "react";
 import { FiEye, FiEyeOff, FiInfo } from "react-icons/fi";
+import { BACKEND_URL } from "../utils/config";
 
 const MyTextInput = ({ label, ...props }) => {
   const [field, meta] = useField(props);
@@ -131,16 +132,12 @@ const Login = () => {
     };
 
     try {
-      const { data } = await axios.post(
-        "http://localhost:8000/token/login/",
-        user,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-          withCredentials: true,
-        }
-      );
+      const { data } = await axios.post(`${BACKEND_URL}/token/login/`, user, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      });
 
       localStorage.clear();
       localStorage.setItem("access_token", data.access);

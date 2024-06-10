@@ -7,6 +7,7 @@ import { useState } from "react";
 import { FiEye, FiEyeOff, FiInfo } from "react-icons/fi";
 import { LuKeyRound } from "react-icons/lu";
 import TitleH2 from "../../component/TitleH2";
+import { BACKEND_URL } from "../../utils/config";
 
 const MyPasswordInput = ({ label, ...props }) => {
   const [field, meta] = useField(props);
@@ -89,15 +90,11 @@ function ResetPassword() {
 
     try {
       await axios
-        .post(
-          "http://localhost:8000/dj-rest-auth/password/reset/confirm/",
-          user,
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        )
+        .post(`${BACKEND_URL}dj-rest-auth/password/reset/confirm/`, user, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
         .then((response) => {
           if (response.status !== 200) {
             throw new Error("Validation error");

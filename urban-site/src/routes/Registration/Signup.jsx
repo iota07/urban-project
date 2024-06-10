@@ -4,6 +4,7 @@ import { Formik, Form, useField } from "formik";
 import * as Yup from "yup";
 import { useState } from "react";
 import { FiEye, FiEyeOff, FiInfo } from "react-icons/fi";
+import { BACKEND_URL } from "../../utils/config";
 
 const MyTextInput = ({ label, ...props }) => {
   const [field, meta] = useField(props);
@@ -221,7 +222,7 @@ const Registration = () => {
 
     try {
       await axios
-        .post("http://localhost:8000/dj-rest-auth/registration/", user, {
+        .post(`${BACKEND_URL}/dj-rest-auth/registration/`, user, {
           headers: {
             "Content-Type": "application/json",
           },

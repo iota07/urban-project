@@ -1,4 +1,5 @@
 import axios from "axios";
+import { BACKEND_URL } from "../utils/config";
 
 // Flag to indicate if a token refresh is in progress
 let isRefreshing = false;
@@ -51,7 +52,7 @@ axios.interceptors.response.use(
     if (
       error.response.status === 401 &&
       !originalRequest._retry &&
-      originalRequest.url !== "http://localhost:8000/token/login/"
+      originalRequest.url !== `${BACKEND_URL}/token/login/`
     ) {
       // If a token refresh is already in progress
       if (isRefreshing) {
@@ -78,7 +79,7 @@ axios.interceptors.response.use(
       try {
         // Attempt to refresh the token
         const refreshResponse = await axios.post(
-          "http://localhost:8000/token/refresh/",
+          `${BACKEND_URL}/token/refresh/`,
           {
             refresh: localStorage.getItem("refresh_token"),
           },

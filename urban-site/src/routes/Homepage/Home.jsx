@@ -3,6 +3,7 @@ import axios from "axios";
 import CadViewer from "../../component/CadViewer";
 import FileUpload from "../../component/FileUpload";
 import TitleH3 from "../../component/TitleH3";
+import { BACKEND_URL } from "../../utils/config";
 
 const Home = () => {
   const [username, setUsername] = useState("");
@@ -14,7 +15,7 @@ const Home = () => {
     } else {
       (async () => {
         try {
-          const { data } = await axios.get("http://localhost:8000/home/", {
+          const { data } = await axios.get(`${BACKEND_URL}/home/`, {
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ${localStorage.getItem("access_token")}`,

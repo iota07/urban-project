@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import axios from "axios";
+import { BACKEND_URL } from "../utils/config";
 
 const Logout = () => {
   useEffect(() => {
@@ -7,7 +8,7 @@ const Logout = () => {
       try {
         const accessToken = localStorage.getItem("access_token");
         await axios.post(
-          "http://localhost:8000/logout/",
+          `${BACKEND_URL}/logout/`,
           {
             refresh_token: localStorage.getItem("refresh_token"),
           },

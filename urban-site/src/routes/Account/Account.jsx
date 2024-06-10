@@ -7,6 +7,7 @@ import { FiEye, FiEyeOff, FiInfo } from "react-icons/fi";
 import TitleH2 from "../../component/TitleH2";
 import TitleH3 from "../../component/TitleH3";
 import DeleteModal from "../../component/DeleteModal";
+import { BACKEND_URL } from "../../utils/config";
 
 const MyTextInput = ({ label, ...props }) => {
   const [field, meta] = useField(props);
@@ -181,7 +182,7 @@ const PasswordUpdateForm = () => {
 
     try {
       const response = await axios.patch(
-        "http://localhost:8000/user/password/",
+        `${BACKEND_URL}/user/password/`,
         passwordData
       );
 
@@ -273,10 +274,7 @@ const Account = () => {
           };
 
           // Send the GET request with the access token included in the headers
-          const response = await axios.get(
-            "http://localhost:8000/user/",
-            config
-          );
+          const response = await axios.get(`${BACKEND_URL}/user/`, config);
 
           if (response.data) {
             const { email, username, name, surname, organisation } =
@@ -304,7 +302,7 @@ const Account = () => {
     };
 
     try {
-      const response = await axios.patch("http://localhost:8000/user/", user, {
+      const response = await axios.patch(`${BACKEND_URL}/user/`, user, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -331,9 +329,7 @@ const Account = () => {
     }
   };
   const handleDelete = async () => {
-    const response = await axios.delete(
-      "http://localhost:8000/delete_account/"
-    );
+    const response = await axios.delete(`${BACKEND_URL}/delete_account/`);
 
     if (response.status === 200) {
       localStorage.clear();
