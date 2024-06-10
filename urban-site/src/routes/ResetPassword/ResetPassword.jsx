@@ -90,7 +90,7 @@ function ResetPassword() {
 
     try {
       await axios
-        .post(`${BACKEND_URL}dj-rest-auth/password/reset/confirm/`, user, {
+        .post(`${BACKEND_URL}/dj-rest-auth/password/reset/confirm/`, user, {
           headers: {
             "Content-Type": "application/json",
           },
