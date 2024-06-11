@@ -162,13 +162,12 @@ const STLWithDataViewer = ({ stlFile, vtpFile }) => {
           // Set the original lookup table to the scalar bar actor
           scalarBarActor.setScalarsToColors(lut);
 
-          scalarBarActor.setAxisLabel("U Magnitude");
+          scalarBarActor.setAxisLabel("Wind speed at pedestrian level [m/s]");
           scalarBarActor.setDrawNanAnnotation(false);
           scalarBarActor.setAutomated(true);
 
           scalarBarActor.setAxisTextStyle({
             fontColor: "#2F5265",
-            fontStyle: "bold",
             fontFamily: "FUTURA55",
           });
 
@@ -216,6 +215,28 @@ const STLWithDataViewer = ({ stlFile, vtpFile }) => {
         // Log any errors that occurred while loading the files
         console.error("Error loading file:", error);
       }
+
+      /*
+      // Function to rotate the camera vertically without setTimeout
+      const rotateCameraVertical = () => {
+        // Get the renderer from the full screen render window
+        const renderer = fullScreenRenderer.current.getRenderer();
+        // Get the camera
+        const camera = renderer.getActiveCamera();
+
+        // Set the camera orientation to rotate around the camera's right vector
+        camera.elevation(-10); // 30 degrees upward rotation
+
+        // Move the camera closer
+        camera.dolly(1.3); // Move the camera 10% closer to the focal point
+
+        // Update the camera
+        camera.modified();
+
+        // Render the scene
+        fullScreenRenderer.current.getRenderWindow().render();
+      };
+      rotateCameraVertical(); */
 
       // Cleanup function to delete the actors, mappers, and readers
       return () => {
