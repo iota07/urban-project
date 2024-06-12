@@ -38,6 +38,7 @@ axios.interceptors.response.use(
     return response;
   },
   async (error) => {
+    console.log(error);
     // If the server is not reachable
     if (!error.response) {
       // Redirect to an error page or display a suitable message
