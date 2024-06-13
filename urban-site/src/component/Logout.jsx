@@ -28,9 +28,9 @@ const Logout = () => {
       } catch (error) {
         console.error("Logout failed:", error);
         // Clear the local storage and redirect regardless of the error status
-        localStorage.clear();
+        await localStorage.clear();
         console.log("Local storage cleared due to logout error");
-        window.location.href = "/";
+        window.location.replace("/");
       }
     })();
   }, []);
