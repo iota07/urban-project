@@ -5,7 +5,7 @@ const Footer = () => {
     <footer className="bg-backg text-primary text-sm md:text-lg lg:text-xl py-3 bottom-0 w-full">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center">
-          <p>
+          <p className="justify center">
             &copy; {new Date().getFullYear()} Buildwind. All rights reserved.
           </p>
           {/*<nav>
