@@ -17,6 +17,9 @@ from rest_framework.permissions import IsAuthenticated
 from .serializers import UserSerializer
 from django.contrib.auth import get_user_model
 from django.conf import settings
+from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.exceptions import AuthenticationFailed
+from allauth.account.models import EmailAddress
 
 
 # HomeView: A view that returns a welcome message for authenticated users.
@@ -123,3 +126,18 @@ class DeleteAccountView(APIView):
         user = request.user
         user.delete()
         return Response({'status': 'Account deleted successfully'}, status=status.HTTP_200_OK)
+    
+class CustomTokenObtainPairView(TokenObtainPairView):
+    def validate(self, attrs):
+        data = super().validate(attrs)
+
+        # Get the user
+        user = self.user
+
+        # Check if the email is verified
+        email_address = EmailAddress.objects.filter(user=user).first()
+        if email_address:
+            if not email_address.verified:
+                raise AuthenticationFailed('Email is not verified')
+
+        return data
