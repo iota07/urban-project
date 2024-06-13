@@ -53,7 +53,8 @@ axios.interceptors.response.use(
     if (
       error.response.status === 401 &&
       !originalRequest._retry &&
-      originalRequest.url !== `${BACKEND_URL}/token/login/`
+      originalRequest.url !== `${BACKEND_URL}/token/login/` &&
+      error.response.data.code === "token_not_valid"
     ) {
       // If a token refresh is already in progress
       if (isRefreshing) {
@@ -117,12 +118,16 @@ axios.interceptors.response.use(
         // Dispatch an event to update the authentication status
         updateAuthStatus();
       }
+    } else if (error.response.status === 401) {
+      // Handle other 401 errors here
+
+      window.location.href = "/";
+      return Promise.reject(error);
     } else if (error.response.status === 500) {
       // Redirect to an error page or display a generic error message
       window.location.href = "/error";
       return Promise.reject(error);
     } // If the response status was 400 or above, redirect to the error page
-    // If the response status was 400 or above, redirect to the error page
     else if (error.response.status >= 400) {
       // Check if the error is a validation error
       if (Object.keys(error.response.data).length > 0) {
