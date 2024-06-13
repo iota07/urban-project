@@ -27,14 +27,10 @@ const Logout = () => {
         window.location.href = "/";
       } catch (error) {
         console.error("Logout failed:", error);
-        // Check if the error status is 400
-        if (error.response && error.response.status === 400) {
-          // If it is, clear the local storage
-          localStorage.clear();
-          console.log("Local storage cleared due to logout error");
-          // Redirect to root
-          window.location.href = "/";
-        }
+        // Clear the local storage and redirect regardless of the error status
+        localStorage.clear();
+        console.log("Local storage cleared due to logout error");
+        window.location.href = "/";
       }
     })();
   }, []);
