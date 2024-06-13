@@ -8,7 +8,7 @@ const Footer = () => {
           <p>
             &copy; {new Date().getFullYear()} Buildwind. All rights reserved.
           </p>
-          <nav>
+          {/*<nav>
             <ul className="flex space-x-4">
               <li>
                 <a href="#" className="hover:text-tertiary">
@@ -21,7 +21,7 @@ const Footer = () => {
                 </a>
               </li>
             </ul>
-          </nav>
+          </nav>*/}
         </div>
       </div>
     </footer>
