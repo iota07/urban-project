@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from dj_rest_auth.registration.serializers import RegisterSerializer
-from dj_rest_auth.serializers import JWTSerializer
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from urban_design_auth.models import CustomUser
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import get_user_model
@@ -35,14 +35,12 @@ class CustomRegisterSerializer(RegisterSerializer):
 
 
 
-User = get_user_model()
-
-class CustomJWTSerializer(JWTSerializer):
+class CustomJWTSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
         data = super().validate(attrs)
 
         # Check if email is verified
-        email_address = User.objects.get(email=self.user.email).emailaddress_set.get(email=self.user.email)
+        email_address = self.user.emailaddress_set.get(email=self.user.email)
         if not email_address.verified:
             raise exceptions.ValidationError('Email is not verified')
 
