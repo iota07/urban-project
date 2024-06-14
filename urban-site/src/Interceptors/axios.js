@@ -133,6 +133,7 @@ axios.interceptors.response.use(
       return Promise.reject(error);
     } // If the response status was 400 or above, redirect to the error page
     else if (error.response.status >= 400) {
+      console.log("Server response:", error.response.data);
       // Check if the error is a validation error
       if (Object.keys(error.response.data).length > 0) {
         // Check if the current frontend URL matches the password reset page
