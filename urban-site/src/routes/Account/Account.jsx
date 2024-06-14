@@ -249,7 +249,7 @@ const PasswordUpdateForm = () => {
               CHANGE PASSWORD
             </button>
             {errorMessage && (
-              <div className="error-message text-danger">{errorMessage}</div>
+              <div className="text-danger text-xl">{errorMessage}</div>
             )}
             {updateStatus === "updated" && (
               <p className="text-success text-xl">Password has been updated.</p>
