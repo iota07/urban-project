@@ -174,6 +174,7 @@ const PasswordUpdateForm = () => {
   });
 
   const submit = async (values, { setFieldError, setSubmitting }) => {
+    const [errorMessage, setErrorMessage] = useState("");
     const passwordData = {
       old_password: values.oldpassword,
       password1: values.newpassword1,
@@ -197,6 +198,9 @@ const PasswordUpdateForm = () => {
         let errorData = error.response.data;
         console.log("Server response in account:", errorData);
         console.log("Full error response in account:", error.response); // Add this line
+
+        // Set the error message in the state
+        setErrorMessage(errorData.detail || "An error occurred");
 
         if (errorData.old_password) {
           setFieldError("oldpassword", errorData.old_password[0]);
@@ -245,6 +249,9 @@ const PasswordUpdateForm = () => {
             >
               CHANGE PASSWORD
             </button>
+            {errorMessage && (
+              <div className="error-message">{errorMessage}</div>
+            )}
             {updateStatus === "updated" && (
               <p className="text-success text-xl">Password has been updated.</p>
             )}
