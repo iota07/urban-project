@@ -216,12 +216,6 @@ const PasswordUpdateForm = () => {
     }
   };
 
-  const handleChangeAndClearError = (event) => {
-    setErrorMessage("");
-    setUpdateStatus(null);
-    handleChange(event);
-  };
-
   return (
     <Formik
       initialValues={{
@@ -232,46 +226,56 @@ const PasswordUpdateForm = () => {
       validationSchema={validationSchema}
       onSubmit={submit}
     >
-      {({ errors, touched }) => (
-        <Form>
-          <fieldset className="flex flex-col gap-6 px-10 text-center">
-            <aside className="md:hidden mt-4">
-              <TitleH2 title="Update Password" />
-            </aside>
-            <aside className="hidden md:block md:mt-8 md:-mb-9">
-              <TitleH3 title="Update Password" />
-            </aside>
+      {({ errors, touched, handleChange }) => {
+        const handleChangeAndClearError = (event) => {
+          setErrorMessage("");
+          setUpdateStatus(null);
+          handleChange(event);
+        };
 
-            <MyPasswordInput
-              name="oldpassword"
-              label="Old Password"
-              onChange={handleChangeAndClearError}
-            />
-            <MyPasswordInput
-              name="newpassword1"
-              label="New Password"
-              onChange={handleChangeAndClearError}
-            />
-            <MyPasswordInput
-              name="newpassword2"
-              label="New Password confirmation"
-              onChange={handleChangeAndClearError}
-            />
-            <button
-              type="submit"
-              className="mt-4 h-12 w-full rounded-lg bg-primary text-white transition-all duration-300 hover:bg-tertiary"
-            >
-              CHANGE PASSWORD
-            </button>
-            {errorMessage && (
-              <div className="text-danger text-xl">{errorMessage}</div>
-            )}
-            {updateStatus === "updated" && (
-              <p className="text-success text-xl">Password has been updated.</p>
-            )}
-          </fieldset>
-        </Form>
-      )}
+        return (
+          <Form>
+            <fieldset className="flex flex-col gap-6 px-10 text-center">
+              <aside className="md:hidden mt-4">
+                <TitleH2 title="Update Password" />
+              </aside>
+              <aside className="hidden md:block md:mt-8 md:-mb-9">
+                <TitleH3 title="Update Password" />
+              </aside>
+
+              <MyPasswordInput
+                name="oldpassword"
+                label="Old Password"
+                onChange={handleChangeAndClearError}
+              />
+              <MyPasswordInput
+                name="newpassword1"
+                label="New Password"
+                onChange={handleChangeAndClearError}
+              />
+              <MyPasswordInput
+                name="newpassword2"
+                label="New Password confirmation"
+                onChange={handleChangeAndClearError}
+              />
+              <button
+                type="submit"
+                className="mt-4 h-12 w-full rounded-lg bg-primary text-white transition-all duration-300 hover:bg-tertiary"
+              >
+                CHANGE PASSWORD
+              </button>
+              {errorMessage && (
+                <div className="text-danger text-xl">{errorMessage}</div>
+              )}
+              {updateStatus === "updated" && (
+                <p className="text-success text-xl">
+                  Password has been updated.
+                </p>
+              )}
+            </fieldset>
+          </Form>
+        );
+      }}
     </Formik>
   );
 };
