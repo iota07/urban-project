@@ -48,7 +48,7 @@ const MyTextInput = ({ label, ...props }) => {
           </label>
         </div>
         {meta.touched && meta.error ? (
-          <p className="max-w-sm text-red-500 pb-2">{meta.error}</p>
+          <p className="max-w-sm text-danger pb-2">{meta.error}</p>
         ) : null}
       </div>
     </>
@@ -104,7 +104,7 @@ const MyPasswordInput = ({ label, ...props }) => {
           </span>
         </div>
         {meta.touched && meta.error ? (
-          <p className="max-w-sm text-red-500 pb-2">{meta.error}</p>
+          <p className="max-w-sm text-danger pb-2">{meta.error}</p>
         ) : null}
       </div>
     </>
@@ -147,12 +147,9 @@ const Login = () => {
       updateAuthStatus(); // Trigger event to update authentication status
       navigate("/home");
     } catch (error) {
-      console.error("Error while logging in:", error);
       setErrorMessage("Error while logging in. Please try again.");
       if (error.response) {
         if (error.response.status === 400) {
-          // The request was a validation error
-          console.log("Validation errors:", error.response.data);
           let errorData = error.response.data;
           if (errorData.email) {
             setFieldError("email", errorData.email[0]);
@@ -160,12 +157,10 @@ const Login = () => {
           if (errorData.password) {
             setFieldError("password", errorData.password[0]);
           }
-          // Add this block to handle non-validation 400 errors
           if (errorData.non_field_errors) {
             setErrorMessage(errorData.non_field_errors[0]);
           }
         } else if (error.response.status === 401) {
-          // The request was unauthorized
           setFieldError("password", error.response.data.detail);
         }
       }
@@ -186,21 +181,37 @@ const Login = () => {
               validationSchema={validationSchema}
               onSubmit={submit}
             >
-              {({ errors, touched }) => (
-                <Form className="mt-10 space-y-8 px-10 py-10 text-center">
-                  <MyTextInput name="email" type="text" label="Email" />
-                  <MyPasswordInput name="password" label="Password" />
-                  <button
-                    type="submit"
-                    className="h-12 w-full rounded-3xl bg-primary text-white transition-all duration-300 hover:bg-tertiary"
-                  >
-                    Login
-                  </button>
-                  {errorMessage && (
-                    <p className="text-red-500">{errorMessage}</p>
-                  )}
-                </Form>
-              )}
+              {({ errors, touched, handleChange }) => {
+                const handleChangeAndClearError = (event) => {
+                  setErrorMessage("");
+                  handleChange(event);
+                };
+
+                return (
+                  <Form className="mt-10 space-y-8 px-10 py-10 text-center">
+                    <MyTextInput
+                      name="email"
+                      type="text"
+                      label="Email"
+                      onChange={handleChangeAndClearError}
+                    />
+                    <MyPasswordInput
+                      name="password"
+                      label="Password"
+                      onChange={handleChangeAndClearError}
+                    />
+                    <button
+                      type="submit"
+                      className="h-12 w-full rounded-3xl bg-primary text-white transition-all duration-300 hover:bg-tertiary"
+                    >
+                      Login
+                    </button>
+                    {errorMessage && (
+                      <p className="text-danger">{errorMessage}</p>
+                    )}
+                  </Form>
+                );
+              }}
             </Formik>
 
             <Link
