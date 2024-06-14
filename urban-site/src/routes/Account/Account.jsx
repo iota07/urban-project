@@ -192,10 +192,10 @@ const PasswordUpdateForm = () => {
         throw new Error("Validation error");
       }
     } catch (error) {
-      console.error("Error while updating password:", error);
+      console.error("Error while updating password in account:", error);
       if (error.response && error.response.status === 400) {
         let errorData = error.response.data;
-        console.log("Server response:", errorData);
+        console.log("Server response in account:", errorData);
         if (errorData.old_password) {
           setFieldError("oldpassword", errorData.old_password[0]);
         }
