@@ -216,6 +216,12 @@ const PasswordUpdateForm = () => {
     }
   };
 
+  const handleChangeAndClearError = (event) => {
+    setErrorMessage("");
+    setUpdateStatus(null);
+    handleChange(event);
+  };
+
   return (
     <Formik
       initialValues={{
@@ -236,11 +242,20 @@ const PasswordUpdateForm = () => {
               <TitleH3 title="Update Password" />
             </aside>
 
-            <MyPasswordInput name="oldpassword" label="Old Password" />
-            <MyPasswordInput name="newpassword1" label="New Password" />
+            <MyPasswordInput
+              name="oldpassword"
+              label="Old Password"
+              onChange={handleChangeAndClearError}
+            />
+            <MyPasswordInput
+              name="newpassword1"
+              label="New Password"
+              onChange={handleChangeAndClearError}
+            />
             <MyPasswordInput
               name="newpassword2"
               label="New Password confirmation"
+              onChange={handleChangeAndClearError}
             />
             <button
               type="submit"
