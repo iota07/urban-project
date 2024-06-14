@@ -158,6 +158,11 @@ const Login = () => {
           if (errorData.password) {
             setFieldError("password", errorData.password[0]);
           }
+          // Add this block to handle non-validation 400 errors
+          if (errorData.non_field_errors) {
+            // Assuming the server returns a non_field_errors array for non-validation errors
+            alert(errorData.non_field_errors[0]);
+          }
         } else if (error.response.status === 401) {
           // The request was unauthorized
           setFieldError("password", error.response.data.detail);
