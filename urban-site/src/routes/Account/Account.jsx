@@ -172,9 +172,8 @@ const PasswordUpdateForm = () => {
         "Password confirmation cannot contain spaces, '<', or '>'"
       ),
   });
-
+  const [errorMessage, setErrorMessage] = useState("");
   const submit = async (values, { setFieldError, setSubmitting }) => {
-    const [errorMessage, setErrorMessage] = useState("");
     const passwordData = {
       old_password: values.oldpassword,
       password1: values.newpassword1,
