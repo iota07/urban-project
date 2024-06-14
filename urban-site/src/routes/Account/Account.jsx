@@ -58,7 +58,7 @@ const MyTextInput = ({ label, ...props }) => {
           />
         </div>
         {meta.touched && meta.error ? (
-          <p className="max-w-sm text-red-500 pb-2">{meta.error}</p>
+          <p className="max-w-sm text-danger pb-2">{meta.error}</p>
         ) : null}
       </section>
     </>
@@ -117,7 +117,7 @@ const MyPasswordInput = ({ label, ...props }) => {
           </span>
         </div>
         {meta.touched && meta.error ? (
-          <p className="max-w-sm text-red-500 pb-2">{meta.error}</p>
+          <p className="max-w-sm text-danger pb-2">{meta.error}</p>
         ) : null}
       </section>
     </>
@@ -249,7 +249,7 @@ const PasswordUpdateForm = () => {
               CHANGE PASSWORD
             </button>
             {errorMessage && (
-              <div className="error-message">{errorMessage}</div>
+              <div className="error-message text-danger">{errorMessage}</div>
             )}
             {updateStatus === "updated" && (
               <p className="text-success text-xl">Password has been updated.</p>
