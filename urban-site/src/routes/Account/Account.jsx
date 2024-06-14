@@ -196,6 +196,8 @@ const PasswordUpdateForm = () => {
       if (error.response && error.response.status === 400) {
         let errorData = error.response.data;
         console.log("Server response in account:", errorData);
+        console.log("Full error response in account:", error.response); // Add this line
+
         if (errorData.old_password) {
           setFieldError("oldpassword", errorData.old_password[0]);
         }
