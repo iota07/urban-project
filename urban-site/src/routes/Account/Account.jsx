@@ -195,6 +195,7 @@ const PasswordUpdateForm = () => {
       console.error("Error while updating password:", error);
       if (error.response && error.response.status === 400) {
         let errorData = error.response.data;
+        console.log("Server response:", errorData);
         if (errorData.old_password) {
           setFieldError("oldpassword", errorData.old_password[0]);
         }
