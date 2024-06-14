@@ -199,7 +199,7 @@ const PasswordUpdateForm = () => {
         console.log("Full error response in account:", error.response); // Add this line
 
         // Set the error message in the state
-        setErrorMessage(errorData.detail || "An error occurred");
+        setErrorMessage(errorData.error || "An error occurred");
 
         if (errorData.old_password) {
           setFieldError("oldpassword", errorData.old_password[0]);
