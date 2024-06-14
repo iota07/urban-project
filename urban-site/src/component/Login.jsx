@@ -124,6 +124,7 @@ const validationSchema = Yup.object().shape({
 
 const Login = () => {
   let navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState("");
 
   const submit = async (values, { setFieldError }) => {
     const user = {
@@ -147,6 +148,7 @@ const Login = () => {
       navigate("/home");
     } catch (error) {
       console.error("Error while logging in:", error);
+      setErrorMessage("Error while logging in. Please try again.");
       if (error.response) {
         if (error.response.status === 400) {
           // The request was a validation error
@@ -160,8 +162,7 @@ const Login = () => {
           }
           // Add this block to handle non-validation 400 errors
           if (errorData.non_field_errors) {
-            // Assuming the server returns a non_field_errors array for non-validation errors
-            alert(errorData.non_field_errors[0]);
+            setErrorMessage(errorData.non_field_errors[0]);
           }
         } else if (error.response.status === 401) {
           // The request was unauthorized
@@ -195,6 +196,9 @@ const Login = () => {
                   >
                     Login
                   </button>
+                  {errorMessage && (
+                    <p className="text-red-500">{errorMessage}</p>
+                  )}
                 </Form>
               )}
             </Formik>
