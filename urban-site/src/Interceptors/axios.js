@@ -121,7 +121,6 @@ axios.interceptors.response.use(
     } else if (error.response.status === 401) {
       // Handle other 401 errors here
 
-      window.location.href = "/";
       return Promise.reject(error);
     } else if (error.response.status === 500) {
       // Redirect to an error page or display a generic error message
