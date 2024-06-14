@@ -5,7 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework import status
 from dj_rest_auth.registration.views import RegisterView
-from .serializers import CustomRegisterSerializer
+from .serializers import CustomRegisterSerializer, CustomJWTSerializer
 from allauth.account.utils import complete_signup
 from allauth.account import app_settings as allauth_settings
 from dj_rest_auth.views import LoginView
@@ -17,6 +17,7 @@ from rest_framework.permissions import IsAuthenticated
 from .serializers import UserSerializer
 from django.contrib.auth import get_user_model
 from django.conf import settings
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 
 
@@ -26,6 +27,9 @@ class HomeView(APIView):
 
     def get(self, request):
         return Response({'username': request.user.username})
+
+
+
 
 # LogoutView: A view that handles user logout by blacklisting the provided refresh token.
 class LogoutView(APIView):
@@ -39,6 +43,9 @@ class LogoutView(APIView):
             return Response(status=status.HTTP_204_NO_CONTENT)
         except Exception as e:
             return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+
 
 # CustomRegisterView: A view that handles user registration with additional fields.
 class CustomRegisterView(RegisterView):
@@ -68,9 +75,16 @@ class CustomRegisterView(RegisterView):
             return Response({"detail": "Verification e-mail sent."}, status=status.HTTP_201_CREATED)
         return response
 
+
+
+
 # CustomLoginView: A view that handles user login. Currently, it's the same as the default LoginView.
 class CustomLoginView(LoginView):
     pass
+
+
+
+
 
 class CustomPasswordResetConfirmView(DjRestAuthPasswordResetConfirmView):
     def get(self, request, *args, **kwargs):
@@ -83,6 +97,10 @@ class CustomPasswordResetConfirmView(DjRestAuthPasswordResetConfirmView):
 
         # Redirect to the React frontend URL
         return HttpResponseRedirect(redirect_url)
+
+
+
+
 
 # UserDetailView: A view that returns the details of the authenticated user.
 class UserDetailView(generics.RetrieveUpdateAPIView):
@@ -97,6 +115,10 @@ class UserDetailView(generics.RetrieveUpdateAPIView):
         # Perform a normal update
         return super().update(request, *args, **kwargs)
     
+
+
+
+
 User = get_user_model()
 
 class UpdatePasswordView(APIView):
@@ -114,8 +136,12 @@ class UpdatePasswordView(APIView):
                 user.save()
                 return Response({'status': 'Password updated successfully'}, status=status.HTTP_200_OK)
             return Response({'error': 'New passwords do not match'}, status=status.HTTP_400_BAD_REQUEST)
-        return Response({'error': 'Old password is not correct'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'error': 'Old password is not correct'}, status=status.HTTP_400_BAD_REQUEST)   
     
+
+
+
+
 
 class DeleteAccountView(APIView):
     permission_classes = (IsAuthenticated,)
@@ -125,3 +151,10 @@ class DeleteAccountView(APIView):
         user.delete()
         return Response({'status': 'Account deleted successfully'}, status=status.HTTP_200_OK)
     
+
+
+
+
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    serializer_class = CustomJWTSerializer

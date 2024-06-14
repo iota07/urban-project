@@ -3,6 +3,8 @@ from dj_rest_auth.registration.serializers import RegisterSerializer
 from dj_rest_auth.serializers import JWTSerializer
 from urban_design_auth.models import CustomUser
 from rest_framework_simplejwt.tokens import RefreshToken
+from django.contrib.auth import get_user_model
+from rest_framework import exceptions
 
 
 
@@ -10,6 +12,10 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ['id', 'username', 'email', 'name', 'surname', 'organisation', 'date_joined', 'last_login']
+
+
+
+
 
 class CustomRegisterSerializer(RegisterSerializer):
     username = serializers.CharField()
@@ -25,10 +31,20 @@ class CustomRegisterSerializer(RegisterSerializer):
 
         return cleaned_data
 
-class CustomJWTSerializer(JWTSerializer):
 
+
+
+
+User = get_user_model()
+
+class CustomJWTSerializer(JWTSerializer):
     def validate(self, attrs):
         data = super().validate(attrs)
+
+        # Check if email is verified
+        email_address = User.objects.get(email=self.user.email).emailaddress_set.get(email=self.user.email)
+        if not email_address.verified:
+            raise exceptions.ValidationError('Email is not verified')
 
         refresh = RefreshToken.for_user(self.user)
 
@@ -36,4 +52,3 @@ class CustomJWTSerializer(JWTSerializer):
         data['access'] = str(refresh.access_token)
 
         return data
-    
