@@ -16,6 +16,11 @@ const updateAuthStatus = () => {
 // Add a request interceptor to Axios
 axios.interceptors.request.use(
   (config) => {
+    // Exclude the login route from the interceptor
+    if (config.url.includes("/token/login/")) {
+      return config;
+    }
+
     // Retrieve the access token from local storage
     const accessToken = localStorage.getItem("access_token");
 
