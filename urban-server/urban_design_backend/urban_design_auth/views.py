@@ -156,7 +156,11 @@ class DeleteAccountView(APIView):
 
         # Send delete confirmation email
         subject = 'Account Deletion Confirmation'
-        html_message = render_to_string('account/delete_confirmation_email.html', {'user': user})
+        context = {
+            'user': user,
+            'domain': settings.FRONTEND_URL
+        }
+        html_message = render_to_string('account/delete_confirmation_email.html', context)
         plain_message = strip_tags(html_message)
         from_email = settings.DEFAULT_FROM_EMAIL
         to_email = user.email
@@ -165,6 +169,7 @@ class DeleteAccountView(APIView):
 
         user.delete()
         return Response({'status': 'Account deleted successfully'}, status=status.HTTP_200_OK)
+
     
 
 

@@ -1,13 +1,28 @@
-<!-- urban_design_auth/templates/account/delete_confirmation_email.html -->
-
 <!DOCTYPE html>
 <html>
   <head>
     <title>Account Deletion Confirmation</title>
+    <style>
+      /* Add some basic styling */
+      body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+      }
+      p {
+        margin: 1em 0;
+      }
+    </style>
   </head>
   <body>
     <p>Dear {{ user.get_full_name }},</p>
-    <p>Your account has been successfully deleted.</p>
+
+    <p>
+      Your account with the username <strong>{{ user.username }}</strong> has
+      been successfully deleted.
+    </p>
+
     <p>Thank you for using our service.</p>
+
+    <p>Sincerely,<br />{{ domain }}</p>
   </body>
 </html>
