@@ -52,7 +52,7 @@ const MyTextInput = ({ label, ...props }) => {
           </label>
         </div>
         {meta.touched && meta.error ? (
-          <p className="max-w-sm text-red-500 pb-2">{meta.error}</p>
+          <p className="max-w-sm text-danger pb-2">{meta.error}</p>
         ) : null}
       </div>
     </>
@@ -160,7 +160,7 @@ const MyPasswordInput = ({ label, ...props }) => {
           </span>
         </div>
         {meta.touched && meta.error ? (
-          <p className="max-w-sm text-red-500 pb-2">{meta.error}</p>
+          <p className="max-w-sm text-danger pb-2">{meta.error}</p>
         ) : null}
       </div>
     </>
@@ -234,10 +234,9 @@ const Registration = () => {
           window.location.href = "/verification";
         });
     } catch (error) {
-      console.error("Error while registering:", error);
       if (error.response && error.response.status === 400) {
         // The request was a validation error
-        console.log("Validation errors:", error.response.data);
+
         let errorData = error.response.data;
         if (errorData.username) {
           setFieldError("username", errorData.username[0]);
@@ -276,41 +275,76 @@ const Registration = () => {
               validationSchema={validationSchema}
               onSubmit={submit}
             >
-              {({ errors, touched }) => (
-                <Form>
-                  <fieldset className="flex flex-col gap-6 mt-10 px-10 py-10 text-center">
-                    <MyTextInput name="email" type="text" label="Email" />
-                    <MyTextInput name="username" type="text" label="Username" />
-                    <MyTextInput name="name" type="text" label="Name" />
-                    <MyTextInput name="surname" type="text" label="Surname" />
-                    <MyOptionalTextInput
-                      name="organisation"
-                      type="text"
-                      label={
-                        <>
-                          <span>Organisation</span>{" "}
-                          <span className="pl-2 text-gray-300">(optional)</span>
-                        </>
-                      }
-                    />
-                    <MyPasswordInput name="password1" label="Password" />
-                    <MyPasswordInput
-                      name="password2"
-                      label="Password confirmation"
-                    />
+              {({ errors, touched, handleChange }) => {
+                const handleChangeAndClearError = (event) => {
+                  setErrorMessage("");
+                  handleChange(event);
+                };
 
-                    <button
-                      type="submit"
-                      className="mt-4 h-12 w-full rounded-3xl bg-primary text-white transition-all duration-300 hover:bg-tertiary"
-                    >
-                      Sign up
-                    </button>
-                    {errorMessage && (
-                      <p className="text-danger mt-2">{errorMessage}</p>
-                    )}
-                  </fieldset>
-                </Form>
-              )}
+                return (
+                  <Form>
+                    <fieldset className="flex flex-col gap-6 mt-10 px-10 py-10 text-center">
+                      <MyTextInput
+                        name="email"
+                        type="text"
+                        label="Email"
+                        onChange={handleChangeAndClearError}
+                      />
+                      <MyTextInput
+                        name="username"
+                        type="text"
+                        label="Username"
+                        onChange={handleChangeAndClearError}
+                      />
+                      <MyTextInput
+                        name="name"
+                        type="text"
+                        label="Name"
+                        onChange={handleChangeAndClearError}
+                      />
+                      <MyTextInput
+                        name="surname"
+                        type="text"
+                        label="Surname"
+                        onChange={handleChangeAndClearError}
+                      />
+                      <MyOptionalTextInput
+                        name="organisation"
+                        type="text"
+                        label={
+                          <>
+                            <span>Organisation</span>{" "}
+                            <span className="pl-2 text-gray-300">
+                              (optional)
+                            </span>
+                          </>
+                        }
+                        onChange={handleChangeAndClearError}
+                      />
+                      <MyPasswordInput
+                        name="password1"
+                        label="Password"
+                        onChange={handleChangeAndClearError}
+                      />
+                      <MyPasswordInput
+                        name="password2"
+                        label="Password confirmation"
+                        onChange={handleChangeAndClearError}
+                      />
+
+                      <button
+                        type="submit"
+                        className="mt-4 h-12 w-full rounded-3xl bg-primary text-white transition-all duration-300 hover:bg-tertiary"
+                      >
+                        Sign up
+                      </button>
+                      {errorMessage && (
+                        <p className="text-danger mt-2">{errorMessage}</p>
+                      )}
+                    </fieldset>
+                  </Form>
+                );
+              }}
             </Formik>
           </div>
         </div>
