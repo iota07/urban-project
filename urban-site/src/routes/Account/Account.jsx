@@ -394,7 +394,7 @@ const Account = () => {
             >
               {({ errors, touched, handleChange }) => {
                 const handleChangeAndClearStatus = (event) => {
-                  saveStatus(null);
+                  setSaveStatus(null);
                   handleChange(event);
                 };
 
