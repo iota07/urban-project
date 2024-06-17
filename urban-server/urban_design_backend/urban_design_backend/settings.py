@@ -24,6 +24,11 @@ BACKEND_URL = os.getenv('BACKEND_URL', 'http://localhost:8000')
 # Extract hostnames from URLs
 frontend_hostname = urlparse(FRONTEND_URL).hostname
 backend_hostname = urlparse(BACKEND_URL).hostname
+
+# Directly get the naked domain
+parts = frontend_hostname.split('.')
+naked_frontend_domain = '.'.join(parts[-2:]) if len(parts) >= 2 else frontend_hostname
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
