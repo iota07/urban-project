@@ -22,7 +22,7 @@ from .serializers import UserSerializer
 from django.contrib.auth import get_user_model
 from django.conf import settings
 from rest_framework_simplejwt.views import TokenObtainPairView
-from django.views.generic import TemplateView
+
 
 
 
@@ -173,12 +173,3 @@ class DeleteAccountView(APIView):
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomJWTSerializer
-
-
-
-
-
-
-
-class TestTemplateView(TemplateView):
-    template_name = 'account/test_template.html'
