@@ -158,7 +158,7 @@ class DeleteAccountView(APIView):
         subject = 'Account Deletion Confirmation'
         context = {
             'user': user,
-            'domain': settings.FRONTEND_URL
+            'domain': settings.frontend_hostname
         }
         html_message = render_to_string('account/delete_confirmation_email.html', context)
         plain_message = strip_tags(html_message)
