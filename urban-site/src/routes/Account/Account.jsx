@@ -192,11 +192,8 @@ const PasswordUpdateForm = () => {
         throw new Error("Validation error");
       }
     } catch (error) {
-      console.error("Error while updating password in account:", error);
       if (error.response && error.response.status === 400) {
         let errorData = error.response.data;
-        console.log("Server response in account:", errorData);
-        console.log("Full error response in account:", error.response); // Add this line
 
         // Set the error message in the state
         setErrorMessage(errorData.error || "An error occurred");
@@ -311,11 +308,8 @@ const Account = () => {
           }
         } else {
           // Handle the case where the access token is missing
-          console.error("Access token is missing");
         }
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
+      } catch (error) {}
     };
 
     fetchUserData();
@@ -342,10 +336,9 @@ const Account = () => {
         throw new Error("Validation error");
       }
     } catch (error) {
-      console.error("Error while registering:", error);
       if (error.response && error.response.status === 400) {
         // The request was a validation error
-        console.log("Validation errors:", error.response.data);
+
         let errorData = error.response.data;
         if (errorData.username) {
           setFieldError("username", errorData.username[0]);
@@ -365,9 +358,8 @@ const Account = () => {
       window.location.href = "/";
     } else {
       // Handle error
-      console.error("Failed to delete account");
     }
-    console.log("Account deleted");
+
     setConfirmDelete("");
     setShowModal(false);
   };
@@ -400,55 +392,62 @@ const Account = () => {
               validationSchema={validationSchema}
               onSubmit={submit}
             >
-              {({ errors, touched }) => (
-                <Form>
-                  <fieldset className="flex flex-col gap-6 px-10 text-center">
-                    <TitleH2 title="Account" />
-                    <MyTextInput
-                      name="email"
-                      type="text"
-                      label="Email"
-                      placeholder={userData ? userData.email : ""}
-                    />
-                    <MyTextInput
-                      name="username"
-                      type="text"
-                      label="Username"
-                      placeholder={userData ? userData.username : ""}
-                    />
-                    <MyTextInput
-                      name="name"
-                      type="text"
-                      label="Name"
-                      placeholder={userData ? userData.name : ""}
-                    />
-                    <MyTextInput
-                      name="surname"
-                      type="text"
-                      label="Surname"
-                      placeholder={userData ? userData.surname : ""}
-                    />
-                    <MyTextInput
-                      name="organisation"
-                      type="text"
-                      label="Organisation"
-                      placeholder={userData ? userData.organisation : ""}
-                    />
+              {({ errors, touched, handleChange }) => {
+                const handleChangeAndClearError = (event) => {
+                  saveStatus(null);
+                  handleChange(event);
+                };
 
-                    <button
-                      type="submit"
-                      className="mt-4 h-12 w-full rounded-lg bg-primary text-white transition-all duration-300 hover:bg-tertiary"
-                    >
-                      SAVE CHANGES
-                    </button>
-                    {saveStatus === "saved" && (
-                      <p className="text-success text-xl">
-                        Account has been updated.
-                      </p>
-                    )}
-                  </fieldset>
-                </Form>
-              )}
+                return (
+                  <Form>
+                    <fieldset className="flex flex-col gap-6 px-10 text-center">
+                      <TitleH2 title="Account" />
+                      <MyTextInput
+                        name="email"
+                        type="text"
+                        label="Email"
+                        placeholder={userData ? userData.email : ""}
+                      />
+                      <MyTextInput
+                        name="username"
+                        type="text"
+                        label="Username"
+                        placeholder={userData ? userData.username : ""}
+                      />
+                      <MyTextInput
+                        name="name"
+                        type="text"
+                        label="Name"
+                        placeholder={userData ? userData.name : ""}
+                      />
+                      <MyTextInput
+                        name="surname"
+                        type="text"
+                        label="Surname"
+                        placeholder={userData ? userData.surname : ""}
+                      />
+                      <MyTextInput
+                        name="organisation"
+                        type="text"
+                        label="Organisation"
+                        placeholder={userData ? userData.organisation : ""}
+                      />
+
+                      <button
+                        type="submit"
+                        className="mt-4 h-12 w-full rounded-lg bg-primary text-white transition-all duration-300 hover:bg-tertiary"
+                      >
+                        SAVE CHANGES
+                      </button>
+                      {saveStatus === "saved" && (
+                        <p className="text-success text-xl">
+                          Account has been updated.
+                        </p>
+                      )}
+                    </fieldset>
+                  </Form>
+                );
+              }}
             </Formik>
             <fieldset>
               <PasswordUpdateForm />
