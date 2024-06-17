@@ -393,7 +393,7 @@ const Account = () => {
               onSubmit={submit}
             >
               {({ errors, touched, handleChange }) => {
-                const handleChangeAndClearError = (event) => {
+                const handleChangeAndClearStatus = (event) => {
                   saveStatus(null);
                   handleChange(event);
                 };
@@ -407,30 +407,35 @@ const Account = () => {
                         type="text"
                         label="Email"
                         placeholder={userData ? userData.email : ""}
+                        onChange={handleChangeAndClearStatus}
                       />
                       <MyTextInput
                         name="username"
                         type="text"
                         label="Username"
                         placeholder={userData ? userData.username : ""}
+                        onChange={handleChangeAndClearStatus}
                       />
                       <MyTextInput
                         name="name"
                         type="text"
                         label="Name"
                         placeholder={userData ? userData.name : ""}
+                        onChange={handleChangeAndClearStatus}
                       />
                       <MyTextInput
                         name="surname"
                         type="text"
                         label="Surname"
                         placeholder={userData ? userData.surname : ""}
+                        onChange={handleChangeAndClearStatus}
                       />
                       <MyTextInput
                         name="organisation"
                         type="text"
                         label="Organisation"
                         placeholder={userData ? userData.organisation : ""}
+                        onChange={handleChangeAndClearStatus}
                       />
 
                       <button
