@@ -1,11 +1,11 @@
 from . import views
-from .views import CustomRegisterView, LogoutView
+from .views import CustomRegisterView, LogoutView, UserDetailView, UpdatePasswordView, DeleteAccountView
 from django.urls import path, re_path, include
-from .views import UserDetailView, UpdatePasswordView, DeleteAccountView
 from urban_design_auth.views import CustomPasswordResetConfirmView
 from allauth.account.views import confirm_email
 from rest_framework_simplejwt.views import TokenRefreshView
 from urban_design_auth.views import CustomTokenObtainPairView
+from urban_design_auth.views import TestTemplateView
 
 
 
@@ -23,7 +23,9 @@ urlpatterns = [
     path('dj-rest-auth/password/reset/confirm/<uidb64>/<token>/', CustomPasswordResetConfirmView.as_view(), name='password_reset_confirm'),    
     re_path(r'^dj-rest-auth/', include('dj_rest_auth.urls')),
     path('accounts/', include('allauth.urls')),
+
     
+    path('test-template/', TestTemplateView.as_view(), name='test_template'),
     
 ]
 

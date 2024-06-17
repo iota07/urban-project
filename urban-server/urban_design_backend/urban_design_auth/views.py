@@ -1,9 +1,13 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework import status
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+from django.conf import settings
 from dj_rest_auth.registration.views import RegisterView
 from .serializers import CustomRegisterSerializer, CustomJWTSerializer
 from allauth.account.utils import complete_signup
@@ -148,6 +152,16 @@ class DeleteAccountView(APIView):
 
     def delete(self, request, *args, **kwargs):
         user = request.user
+
+        # Send delete confirmation email
+        subject = 'Account Deletion Confirmation'
+        html_message = render_to_string('account/delete_confirmation_email.html', {'user': user})
+        plain_message = strip_tags(html_message)
+        from_email = settings.DEFAULT_FROM_EMAIL
+        to_email = user.email
+
+        send_mail(subject, plain_message, from_email, [to_email], html_message=html_message)
+
         user.delete()
         return Response({'status': 'Account deleted successfully'}, status=status.HTTP_200_OK)
     
@@ -158,3 +172,13 @@ class DeleteAccountView(APIView):
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomJWTSerializer
+
+
+
+
+
+    # urban_design_auth/views.py
+from django.views.generic import TemplateView
+
+class TestTemplateView(TemplateView):
+    template_name = 'account/test_template.html'
