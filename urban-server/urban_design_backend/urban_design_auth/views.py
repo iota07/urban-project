@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
@@ -22,6 +22,7 @@ from .serializers import UserSerializer
 from django.contrib.auth import get_user_model
 from django.conf import settings
 from rest_framework_simplejwt.views import TokenObtainPairView
+from django.views.generic import TemplateView
 
 
 
@@ -177,8 +178,7 @@ class CustomTokenObtainPairView(TokenObtainPairView):
 
 
 
-    # urban_design_auth/views.py
-from django.views.generic import TemplateView
+
 
 class TestTemplateView(TemplateView):
     template_name = 'account/test_template.html'

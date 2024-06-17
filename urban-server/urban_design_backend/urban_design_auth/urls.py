@@ -23,9 +23,8 @@ urlpatterns = [
     path('dj-rest-auth/password/reset/confirm/<uidb64>/<token>/', CustomPasswordResetConfirmView.as_view(), name='password_reset_confirm'),    
     re_path(r'^dj-rest-auth/', include('dj_rest_auth.urls')),
     path('accounts/', include('allauth.urls')),
-
+    path('test-template/', TestTemplateView.as_view(), name='test_template'),    
     
-    path('test-template/', TestTemplateView.as_view(), name='test_template'),
     
 ]
 
