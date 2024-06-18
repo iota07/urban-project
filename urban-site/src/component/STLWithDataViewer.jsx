@@ -79,8 +79,7 @@ const STLWithDataViewer = ({ stlFile, vtpFile }) => {
         renderer.addActor(stlActor);
 
         const camera = renderer.getActiveCamera();
-        camera.roll(30);
-        camera.azimuth(-10);
+        camera.setOrientationWXYZ(1, 0, 0, -80);
 
         // Wait for the VTP file to load
         await vtpPromise;
@@ -214,6 +213,9 @@ const STLWithDataViewer = ({ stlFile, vtpFile }) => {
         renderWindow.render();
         // Set the files as loaded
         setFilesLoaded(true);
+
+        // Start the slow camera elevation
+        startCameraElevation(renderer, renderWindow);
       } catch (error) {
         // Log any errors that occurred while loading the files
         console.error("Error loading file:", error);
@@ -237,6 +239,30 @@ const STLWithDataViewer = ({ stlFile, vtpFile }) => {
     // Call the loadFiles function
     loadFiles();
   }, [stlFile, vtpFile, filesLoaded]);
+
+  const startCameraElevation = (renderer, renderWindow) => {
+    const camera = renderer.getActiveCamera();
+    let targetElevation = 0; // Target elevation angle
+    let currentElevation = 12; // Starting elevation angle
+    let step = -0.2; // Elevation step per frame
+    let interval;
+
+    const elevateCamera = () => {
+      if (currentElevation > targetElevation) {
+        camera.elevation(step);
+        currentElevation += step;
+        renderWindow.render();
+
+        requestAnimationFrame(elevateCamera);
+        renderer.resetCamera();
+      } else {
+        // Clear the interval once the target elevation is reached
+        cancelAnimationFrame(interval);
+      }
+    };
+
+    interval = requestAnimationFrame(elevateCamera);
+  };
 
   // Render a div to contain the rendered files
   return (
