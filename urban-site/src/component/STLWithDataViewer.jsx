@@ -77,7 +77,10 @@ const STLWithDataViewer = ({ stlFile, vtpFile }) => {
         stlMapper.setInputData(stlOutputData);
         // Add the STL actor to the renderer and reset the camera
         renderer.addActor(stlActor);
-        renderer.resetCamera();
+
+        const camera = renderer.getActiveCamera();
+        camera.roll(30);
+        camera.azimuth(-10);
 
         // Wait for the VTP file to load
         await vtpPromise;
@@ -215,28 +218,6 @@ const STLWithDataViewer = ({ stlFile, vtpFile }) => {
         // Log any errors that occurred while loading the files
         console.error("Error loading file:", error);
       }
-
-      /*
-      // Function to rotate the camera vertically without setTimeout
-      const rotateCameraVertical = () => {
-        // Get the renderer from the full screen render window
-        const renderer = fullScreenRenderer.current.getRenderer();
-        // Get the camera
-        const camera = renderer.getActiveCamera();
-
-        // Set the camera orientation to rotate around the camera's right vector
-        camera.elevation(-10); // 30 degrees upward rotation
-
-        // Move the camera closer
-        camera.dolly(1.3); // Move the camera 10% closer to the focal point
-
-        // Update the camera
-        camera.modified();
-
-        // Render the scene
-        fullScreenRenderer.current.getRenderWindow().render();
-      };
-      rotateCameraVertical(); */
 
       // Cleanup function to delete the actors, mappers, and readers
       return () => {
