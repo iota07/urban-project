@@ -29,6 +29,10 @@ backend_hostname = urlparse(BACKEND_URL).hostname
 parts = frontend_hostname.split('.')
 naked_frontend_domain = '.'.join(parts[-2:]) if len(parts) >= 2 else frontend_hostname
 
+
+# Google OAuth2 Client ID
+CLIENT_ID = os.getenv('CLIENT_ID')
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -42,12 +46,13 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG') == 'True'
 
-ALLOWED_HOSTS = [frontend_hostname,backend_hostname, 'localhost']
+ALLOWED_HOSTS = [frontend_hostname,backend_hostname, 'localhost', '127.0.0.1']
 
 # Application definition
 
 INSTALLED_APPS = [
     'urban_design_auth',
+    'urban_design_projects',
     'corsheaders',
     'rest_framework',
     'rest_framework.authtoken',
@@ -63,6 +68,7 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
     'dj_rest_auth',
     
 ]
@@ -70,8 +76,7 @@ INSTALLED_APPS = [
 CORS_ORIGIN_ALLOW_ALL = False
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
-    FRONTEND_URL,
+    FRONTEND_URL
 ]
 
 
@@ -96,6 +101,9 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
     ],
 }
 
@@ -149,6 +157,28 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 SITE_ID = 1
 
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'APP': {
+            'client_id': os.getenv('CLIENT_ID'),
+            'secret': os.getenv('CLIENT_SECRET'),
+            'key': ''
+        },
+        'SCOPE': [
+            'profile',
+            'email'
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        }
+    }
+}
+
 # Email settings
 EMAIL_HOST = 'send.one.com'
 EMAIL_PORT = 587
@@ -193,11 +223,23 @@ DATABASES = {
         'OPTIONS': {
             'sslmode': 'require',      
             'sslrootcert': os.getenv('DATABASE_SSLROOTCERT'),
-        }
+        },
+    },
+    'project_db': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('PROJECTDB_NAME'),
+        'USER': os.getenv('PROJECTDB_USER'),
+        'PASSWORD': os.getenv('PROJECTDB_PASSWORD'),
+        'HOST': os.getenv('PROJECTDB_HOST'),
+        'PORT': os.getenv('PROJECTDB_PORT'),
+        'OPTIONS': {
+            'sslmode': 'require',      
+            
+        },
     }
 }
 
-
+DATABASE_ROUTERS = ['urban_design_auth.db_router.ProjectDatabaseRouter']
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -248,3 +290,7 @@ STORAGES = {
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'

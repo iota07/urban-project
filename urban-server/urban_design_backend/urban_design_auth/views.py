@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
@@ -17,11 +16,15 @@ from dj_rest_auth.views import PasswordResetConfirmView as DjRestAuthPasswordRes
 from django.http import HttpResponseRedirect
 from urban_design_auth.models import CustomUser
 from rest_framework import generics
-from rest_framework.permissions import IsAuthenticated
 from .serializers import UserSerializer
 from django.contrib.auth import get_user_model
-from django.conf import settings
 from rest_framework_simplejwt.views import TokenObtainPairView
+from google.oauth2 import id_token
+from google.auth.transport import requests
+from rest_framework.permissions import AllowAny
+from allauth.account.models import EmailAddress
+from allauth.socialaccount.models import SocialAccount
+
 
 
 
@@ -146,6 +149,10 @@ class UpdatePasswordView(APIView):
 
 
 
+class CustomTokenObtainPairView(TokenObtainPairView):
+    serializer_class = CustomJWTSerializer
+
+
 
 
 class DeleteAccountView(APIView):
@@ -171,11 +178,48 @@ class DeleteAccountView(APIView):
         user.delete()
         return Response({'status': 'Account deleted successfully'}, status=status.HTTP_200_OK)
 
-    
 
 
 
 
+class GoogleLogin(APIView):
+    permission_classes = [AllowAny]
+    def post(self, request, *args, **kwargs):
+        token = request.data.get('id_token')
+        try:
+            # Verify the id_token according to Google's guidelines
+            idinfo = id_token.verify_oauth2_token(token, requests.Request(), settings.CLIENT_ID)
 
-class CustomTokenObtainPairView(TokenObtainPairView):
-    serializer_class = CustomJWTSerializer
+            # Extract user details from idinfo
+            email = idinfo['email']            
+            given_name = idinfo.get('given_name', '')
+            family_name = idinfo.get('family_name', '')
+            email_verified = idinfo.get('email_verified', False)
+
+            # Check if this user is already in your database
+            user, created = User.objects.get_or_create(email=email)
+
+            if created:
+                # For new users, set username to Google's name or email if name is not available
+                user.username = email
+                user.name = given_name  # Map given_name to name
+                user.surname = family_name  # Map family_name to surname
+                user.save()
+
+            # If Google has verified the email, mark it as verified in Django allauth
+            if email_verified:
+                EmailAddress.objects.update_or_create(
+                    user=user, 
+                    email=email, 
+                    defaults={'verified': True, 'primary': True}
+                )
+
+            # Generate JWT tokens
+            refresh = RefreshToken.for_user(user)
+            data = {'refresh': str(refresh), 'access': str(refresh.access_token)}
+
+            return Response(data, status=status.HTTP_200_OK)
+
+        except ValueError:
+            # Invalid token
+            return Response({'error': 'Invalid token'}, status=status.HTTP_400_BAD_REQUEST)

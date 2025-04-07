@@ -4,10 +4,11 @@ from django.utils import timezone
 from django.core.validators import RegexValidator
 from django.utils.translation import gettext_lazy as _
 from .managers import CustomUserManager
+from urban_design_projects.models import Project
 
 username_validator = RegexValidator(
-    regex=r'^[\w\s]+$',
-    message=_('The username may contain alphanumeric characters and spaces only.')
+    regex=r'^[\w@.-]+$',
+    message=_('The username may contain alphanumeric characters, hyphens, underscores, "@", and "." only.')
 )
 
 # Create your models here.
@@ -35,6 +36,11 @@ class CustomUser(AbstractUser):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username', 'name', 'surname']
     objects = CustomUserManager()
+
+    def delete(self, *args, **kwargs):
+        # Delete related projects in the 'project_db' database
+        Project.objects.using('project_db').filter(user=str(self.id)).delete()
+        super().delete(*args, **kwargs)
 
     def __str__(self):
         return self.username
