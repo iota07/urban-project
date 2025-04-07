@@ -5,9 +5,9 @@ import * as Yup from "yup";
 import { useState, useEffect } from "react";
 import { FiEye, FiEyeOff, FiInfo } from "react-icons/fi";
 import TitleH2 from "../../component/TitleH2";
-import TitleH3 from "../../component/TitleH3";
 import DeleteModal from "../../component/DeleteModal";
 import { BACKEND_URL } from "../../utils/config";
+import useUser from "../../hook/useUser";
 
 const MyTextInput = ({ label, ...props }) => {
   const [field, meta] = useField(props);
@@ -15,11 +15,11 @@ const MyTextInput = ({ label, ...props }) => {
 
   const validationMessages = {
     username:
-      "Username can include: A-Z, a-z, 0-9, hyphen (-), and underscore (_). Spaces, '<', and '>' are not allowed",
+      "Username can only contain alphanumeric characters, hyphens, underscores, '@', and '.'",
     email: "Email cannot contain spaces, '<', or '>'",
-    name: "Name can only contain alphanumeric characters. Spaces, '<', and '>' are not allowed",
+    name: "Name can only contain alphanumeric characters and hyphens",
     surname:
-      "Surname can only contain alphanumeric characters. Spaces, '<', and '>' are not allowed",
+      "Surname can only contain alphanumeric characters, spaces, and hyphens",
     organisation: "Organisation cannot contain '<' or '>'",
   };
 
@@ -29,14 +29,14 @@ const MyTextInput = ({ label, ...props }) => {
         <div className="group relative flex flex-col place-items-start">
           <div>
             {validationMessages[props.name] && (
-              <div className="absolute left-0 top-0 transform -translate-x-full translate-y-1/2 cursor-pointer">
+              <div className="absolute left-0 top-0 transform -translate-x-full translate-y-1/2 cursor-pointer z-50">
                 <FiInfo
                   className="text-white"
                   onMouseEnter={() => setShowTooltip(true)}
                   onMouseLeave={() => setShowTooltip(false)}
                 />
                 {showTooltip && (
-                  <div className="absolute left-80 -top-14 text-sm transform -translate-x-full w-64 p-2 bg-white border rounded-xl shadow-md z-50">
+                  <div className="absolute left-80 -top-14 text-sm transform -translate-x-full w-64 p-2 bg-white border rounded-xl shadow-md">
                     {validationMessages[props.name]}
                   </div>
                 )}
@@ -82,14 +82,14 @@ const MyPasswordInput = ({ label, ...props }) => {
         <div className="group relative flex flex-col place-items-start">
           <div>
             {validationMessages[props.name] && (
-              <div className="absolute left-0 top-0 transform -translate-x-full translate-y-1/2 cursor-pointer">
+              <div className="absolute left-0 top-0 transform -translate-x-full translate-y-1/2 cursor-pointer z-50">
                 <FiInfo
                   className="text-white"
                   onMouseEnter={() => setShowTooltip(true)}
                   onMouseLeave={() => setShowTooltip(false)}
                 />
                 {showTooltip && (
-                  <div className="absolute left-80 -top-14 text-sm transform -translate-x-full w-64 p-2 bg-white border rounded-xl shadow-md z-50">
+                  <div className="absolute left-80 -top-14 text-sm transform -translate-x-full w-64 p-2 bg-white border rounded-xl shadow-md">
                     {validationMessages[props.name]}
                   </div>
                 )}
@@ -131,41 +131,44 @@ const validationSchema = Yup.object().shape({
 
   username: Yup.string()
     .matches(
-      /^[a-zA-Z0-9_-]*$/,
-      "Username can only contain alphanumeric characters, hyphens, and underscores"
+      /^[a-zA-Z0-9@._-]*$/,
+      "Username can only contain alphanumeric characters, hyphens, underscores, '@', and '.'"
     )
     .matches(/^[^\s<>]*$/, "Username cannot contain spaces, '<', or '>'"),
 
   name: Yup.string()
-    .matches(/^[a-zA-Z0-9]*$/, "Name can only contain alphanumeric characters")
-    .matches(/^[^\s<>]*$/, "Name cannot contain spaces, '<', or '>'"),
-
+    .matches(
+      /^[a-zA-Z0-9-]*$/,
+      "Name can only contain alphanumeric characters and hyphens"
+    )
+    .matches(/^[^\s<>]*$/, "Name cannot contain spaces, '<', or '>'")
+    .required("Required"),
   surname: Yup.string()
     .matches(
-      /^[a-zA-Z0-9]*$/,
-      "Surname can only contain alphanumeric characters"
+      /^[a-zA-Z0-9- ]*$/,
+      "Surname can only contain alphanumeric characters, spaces, and hyphens"
     )
-    .matches(/^[^\s<>]*$/, "Surname cannot contain spaces, '<', or '>'"),
-
-  organisation: Yup.string().matches(
-    /^[^\s<>]*$/,
-    "Organisation cannot contain spaces, '<', or '>'"
-  ),
+    .matches(/^[^<>]*$/, "Surname cannot contain '<' or '>'")
+    .required("Required"),
+  organisation: Yup.string()
+    .matches(/^[^<>]*$/, "Organisation cannot contain '<' or '>'")
+    .notRequired(),
 });
 
 const PasswordUpdateForm = () => {
   const [updateStatus, setUpdateStatus] = useState(null);
 
   const validationSchema = Yup.object().shape({
-    oldpassword: Yup.string()
-      .required("Old password is required")
-      .matches(/^[^\s<>]*$/, "Password cannot contain spaces, '<', or '>'"),
+    oldpassword: Yup.string().matches(
+      /^[^\s<>]*$/,
+      "Password cannot contain spaces, '<', or '>'"
+    ),
     newpassword1: Yup.string()
-      .required("New password is required")
+
       .min(8, "Must be at least 8 characters")
       .matches(/^[^\s<>]*$/, "Password cannot contain spaces, '<', or '>'"),
     newpassword2: Yup.string()
-      .required("Password confirmation is required")
+
       .oneOf([Yup.ref("newpassword1"), null], "Passwords must match")
       .matches(
         /^[^\s<>]*$/,
@@ -232,43 +235,47 @@ const PasswordUpdateForm = () => {
 
         return (
           <Form>
-            <fieldset className="flex flex-col gap-6 px-10 text-center">
-              <aside className="md:hidden mt-4">
+            <fieldset className="flex flex-col gap-6 px-10 text-center md:grid md:grid-cols-2">
+              <aside className="mt-4 md:mt-16">
                 <TitleH2 title="Update Password" />
               </aside>
-              <aside className="hidden md:block md:mt-8 md:-mb-9">
-                <TitleH3 title="Update Password" />
-              </aside>
-
-              <MyPasswordInput
-                name="oldpassword"
-                label="Old Password"
-                onChange={handleChangeAndClearError}
-              />
-              <MyPasswordInput
-                name="newpassword1"
-                label="New Password"
-                onChange={handleChangeAndClearError}
-              />
-              <MyPasswordInput
-                name="newpassword2"
-                label="New Password confirmation"
-                onChange={handleChangeAndClearError}
-              />
-              <button
-                type="submit"
-                className="mt-4 h-12 w-full rounded-lg bg-primary text-white transition-all duration-300 hover:bg-tertiary"
-              >
-                CHANGE PASSWORD
-              </button>
-              {errorMessage && (
-                <div className="text-danger text-xl">{errorMessage}</div>
-              )}
-              {updateStatus === "updated" && (
-                <p className="text-success text-xl">
-                  Password has been updated.
-                </p>
-              )}
+              <div className="md:row-start-2">
+                <MyPasswordInput
+                  name="oldpassword"
+                  label="Old Password"
+                  onChange={handleChangeAndClearError}
+                />
+              </div>
+              <div className="md:row-start-2 col-start-2">
+                <MyPasswordInput
+                  name="newpassword1"
+                  label="New Password"
+                  onChange={handleChangeAndClearError}
+                />
+              </div>
+              <div className="md:row-start-3 col-start-2">
+                <MyPasswordInput
+                  name="newpassword2"
+                  label="New Password confirmation"
+                  onChange={handleChangeAndClearError}
+                />
+              </div>
+              <div className="md:row-start-4 col-start-2">
+                <button
+                  type="submit"
+                  className="mt-4 mb-4 h-12 w-full rounded-lg bg-primary text-white transition-all duration-300 hover:bg-tertiary"
+                >
+                  CHANGE PASSWORD
+                </button>
+                {errorMessage && (
+                  <div className="text-danger text-xl">{errorMessage}</div>
+                )}
+                {updateStatus === "updated" && (
+                  <p className="text-success text-xl">
+                    Password has been updated.
+                  </p>
+                )}
+              </div>
             </fieldset>
           </Form>
         );
@@ -278,42 +285,11 @@ const PasswordUpdateForm = () => {
 };
 
 const Account = () => {
+  const { userData } = useUser();
   const [saveStatus, setSaveStatus] = useState(null);
-  const [userData, setUserData] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState("");
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        // Retrieve the access token from local storage
-        const accessToken = localStorage.getItem("access_token");
-
-        // Check if the access token exists
-        if (accessToken) {
-          // Include the access token in the request headers
-          const config = {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          };
-
-          // Send the GET request with the access token included in the headers
-          const response = await axios.get(`${BACKEND_URL}/user/`, config);
-
-          if (response.data) {
-            const { email, username, name, surname, organisation } =
-              response.data;
-            setUserData({ email, username, name, surname, organisation });
-          }
-        } else {
-          // Handle the case where the access token is missing
-        }
-      } catch (error) {}
-    };
-
-    fetchUserData();
-  }, []);
   const submit = async (values, { setFieldError }) => {
     const user = {
       email: values.email,
@@ -379,7 +355,7 @@ const Account = () => {
               d="M0,224L48,229.3C96,235,192,245,288,256C384,267,480,277,576,266.7C672,256,768,224,864,208C960,192,1056,192,1152,202.7C1248,213,1344,235,1392,245.3L1440,256L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"
             ></path>
           </svg>
-          <div className="flex h-auto w-full flex-col pb-16 mb-2  pt-0 mt-0 rounded-b-lg bg-secondary bg-opacity-20 md:grid md:grid-cols-2">
+          <div className="flex h-auto w-full flex-col pb-16 mb-2  pt-0 mt-0 rounded-b-lg bg-secondary bg-opacity-20">
             <Formik
               initialValues={{
                 email: userData?.email ?? "",
@@ -400,55 +376,67 @@ const Account = () => {
 
                 return (
                   <Form>
-                    <fieldset className="flex flex-col gap-6 px-10 text-center">
+                    <fieldset className="flex flex-col gap-6 px-10 text-center md:flex-none md:grid md:grid-cols-2">
                       <TitleH2 title="Account" />
-                      <MyTextInput
-                        name="email"
-                        type="text"
-                        label="Email"
-                        placeholder={userData ? userData.email : ""}
-                        onChange={handleChangeAndClearStatus}
-                      />
-                      <MyTextInput
-                        name="username"
-                        type="text"
-                        label="Username"
-                        placeholder={userData ? userData.username : ""}
-                        onChange={handleChangeAndClearStatus}
-                      />
-                      <MyTextInput
-                        name="name"
-                        type="text"
-                        label="Name"
-                        placeholder={userData ? userData.name : ""}
-                        onChange={handleChangeAndClearStatus}
-                      />
-                      <MyTextInput
-                        name="surname"
-                        type="text"
-                        label="Surname"
-                        placeholder={userData ? userData.surname : ""}
-                        onChange={handleChangeAndClearStatus}
-                      />
-                      <MyTextInput
-                        name="organisation"
-                        type="text"
-                        label="Organisation"
-                        placeholder={userData ? userData.organisation : ""}
-                        onChange={handleChangeAndClearStatus}
-                      />
-
-                      <button
-                        type="submit"
-                        className="mt-4 h-12 w-full rounded-lg bg-primary text-white transition-all duration-300 hover:bg-tertiary"
-                      >
-                        SAVE CHANGES
-                      </button>
-                      {saveStatus === "saved" && (
-                        <p className="text-success text-xl">
-                          Account has been updated.
-                        </p>
-                      )}
+                      <div className="md:row-start-3 col-start-2">
+                        <MyTextInput
+                          name="email"
+                          type="text"
+                          label="Email"
+                          placeholder={userData ? userData.email : ""}
+                          onChange={handleChangeAndClearStatus}
+                        />
+                      </div>
+                      <div className="md:row-start-3">
+                        <MyTextInput
+                          name="username"
+                          type="text"
+                          label="Username"
+                          placeholder={userData ? userData.username : ""}
+                          onChange={handleChangeAndClearStatus}
+                        />
+                      </div>
+                      <div className="md:row-start-2">
+                        <MyTextInput
+                          name="name"
+                          type="text"
+                          label="Name"
+                          placeholder={userData ? userData.name : ""}
+                          onChange={handleChangeAndClearStatus}
+                          className="md:row-start-3"
+                        />
+                      </div>
+                      <div className="md:row-start-2">
+                        <MyTextInput
+                          name="surname"
+                          type="text"
+                          label="Surname"
+                          placeholder={userData ? userData.surname : ""}
+                          onChange={handleChangeAndClearStatus}
+                        />
+                      </div>
+                      <div className="md:row-start-5 col-start-2">
+                        <MyTextInput
+                          name="organisation"
+                          type="text"
+                          label="Organisation"
+                          placeholder={userData ? userData.organisation : ""}
+                          onChange={handleChangeAndClearStatus}
+                        />
+                      </div>
+                      <div className="md:row-start-6 col-start-2 md:space-y-4">
+                        <button
+                          type="submit"
+                          className="mt-4 h-12 w-full rounded-lg bg-primary text-white transition-all duration-300 hover:bg-tertiary"
+                        >
+                          SAVE CHANGES
+                        </button>
+                        {saveStatus === "saved" && (
+                          <p className="text-success text-xl pt-4 md:pt-0">
+                            Account has been updated.
+                          </p>
+                        )}
+                      </div>
                     </fieldset>
                   </Form>
                 );
@@ -457,9 +445,9 @@ const Account = () => {
             <fieldset>
               <PasswordUpdateForm />
             </fieldset>
-            <div className="flex flex-col gap-6 px-10 text-center mt-8 col-start-2">
+            <div className="flex flex-col gap-6 px-10 text-center mt-8 md:grid md:grid-cols-2">
               <button
-                className="mt-4 h-12 w-full rounded-lg bg-primary text-white transition-all duration-300 hover:bg-danger"
+                className="mt-4 h-12 w-full rounded-lg bg-primary text-white transition-all duration-300 hover:bg-danger md:col-start-2"
                 onClick={() => setShowModal(true)}
               >
                 DELETE ACCOUNT

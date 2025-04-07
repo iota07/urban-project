@@ -3,21 +3,14 @@
 @tailwind utilities;
 
 @font-face {
-  font-family: "Helvetica";
+  font-family: "Jost";
   font-weight: normal;
   font-style: normal;
-  src: local("Helvetica"), url("assets/fonts/Helvetica.ttf") format("truetype");
+  src: local("Jost"), url("assets/fonts/Jost-Regular.ttf") format("truetype");
 }
 
-@font-face {
-  font-family: "FUTURA55";
-  font-weight: normal;
-  font-style: normal;
-  src: local("FUTURA55"),
-    url("assets/fonts/FUTURA55REGULAR.TTF") format("truetype");
-}
 body {
-  font-family: "FUTURA55";
+  font-family: "Jost";
   font-weight: 400;
   font-style: normal;
 }

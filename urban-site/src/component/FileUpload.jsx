@@ -9,9 +9,9 @@ const FileUpload = ({ onFileContentRead }) => {
   const onDrop = useCallback(
     (acceptedFiles) => {
       const file = acceptedFiles[0];
-      if (file.size > 20971520) {
-        // 20MB limit (20 * 1024 * 1024)
-        alert("File is too large. Maximum size is 20MB.");
+      if (file.size > 52428800) {
+        // 50MB limit
+        alert("File is too large. Maximum size is 50MB.");
         return;
       }
 
@@ -19,7 +19,7 @@ const FileUpload = ({ onFileContentRead }) => {
 
       fileReaderRef.current = new FileReader();
       fileReaderRef.current.onload = (event) => {
-        onFileContentRead(event.target.result);
+        onFileContentRead(file, event.target.result);
       };
 
       fileReaderRef.current.readAsDataURL(file);
@@ -51,26 +51,24 @@ const FileUpload = ({ onFileContentRead }) => {
   }, []);
 
   return (
-    <div className="file-upload flex flex-col justify-center m-4">
+    <div className="file-upload flex flex-col justify-center">
       <div
         {...getRootProps({
           className:
-            "dropzone my-2 p-8 flex items-center justify-center w-auto h-64 border-4 border-dashed border-primary rounded-lg cursor-pointer transition duration-300 ease-in-out hover:border-tertiary hover:bg-secondary",
+            "dropzone flex items-center justify-center w-auto h-64 border-2 border-dashed border-primary rounded-lg cursor-pointer",
         })}
       >
         <input {...getInputProps()} />
-        <span className="flex items-center text-lg text-primary p-8">
-          <IoCloudUploadOutline className="mr-2 text-8xl" />
-          Drag & drop your .stl file here, or click to select a file
-        </span>
-      </div>
-      {fileName && (
-        <div className="file-details">
-          <p>
-            <strong>File Name:</strong> {fileName}
+        <section className="flex flex-col items-center p-4">
+          <IoCloudUploadOutline className="text-primary text-6xl md:text-8xl" />
+          <p className="text-xl text-primary mt-4">
+            Drag and Drop or click to Browse
           </p>
-        </div>
-      )}
+          <p className="text-md text-secondary mt-4">
+            File type supported: .stl, Max size: 50MB
+          </p>
+        </section>
+      </div>
     </div>
   );
 };

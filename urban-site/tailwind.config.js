@@ -39,13 +39,37 @@ export default {
           light: "#ff6b7f",
           dark: "#d9404f",
         },
+        "wind-comfort": "#29C0E7",
+        "wind-energy": "#ADF29C",
+        "thermal-comfort": "#FF8767",
+        "air-quality": "#FFE77A",
 
         // Add more custom colors
       },
       fontFamily: {
-        helvetica: ["Helvetica", "Arial", "sans-serif"],
-        futura: ["FUTURA55", "Helvetica", "Arial", "sans-serif"],
+        Jost: ["Jost", "sans-serif"],
+
         // Add more custom fonts
+      },
+      maxHeight: {
+        128: "32rem",
+        144: "36rem",
+      },
+      Width: {
+        128: "32rem",
+        144: "36rem",
+        256: "64rem",
+        320: "80rem",
+        400: "100rem",
+        640: "160rem",
+      },
+      minWidth: {
+        128: "32rem",
+        144: "36rem",
+      },
+
+      screens: {
+        lg: { min: "1025px" },
       },
     },
   },

@@ -12,11 +12,11 @@ const MyTextInput = ({ label, ...props }) => {
 
   const validationMessages = {
     username:
-      "Username can include: A-Z, a-z, 0-9, hyphen (-), and underscore (_). Spaces, '<', and '>' are not allowed",
+      "Username can only contain alphanumeric characters, hyphens, underscores, '@', and '.'",
     email: "Email cannot contain spaces, '<', or '>'",
-    name: "Name can only contain alphanumeric characters. Spaces, '<', and '>' are not allowed",
+    name: "Name can only contain alphanumeric characters and hyphens",
     surname:
-      "Surname can only contain alphanumeric characters. Spaces, '<', and '>' are not allowed",
+      "Surname can only contain alphanumeric characters, spaces, and hyphens",
   };
 
   return (
@@ -24,14 +24,14 @@ const MyTextInput = ({ label, ...props }) => {
       <div>
         <div className="group relative">
           {validationMessages[props.name] && (
-            <div className="absolute left-0 top-0 transform -translate-x-full translate-y-1/2 cursor-pointer">
+            <div className="absolute left-0 top-0 transform -translate-x-full translate-y-1/2 cursor-pointer z-50">
               <FiInfo
                 className="text-white"
                 onMouseEnter={() => setShowTooltip(true)}
                 onMouseLeave={() => setShowTooltip(false)}
               />
               {showTooltip && (
-                <div className="absolute left-80 -top-14 text-sm transform -translate-x-full w-64 p-2 bg-white border rounded-xl shadow-md z-50">
+                <div className="absolute left-80 -top-14 text-sm transform -translate-x-full w-64 p-2 bg-white border rounded-xl shadow-md">
                   {validationMessages[props.name]}
                 </div>
               )}
@@ -46,7 +46,7 @@ const MyTextInput = ({ label, ...props }) => {
           />
           <label
             htmlFor={props.name}
-            className="absolute left-2 top-0 flex h-full transform items-center pl-2 text-base transition-all duration-300 group-focus-within:-top-7 group-focus-within:h-1/2 group-focus-within:pl-0 group-focus-within:text-base group-focus-within:text-white peer-valid:-top-7 peer-valid:h-1/2 peer-valid:pl-0 peer-valid:text-base peer-valid:text-white"
+            className="absolute left-2 top-0 flex h-full transform items-center pl-2 text-base transition-all duration-300 group-focus-within:-top-7 group-focus-within:h-1/2 group-focus-within:pl-0 group-focus-within:text-base group-focus-within:text-white peer-valid:-top-7 peer-valid:h-1/2 peer-valid:pl-0 peer-valid:text-base peer-valid:text-white z-10"
           >
             {label}
           </label>
@@ -72,14 +72,14 @@ const MyOptionalTextInput = ({ label, ...props }) => {
       <div>
         <div className="group relative">
           {validationMessages[props.name] && (
-            <div className="absolute left-0 top-0 transform -translate-x-full translate-y-1/2 cursor-pointer">
+            <div className="absolute left-0 top-0 transform -translate-x-full translate-y-1/2 cursor-pointer z-50">
               <FiInfo
                 className="text-white"
                 onMouseEnter={() => setShowTooltip(true)}
                 onMouseLeave={() => setShowTooltip(false)}
               />
               {showTooltip && (
-                <div className="absolute left-80 -top-14 text-sm transform -translate-x-full w-64 p-2 bg-white border rounded-xl shadow-md z-50">
+                <div className="absolute left-80 -top-14 text-sm transform -translate-x-full w-64 p-2 bg-white border rounded-xl shadow-md">
                   {validationMessages[props.name]}
                 </div>
               )}
@@ -98,13 +98,15 @@ const MyOptionalTextInput = ({ label, ...props }) => {
             className={`absolute left-2 top-0 flex h-full transform items-center pl-2 text-base transition-all duration-300 ${
               field.value
                 ? "-top-7 h-1/2 pl-0 text-base text-white"
-                : "peer-focus:-top-7 peer-focus:h-1/2 peer-focus:pl-0 peer-focus:text-base peer-focus:text-white"
+                : "peer-focus:-top-7 peer-focus:h-1/2 peer-focus:pl-0 peer-focus:text-base peer-focus:text-white z-10"
             }`}
           >
             {label}
           </label>
         </div>
-        {meta.error && <div className="error">{meta.error}</div>}
+        {meta.error && (
+          <div className="max-w-sm text-danger pb-2">{meta.error}</div>
+        )}
       </div>
     </>
   );
@@ -125,14 +127,14 @@ const MyPasswordInput = ({ label, ...props }) => {
       <div>
         <div className="group relative">
           {validationMessages[props.name] && (
-            <div className="absolute left-0 top-0 transform -translate-x-full translate-y-1/2 cursor-pointer">
+            <div className="absolute left-0 top-0 transform -translate-x-full translate-y-1/2 cursor-pointer z-50">
               <FiInfo
                 className="text-white"
                 onMouseEnter={() => setShowTooltip(true)}
                 onMouseLeave={() => setShowTooltip(false)}
               />
               {showTooltip && (
-                <div className="absolute left-80 -top-14 text-sm transform -translate-x-full w-64 p-2 bg-white border rounded-xl shadow-md z-50">
+                <div className="absolute left-80 -top-14 text-sm transform -translate-x-full w-64 p-2 bg-white border rounded-xl shadow-md ">
                   {validationMessages[props.name]}
                 </div>
               )}
@@ -148,7 +150,7 @@ const MyPasswordInput = ({ label, ...props }) => {
           />
           <label
             htmlFor={props.name}
-            className="absolute left-2 top-0 flex h-full transform items-center pl-2 text-base transition-all duration-300 group-focus-within:-top-7 group-focus-within:h-1/2 group-focus-within:pl-0 group-focus-within:text-base group-focus-within:text-white peer-valid:-top-7 peer-valid:h-1/2 peer-valid:pl-0 peer-valid:text-base peer-valid:text-white"
+            className="absolute left-2 top-0 flex h-full transform items-center pl-2 text-base transition-all duration-300 group-focus-within:-top-7 group-focus-within:h-1/2 group-focus-within:pl-0 group-focus-within:text-base group-focus-within:text-white peer-valid:-top-7 peer-valid:h-1/2 peer-valid:pl-0 peer-valid:text-base peer-valid:text-white z-10"
           >
             {label}
           </label>
@@ -174,8 +176,8 @@ const validationSchema = Yup.object().shape({
     .required("Required"),
   username: Yup.string()
     .matches(
-      /^[a-zA-Z0-9_-]*$/,
-      "Username can only contain alphanumeric characters, hyphens, and underscores"
+      /^[a-zA-Z0-9@._-]*$/,
+      "Username can only contain alphanumeric characters, hyphens, underscores, '@', and '.'"
     )
     .matches(/^[^\s<>]*$/, "Username cannot contain spaces, '<', or '>'")
     .required("Required"),
@@ -191,18 +193,21 @@ const validationSchema = Yup.object().shape({
     )
     .required("Required"),
   name: Yup.string()
-    .matches(/^[a-zA-Z0-9]*$/, "Name can only contain alphanumeric characters")
+    .matches(
+      /^[a-zA-Z0-9-]*$/,
+      "Name can only contain alphanumeric characters and hyphens"
+    )
     .matches(/^[^\s<>]*$/, "Name cannot contain spaces, '<', or '>'")
     .required("Required"),
   surname: Yup.string()
     .matches(
-      /^[a-zA-Z0-9]*$/,
-      "Surname can only contain alphanumeric characters"
+      /^[a-zA-Z0-9- ]*$/,
+      "Surname can only contain alphanumeric characters, spaces, and hyphens"
     )
-    .matches(/^[^\s<>]*$/, "Surname cannot contain spaces, '<', or '>'")
+    .matches(/^[^<>]*$/, "Surname cannot contain '<' or '>'")
     .required("Required"),
   organisation: Yup.string()
-    .matches(/^[^\s<>]*$/, "Organisation cannot contain spaces, '<', or '>'")
+    .matches(/^[^<>]*$/, "Organisation cannot contain '<' or '>'")
     .notRequired(),
 });
 
@@ -314,7 +319,7 @@ const Registration = () => {
                         label={
                           <>
                             <span>Organisation</span>{" "}
-                            <span className="pl-2 text-gray-300">
+                            <span className="pl-2 text-gray-400">
                               (optional)
                             </span>
                           </>

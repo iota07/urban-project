@@ -6,7 +6,7 @@ const Footer = () => {
       <div className="container mx-auto px-4">
         <div className="flex justify-center items-center">
           <p>
-            &copy; {new Date().getFullYear()} Buildwind. All rights reserved.
+            &copy; {new Date().getFullYear()} BuildWind. All rights reserved.
           </p>
         </div>
       </div>

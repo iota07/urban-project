@@ -35,17 +35,17 @@ const DeleteModal = ({
             <div className="flex justify-between">
               <TitleH2 title="Delete Account" />
               <button
-                className="py-2 w-fit px-8 mb-2 rounded-lg bg-primary text-white transition-all duration-300 hover:bg-tertiary"
+                className="py-2 w-fit px-8 mb-2 rounded-lg bg-primary text-white md:text-2xl xl:my-8 transition-all duration-300 hover:bg-tertiary"
                 onClick={() => setShowModal(false)}
               >
                 Cancel
               </button>
             </div>
-            <p className="border-t-2">
+            <p className="border-t-2 text-lg xl:text-xl">
               Deleting your account will remove all your information from our
               database. This cannot be undone.
             </p>
-            <p className="text-secondary mt-8">
+            <p className="text-secondary mt-8 text-lg xl:text-xl">
               Please confirm this, type "DELETE"
             </p>
             <input
@@ -63,7 +63,7 @@ const DeleteModal = ({
                 disabled={confirmDelete !== "DELETE"}
                 onClick={handleDelete}
               >
-                Delete
+                DELETE
               </button>
             </div>
           </div>

@@ -1,45 +1,18 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
-import CadViewer from "../../component/CadViewer";
-import FileUpload from "../../component/FileUpload";
-import TitleH3 from "../../component/TitleH3";
-import { BACKEND_URL } from "../../utils/config";
+import React from "react";
+import Hero from "../../component/Hero";
+import QuickLink from "../../component/QuickLink";
 
 const Home = () => {
-  const [username, setUsername] = useState("");
-  const [stlFile, setStlFile] = useState(null);
-
-  useEffect(() => {
-    if (localStorage.getItem("access_token") === null) {
-      window.location.href = "/login";
-    } else {
-      (async () => {
-        try {
-          const { data } = await axios.get(`${BACKEND_URL}/home/`, {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-            },
-          });
-          setUsername(data.username);
-        } catch (e) {
-          console.log("not auth");
-          window.location.href = "/login";
-        }
-      })();
-    }
-  }, []);
-
-  const handleFileContentRead = (content) => {
-    setStlFile(content); // Update state with the STL file content
-  };
-
   return (
     <>
-      <section className="flex flex-col justify-center items-center mt-5">
-        <TitleH3 title={`Welcome ${username}`} />
-        <FileUpload onFileContentRead={handleFileContentRead} />
-        <CadViewer stlFile={stlFile} />
+      <nav className="flex justify-center items-center py-8 md:py-0 md:pb-12">
+        <QuickLink />
+      </nav>
+      <section className="lg:w-full flex justify-center items-center">
+        <Hero
+          title="Empower Your Designs with Cutting-Edge Simulations"
+          text="Welcome to urban.design, your ultimate workspace for architects seeking precision simulations to enhance their projects. Whether you're optimizing for wind comfort, wind energy, thermal comfort or air quality, our platform offers robust tools to enhance your architectural vision. Explore cutting-edge capabilities tailored to meet your design challenges with unparalleled precision and efficiency."
+        />
       </section>
     </>
   );

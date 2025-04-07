@@ -7,30 +7,45 @@ const Logout = () => {
     (async () => {
       try {
         const accessToken = localStorage.getItem("access_token");
-        await axios.post(
-          `${BACKEND_URL}/logout/`,
-          {
-            refresh_token: localStorage.getItem("refresh_token"),
+        const refreshToken = localStorage.getItem("refresh_token");
+
+        if (!accessToken || !refreshToken) {
+          console.error("No access or refresh token found in local storage");
+          return;
+        }
+
+        console.log("Access Token:", accessToken);
+        console.log("Refresh Token:", refreshToken);
+
+        const response = await axios({
+          method: "post",
+          url: `${BACKEND_URL}/logout/`,
+          data: {
+            refresh_token: refreshToken,
           },
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${accessToken}`,
-            },
-            withCredentials: true,
-          }
-        );
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+          withCredentials: true,
+        });
+
+        console.log("Logout response:", response);
 
         localStorage.removeItem("access_token");
         localStorage.removeItem("refresh_token");
-
+        window.dispatchEvent(new CustomEvent("tokenChanged"));
         window.location.href = "/";
       } catch (error) {
-        console.error("Logout failed:", error);
-        // Clear the local storage and redirect regardless of the error status
-        await localStorage.clear();
-        console.log("Local storage cleared due to logout error");
-        window.location.replace("/");
+        if (error.response) {
+          console.error(
+            "Logout failed:",
+            error.response.data,
+            error.response.status
+          );
+        } else {
+          console.error("Logout failed:", error.message);
+        }
       }
     })();
   }, []);

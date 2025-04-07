@@ -1,5 +1,5 @@
 import React from "react";
-import logo from "../assets/Logo_200x200.png";
+import logo from "../assets/2024_06_BW_logo2024_whiteB.png";
 
 function Logo({ onClick }) {
   return (

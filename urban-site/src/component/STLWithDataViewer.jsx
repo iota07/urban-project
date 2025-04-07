@@ -46,6 +46,11 @@ const STLWithDataViewer = ({ stlFile, vtpFile }) => {
           rootContainer: containerRef.current,
           containerStyle: { height: "100%", width: "100%" },
         });
+        // Remove the event listeners for the interactor RenderWindowInteractor
+        const interactor = fullScreenRenderer.current.getInteractor();
+        document.removeEventListener("keypress", interactor.handleKeyPress);
+        document.removeEventListener("keydown", interactor.handleKeyDown);
+        document.removeEventListener("keyup", interactor.handleKeyUp);
       }
 
       // Get the renderer and the render window
@@ -77,9 +82,6 @@ const STLWithDataViewer = ({ stlFile, vtpFile }) => {
         stlMapper.setInputData(stlOutputData);
         // Add the STL actor to the renderer and reset the camera
         renderer.addActor(stlActor);
-
-        const camera = renderer.getActiveCamera();
-        camera.setOrientationWXYZ(1, 0, 0, -80);
 
         // Wait for the VTP file to load
         await vtpPromise;
@@ -170,12 +172,12 @@ const STLWithDataViewer = ({ stlFile, vtpFile }) => {
 
           scalarBarActor.setAxisTextStyle({
             fontColor: "#2F5265",
-            fontFamily: "FUTURA55",
+            fontFamily: "Jost",
           });
 
           scalarBarActor.setTickTextStyle({
             fontColor: "#2F5265",
-            fontFamily: "FUTURA55",
+            fontFamily: "Jost",
           });
 
           function generateTicks(numberOfTicks) {
@@ -233,6 +235,10 @@ const STLWithDataViewer = ({ stlFile, vtpFile }) => {
           renderer.removeActor(scalarBarActorRef.current);
           scalarBarActorRef.current.delete();
         }
+        if (fullScreenRenderer.current) {
+          fullScreenRenderer.current.delete();
+          fullScreenRenderer.current = null;
+        }
       };
     };
 
@@ -242,9 +248,9 @@ const STLWithDataViewer = ({ stlFile, vtpFile }) => {
 
   const startCameraElevation = (renderer, renderWindow) => {
     const camera = renderer.getActiveCamera();
-    let targetElevation = 0; // Target elevation angle
-    let currentElevation = 12; // Starting elevation angle
-    let step = -0.2; // Elevation step per frame
+    let targetElevation = 75; // Target elevation angle
+    let currentElevation = 100; // Starting elevation angle
+    let step = -0.5; // Elevation step per frame
     let interval;
 
     const elevateCamera = () => {
@@ -266,7 +272,7 @@ const STLWithDataViewer = ({ stlFile, vtpFile }) => {
 
   // Render a div to contain the rendered files
   return (
-    <div className="pt-4 lg:pt-0 w-auto md:w-auto lg:w-5/6 xl:w-5/6 2xl:w-5/6">
+    <div className="pt-4 lg:pt-0 w-full">
       <div ref={containerRef} className="relative w-auto h-auto">
         {!filesLoaded && (
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-backg bg-opacity-0">
@@ -280,7 +286,7 @@ const STLWithDataViewer = ({ stlFile, vtpFile }) => {
             className="mt-2 md:mt-4 md:text-2xl bg-transparent hover:bg-primary text-primary font-semibold hover:text-white py-1 px-4 border-2 border-primary hover:border-transparent rounded-xl"
             onClick={resetRenderWindow}
           >
-            Reset
+            Reset Camera
           </button>
         )}
       </div>
