@@ -8,7 +8,7 @@ const Hero = ({ title, text, buttonText, buttonAction, children }) => {
       <div className="w-full px-2 text-center lg:flex">
         <div className="lg:pt-8">
           <TitleH1 title={title} />
-          <p className="mt-4 md:pt-8 md:mt-0 lg:mt-12 px-2 text-primary">
+          <p className="mt-4 md:pt-8 md:mt-0 lg:mt-12 px-2 text-primary select-none">
             {text}
           </p>
           {buttonText && (
